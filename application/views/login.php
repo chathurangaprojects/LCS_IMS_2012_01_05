@@ -53,6 +53,8 @@
 	<!--[if IE 7]>
 	<link href="<?php echo base_url(); ?>template_resources/css/ie7.css" rel="stylesheet" media="all" />
 	<![endif]-->
+	
+	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/jquery.validate.js"></script>
 </head>
 <body>
 	<div id="page_wrapper">
