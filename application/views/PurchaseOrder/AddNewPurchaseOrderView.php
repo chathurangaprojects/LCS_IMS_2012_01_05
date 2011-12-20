@@ -1,5 +1,5 @@
 <div class="content-box">
-	<form method="post" action="">
+	<form method="post" action="" id="purchase_order_request">
             <fieldset>
                 <table width="100%" border="1px" class="flexme2">
                     <tr>
@@ -29,6 +29,11 @@
                                 var sup_name = new LiveValidation('sup_name', {onlyOnSubmit: true });
                                 sup_name.add( Validate.Presence, {failureMessage: "Please Enter Supplier Name"} );
                             </script>
+                            
+                            Text: <input type="text" id="autocomplete" />
+                            
+                           
+                            
                         </td>
                     </tr>
                     

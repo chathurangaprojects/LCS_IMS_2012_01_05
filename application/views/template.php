@@ -10,8 +10,10 @@ echo $this->template->getPage_title();
 ?>
 </title>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/jquery-1.3.2.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.core.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<!--<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/jquery-1.3.2.js"></script>
+--><script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.core.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/live_search.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/tooltip.js"></script>
@@ -26,10 +28,10 @@ echo $this->template->getPage_title();
 
 <link href="<?php echo base_url(); ?>template_resources/css/themes/black_rose/ui.css" rel="stylesheet" title="style" media="all" />
 
-<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/js-functions.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/livevalidation_standalone.js"></script>
+<!-- <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/js-functions.js"></script> -->
+<!-- <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/livevalidation_standalone.js"></script> -->
 
-<link href="<?php echo base_url(); ?>template_resources/css/livevalidation_standalone.css" rel="stylesheet" />
+<!-- <link href="<?php echo base_url(); ?>template_resources/css/livevalidation_standalone.css" rel="stylesheet" /> -->
 
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/autocomplete/jquery.autocomplete.js"></script><hr />
 
@@ -87,11 +89,11 @@ Logout
 
 <ul id="navigation">
 <li>
-<a href="<?php echo base_url(); ?>" class="sf-with-ul">Dashboard</a>
+<a href="<?php echo base_url(); ?>" class="sf-with-ul" style="cursor: pointer;">Dashboard</a>
 </li>
 
 <li>
-<a href="<?php echo base_url(); ?>" class="sf-with-ul">Purchase Order</a>
+<a class="sf-with-ul" style="cursor: pointer;">Purchase Order</a>
 
 <ul>
 <li>
@@ -102,7 +104,7 @@ Logout
 
 
 <li>
-<a href="<?php echo base_url(); ?>" class="sf-with-ul">Employees</a>
+<a class="sf-with-ul" style="cursor: pointer;">Employees</a>
 
 <ul>
 <li>
@@ -116,6 +118,15 @@ Logout
 </ul>
 </li>
 
+<li>
+	<a class="sf-with-ul" style="cursor: pointer;">Items</a>
+	
+	<ul>
+		<li>
+			<a href="<?php echo site_url(); ?>/ItemMaster/ItemMasterManagement/insertItemMasterDetails" class="sf-with-ul">Add Master Items</a>
+		</li>
+	</ul>
+</li>
 
 
 
