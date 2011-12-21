@@ -303,10 +303,15 @@ $(document).ready(function() {
 
         //po request add starts
        $('#lnk_add_item').click(function(){
-          
+         
+		 var po_id=$('#required_fields').val();
+		 //alert("template val"+po_id);
+		 if(po_id!="false"){
         $('#dlg_add_item').dialog('open');
        // add_item_to_po();
         return false;
+		 }
+		 
     });
     
     
@@ -328,10 +333,13 @@ $(document).ready(function() {
 	
 	
 	//po request edit start
-	       $('#lnk_update_item').click(function(){
-          
+	    $('#lnk_update_item').click(function(){
+
+	
         $('#dlg_edit_item').dialog('open');
        // add_item_to_po();
+		 
+		 
         return false;
     });
     
@@ -342,8 +350,8 @@ $(document).ready(function() {
         width: 900,
         bgiframe: false,
         modal: true,
-                resizable: false,
-                buttons: {
+        resizable: false,
+        buttons: {
             "Close": function() { 
                 $(this).dialog("close"); 
             } 
@@ -351,5 +359,7 @@ $(document).ready(function() {
 		});
 	
 	//po request edit ends
+
+
 
 });

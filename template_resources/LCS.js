@@ -36,7 +36,9 @@ $('#login_msg').html('<div class="response-msg error ui-corner-all">Invalid logi
  });
 	
 	 });
-		
+	
+	
+			
 });
 
 
@@ -273,6 +275,79 @@ $().ready(function() {
 //user edit ends
 
 
+//purchase order request
+
+
+
+$().ready(function() {
+    //form name and id
+	$("#purchase_order_request").validate
+	({
+	 
+	 //sup_name
+	 
+		rules:
+		{
+			sup_name: "required",
+			quatation_no: "required",
+			attention: "required",
+			order_date: {				
+			   required: true,
+			   date : true
+			},
+			expected_date: {				
+			   required: true,
+			   date : true
+			},
+			sup_type:"required",
+			Department_Code:"required"
+		},
+			messages:
+			{
+				sup_name: "Supplier Name is required",
+				sup_type: "Supplier type is required",
+				quatation_no: "Quatation no required",
+				attention: "Attention is required",
+				order_date: "Order date is required",
+		        expected_date: "Please select valid Expected Date",
+				Department_Code:"Department is required"
+				
+				
+			},
+			
+			submitHandler: function(form) {
+				
+				//alert("submit handler");
+				/*
+				 $('#addnewempmsg').html('<font color="#CC0000"> Please wait............ </font>'); 
+				$.post(base_url+'index.php/UserAdministration/EmployeeAdministration/registerNewEmployee', $("#user_registration_form").serialize(), function(msg) {
+					$('#addnewempmsg').html(msg);
+				});
+				*/
+				
+				//$('#add_new_po_msg').html('<input type="text" id="purchase_order_no" name="purchase_order_no" value="13">');
+				//alert('submit hadling');
+				var isAllFiedsValidated=$('#required_fields').val();
+				if(isAllFiedsValidated=='true'){
+					
+					// all the data fields are validated and ready for the submission
+				$('#required_fields').val('true');
+				
+				}//if
+				
+			}//submitHandler
+
+	});
+	
+});
+
+
+
+
+
+
+//purchase order request
+
 
 
 
@@ -323,8 +398,116 @@ function retrieveAllRegisteredEmployees(){
 
 
 
+function onValueChange(id){
+
+	/* setting up the hidden field value based on the value change of the required fields */
+	var value = $('#'+id).val();
+	
+	alert("lcs value["+value+"]");
+	
+	if(trim(value)==""){
+		
+		$('#required_fields').val('false');
+	}
+	
+}
 
 
-						 
 
+
+// Removes leading whitespaces
+function LTrim( value ) {
+	
+	var re = /\s*((\S+\s*)*)/;
+	return value.replace(re, "$1");
+	
+}
+
+// Removes ending whitespaces
+function RTrim( value ) {
+	
+	var re = /((\s*\S+)*)\s*/;
+	return value.replace(re, "$1");
+	
+}
+
+// Removes leading and ending whitespaces
+function trim( value ) {
+	
+	return LTrim(RTrim(value));
+	
+}
+
+
+
+
+
+function purchaseOrderRequestFormValidation(){
+	
+	
+	var order_date=trim($('#order_date').val());
+	var expected_date=trim($('#expected_date').val());
+	
+	var date_result=order_date<=expected_date;
+	var sup_name=trim($('#sup_name').val());
+	var sup_type=trim($('#sup_type').val());
+	var attention=trim($('#attention').val());
+	var quatation_no=trim($('#quatation_no').val());
+	//var order_date=trim($('#order_date').val());
+	//var expected_date=trim($('#expected_date').val());
+	var Department_Code=trim($('#Department_Code').val());
+	//displaying the date validation errors
+	if(date_result==false){
+		
+		$('#date_error_message').html('<label style="color:#900" > <b>Expected date should be greater or equal to order date </b></label>');
+		
+	}
+	else{
+		
+	 $('#date_error_message').html("");
+	 
+	}
+	
+	
+	// validating the all fields in the form
+	if(sup_name!="" & attention!="" & quatation_no!="" &order_date != "" & expected_date!="" & Department_Code!="" &sup_type!= ""){
+		
+		
+		if(date_result){
+		//all required fields are filled(not empty)
+		//alert('date valid');
+		$('#required_fields').val('true');
+        $('#date_error_message').html("");
+		}
+		else{
+			
+		//alert('date invalid');
+		$('#date_error_message').html('<label style="color:#900" > <b>Expected date should be greater or equal to order date </b></label>');
+		$('#required_fields').val('false');
+	
+		}
+		
+		
+	}
+	else{		
+		//all or some requird felds are emplty
+	   
+	    $('#required_fields').val('false');
+		
+	}
+	
+	
+}//function
+
+
+
+
+
+function select_currency(){
+	//check whether the field value is set
+	purchaseOrderRequestFormValidation();
+	
+	
+}//function
+	
 

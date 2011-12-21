@@ -1,36 +1,35 @@
 <div class="content-box">
 	<h3>Purchase Order Form</h3>
         
-        <?php echo form_open_multipart(base_url() . 'index.php/po/purchase_order/add_po'); ?>
+<?php /*?>        <?php echo form_open_multipart(base_url() . 'index.php/po/purchase_order/add_po',array('name'=>'purchase_order_request','id'=>'purchase_order_request')); ?><?php */?>
+
+        <?php echo form_open_multipart('',array('name'=>'purchase_order_request','id'=>'purchase_order_request')); ?>
+        
             <fieldset>
                 <table width="100%" border="1px" class="flexme2">
                     <tr>
                         <td colspan="1" style="padding: 5px 5px 5px 0;">
                             <b>Supplier Type *</b>
                         </td>
-                        
+                        <div>
                         <td colspan="3" style="padding: 5px 5px 5px 0;">
-                            <select id="sup_type" class="field select full" name="cmb_sup_type" onchange="select_currency();">
-                                <option value=""></option>
+                            <select id="sup_type" class="field select full" name="sup_type" onchange="select_currency();" >
+                                <option value=""> - -Select Supplier Type- -</option>
                                 <option value="0">Local Supplier</option>
                                 <option value="1">Foreign Supplier</option>
                             </select>
-                            <script type="text/javascript">
-                                var sup_type = new LiveValidation('sup_type', {onlyOnSubmit: true });
-                                sup_type.add( Validate.Presence, {failureMessage: "Please Select Supplier Type"} );
-                            </script>
                         </td>
+                        
+                        </div>
                         
                         <td colspan="1" style="padding: 5px 5px 5px 0;">
                             <b>Supplier Name *</b>
                         </td>
                         
                         <td colspan="3" style="padding: 5px 5px 5px 0;">
-                            <input type="text" id="sup_name" class="field text full" name="txt_sup_name" />
-                            <script type="text/javascript">
-                                var sup_name = new LiveValidation('sup_name', {onlyOnSubmit: true });
-                                sup_name.add( Validate.Presence, {failureMessage: "Please Enter Supplier Name"} );
-                            </script>
+                         <div>
+                            <input type="text" id="sup_name" name="sup_name" class="field text full" name="sup_name" onchange="purchaseOrderRequestFormValidation()" />
+                         </div>
                         </td>
                     </tr>
                     
@@ -40,7 +39,9 @@
                         </td>
                         
                         <td style="padding: 5px 5px 5px 0;">
-                            <input type="text" id="ord_date" class="field text full" name="txt_ord_date" value="<?php echo date("Y-m-d"); ?>" readonly="readonly"/>
+                        <div>
+                            <input type="text" id="order_date" class="field text full" name="order_date" value="<?php echo date("Y-m-d"); ?>" readonly="readonly" onchange="purchaseOrderRequestFormValidation()"/>
+                            </div>
                         </td>
                         
                         <td style="padding: 5px 5px 5px 0;">
@@ -48,23 +49,31 @@
                         </td>
                         
                         <td style="padding: 5px 5px 5px 0;">
-                            <input type="text" id="exp_date" class="field text full" name="txt_exp_date" />
+                            <div>
+                            <input type="text" id="expected_date" class="field text full" name="expected_date" onchange="purchaseOrderRequestFormValidation()"/>
+                            </div>
+                            <div id="date_error_message"> </div>
                         </td>
                         
                         <td style="padding: 5px 5px 5px 0;">
                             <b>Quotation No.</b>
                         </td>
-                        
+                       
                         <td style="padding: 5px 5px 5px 0;">
-                            <input type="text" id="quote_no" class="field text full" name="txt_quote_no" />
+                        <div>
+                            <input type="text" id="quatation_no" class="field text full" name="quatation_no" onchange="purchaseOrderRequestFormValidation()" />
+                        </div>
                         </td>
+                       
                         
                         <td style="padding: 5px 5px 5px 0;">
                             <b>Attention</b>
                         </td>
                         
                         <td style="padding: 5px 5px 5px 0;">
-                            <input type="text" id="attention" class="field text full" name="txt_attention" />
+                        <div>
+                            <input type="text" id="attention" class="field text full" name="attention" onchange="purchaseOrderRequestFormValidation()" />
+                        </div> 
                         </td>
                     </tr>
                     
@@ -74,19 +83,25 @@
                         </td>
                         
                         <td colspan="3" style="padding: 5px 5px 5px 0;">
-                            <select id="req_dept" class="field select full" name="cmb_req_dept">
-                                <option value=""></option>
-                                <?php
-                                   /* foreach ($depts->result_array() as $row)
-                                    {
-                                        echo '<option value="' . $row['Department_Code'] . '">' . $row['Department_Name'] . '</option>';
-                                    }*/
-                                ?>
+                           <div>
+                            <select id="Department_Code" class="field select full" name="Department_Code" onchange="purchaseOrderRequestFormValidation()">
+                                 <option value="">Please select</option>
+               <?php
+								 
+				$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','UserService','UserModel'));
+			  
+			    $departmentService=new DepartmentService();
+				
+				$departmentData=$departmentService->retriveAllDepartmentDetails();
+					for($index=0;$index<sizeof($departmentData);$index++){
+					?>
+            <option value="<?php echo $departmentData[$index]->getDepartmentCode(); ?>"><?php echo $departmentData[$index]->getDepartmentName(); ?></option>
+            <?php
+					}
+				?>
+                
                             </select>
-                            <script type="text/javascript">
-                                var req_dept = new LiveValidation('req_dept', {onlyOnSubmit: true });
-                                req_dept.add( Validate.Presence, {failureMessage: "Please Select Requested Department"} );
-                            </script>
+                          </div>
                         </td>
                         
                         <td colspan="1" style="padding: 5px 5px 5px 0;">
@@ -94,14 +109,37 @@
                         </td>
                         
                         <td colspan="3" style="padding: 5px 5px 5px 0;">
-                            <select id="req_by" class="field select full" name="cmb_req_by">
-                                <?php
-                                   /* foreach ($emps->result_array() as $row)
-                                    {
-                                        echo '<option value="' . $row['Employee_Code'] . '">' . $row['Employee_Name'] . '</option>';
-                                    }*/
-                                ?>
+                        <?php 
+						if($departmentName!='Admin') { 
+						//retrieve only the logged employee data
+						?>
+                            <select id="requested_by" class="field select full" name="requested_by">
+                               <option value="<?php echo $this->session->userdata('emp_id'); ?>" ><?php echo $this->session->userdata('email'); ?></option>
+                              
                             </select>
+                         <?php
+						}
+						else{
+							//retrieve a list of all user data 
+							
+							$userService = new UserService();
+							$userModelArray=$userService->retrieveAllEmployeeDetails();
+					     ?>
+                      <select id="requested_by" class="field select full" name="requested_by">
+                        <option value=""> -- Select Employee --</option>
+                       <?php		
+							for($index=0;$index<sizeof($userModelArray);$index++){
+					    ?>
+                        
+                            <option value="<?php echo $userModelArray[$index]->getEmployeeCode(); ?>">
+                            <?php echo $userModelArray[$index]->getEmail(); ?>
+                            </option>
+                       <?php
+							}//for
+						}//else
+						?>
+                        
+					</select>		
                             <script type="text/javascript">
                                 var req_by = new LiveValidation('req_by', {onlyOnSubmit: true });
                                 req_by.add( Validate.Presence, {failureMessage: "Please Select Requested Employee"} );
@@ -172,22 +210,7 @@
                             <!-- <input type="text" id="pay_remark" class="field text full" name="txt_pay_remark" /> -->
                             <textarea id="pay_remark" class="field text full" name="txt_pay_remark" rows="2"></textarea>
                         </td>
-                        
-                        <!-- <td style="padding: 5px 5px 5px 0;">
-                            <b>Discount %</b>
-                        </td>
-                        
-                        <td style="padding: 5px 5px 5px 0;">
-                            <input type="text" id="discount" class="field text full" name="txt_discount" />
-                        </td>
-                        
-                        <td style="padding: 5px 5px 5px 0;">
-                            <b>Discount Amount</b>
-                        </td>
-                        
-                        <td style="padding: 5px 5px 5px 0;">
-                            <input type="text" id="discount_amount" class="field text full" name="txt_discount_amount" />
-                        </td> -->
+                       
                     </tr>
                     
                     <tr>
@@ -212,13 +235,22 @@
                     
                     <tr>
                         <td colspan="8">
-                            <input type="hidden" name="txt_po_no" id="po_no" value="13">
                             
-                            <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+<!--                            <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
                                 <a id="lnk_add_item" class="btn ui-state-default ui-corner-all" href="#">
                                     <span class="ui-icon ui-icon-newwin"></span>
                                     Add Item
                                 </a>
+                            </span>-->
+                            
+<!--                                                        <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+                                <a id="lnk_add_item" class="btn ui-state-default ui-corner-all" href="#" onclick="validate();"  >
+                                   <span class="ui-icon ui-icon-newwin"></span>
+                                    Add Item
+                                </a>
+                            </span>-->
+                            <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+                            <input type="submit" value="Add Item"  id="lnk_add_item" name="lnk_add_item" class="btn ui-state-default ui-corner-all" />
                             </span>
                             
                             <!-- <button class="ui-state-default ui-corner-all float-left ui-button" type="submit" disabled="disabled">Save</button> -->
@@ -230,7 +262,7 @@
                                 </a>
                             </span>
                             
-                            
+                             <div id="add_new_po_msg"> <input type="text" id="required_fields" name="required_fields" value="false"></div>
                         </td>
                     </tr>
                 </table>
@@ -360,7 +392,7 @@
                               
                               <?php //order item edit start ?>
                               
-                               <div class="dlg_edit_item" title="Edit Item">
+                               <div id="dlg_edit_item" title="Edit Item">
             <form>
                 <table style="width: 100%">
                     <tr>

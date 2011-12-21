@@ -8,6 +8,7 @@ class DepartmentService extends CI_Model {
         parent::__construct();
 		$this->load->database();
 		$this->load->model('DepartmentModel');
+		
  }//constructor
  
  
@@ -55,8 +56,6 @@ class DepartmentService extends CI_Model {
 	  		
 	 
  }//retrieveDepartmentName
- 
- 
  
  
  
