@@ -299,6 +299,57 @@ $(document).ready(function() {
 	});
 
 
+//lcs custom js starts
 
+        //po request add starts
+       $('#lnk_add_item').click(function(){
+          
+        $('#dlg_add_item').dialog('open');
+       // add_item_to_po();
+        return false;
+    });
+    
+    
+    
+    $('#dlg_add_item').dialog({
+        autoOpen: false,
+        width: 900,
+        bgiframe: false,
+        modal: true,
+                resizable: false,
+                buttons: {
+            "Close": function() { 
+                $(this).dialog("close"); 
+            } 
+        }
+		});
+	
+	 //po request add ends
+	
+	
+	//po request edit start
+	       $('#lnk_update_item').click(function(){
+          
+        $('#dlg_edit_item').dialog('open');
+       // add_item_to_po();
+        return false;
+    });
+    
+    
+    
+    $('#dlg_edit_item').dialog({
+        autoOpen: false,
+        width: 900,
+        bgiframe: false,
+        modal: true,
+                resizable: false,
+                buttons: {
+            "Close": function() { 
+                $(this).dialog("close"); 
+            } 
+        }
+		});
+	
+	//po request edit ends
 
 });
