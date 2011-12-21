@@ -19,8 +19,7 @@
                                 <option value="1">Foreign Supplier</option>
                             </select>
                         </td>
-                        
-                        </div>
+                       </div>
                         
                         <td colspan="1" style="padding: 5px 5px 5px 0;">
                             <b>Supplier Name *</b>
