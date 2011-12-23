@@ -1,7 +1,7 @@
 10
 
 dir
-11
+13
 svn+ssh://web@192.168.0.11/LCS_IMS/template_resources/images/icons
 svn+ssh://web@192.168.0.11/LCS_IMS
 
@@ -60,40 +60,6 @@ has-props
 
 2986
 
-Thumbs.db
-file
-
-
-
-
-2011-12-19T07:42:01.671875Z
-c81ebb2cb07d2edce14c6d7386489b74
-2011-12-19T08:25:36.610036Z
-1
-chathuranga
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-6656
-
 Mail_open.png
 file
 
@@ -127,6 +93,40 @@ has-props
 
 
 2274
+
+Thumbs.db
+file
+
+
+
+
+2011-12-19T07:42:01.671875Z
+c81ebb2cb07d2edce14c6d7386489b74
+2011-12-19T08:25:36.610036Z
+1
+chathuranga
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6656
 
 Briefcase_files.png
 file
@@ -264,40 +264,6 @@ has-props
 
 1334
 
-Star.png
-file
-
-
-
-
-2011-12-19T07:42:01.671875Z
-193c28180e2e6031f6dcdeaac92b1179
-2011-12-19T08:25:36.610036Z
-1
-chathuranga
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-3131
-
 Glass.png
 file
 
@@ -331,6 +297,40 @@ has-props
 
 
 2429
+
+Star.png
+file
+
+
+
+
+2011-12-19T07:42:01.671875Z
+193c28180e2e6031f6dcdeaac92b1179
+2011-12-19T08:25:36.610036Z
+1
+chathuranga
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3131
 
 Books.png
 file
@@ -366,40 +366,6 @@ has-props
 
 2652
 
-Clipboard_3.png
-file
-
-
-
-
-2011-12-19T07:42:01.671875Z
-1bf91f95db8ca3009f413479a9ef75bc
-2011-12-19T08:25:36.610036Z
-1
-chathuranga
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2105
-
 notice.png
 file
 
@@ -433,6 +399,40 @@ has-props
 
 
 1319
+
+Clipboard_3.png
+file
+
+
+
+
+2011-12-19T07:42:01.671875Z
+1bf91f95db8ca3009f413479a9ef75bc
+2011-12-19T08:25:36.610036Z
+1
+chathuranga
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2105
 
 Box_content.png
 file

@@ -14,12 +14,24 @@
 		public function retriewSupplierNameAndID($supplierModel)
 		{
 			//get supplier name
-			$supplierModel->getSupplierName();
+			$supplierName = $supplierModel->getSupplierName();
 			
 			//database select query based on like operator on name
+             $this->db->like('Supplier_Name',$supplierName);  
+             $query = $this->db->get('ta_ims_supplier_header');
 			
-			
-			//extract id and name of the retrieved result
-		}
+			$supplierArray = array();
+			$index = 0;
+            foreach ($query->result() as $row)
+			{
+			$supplier = new SupplierModel();
+				
+			 $supplierArray[$index] = $supplier->setSupplierCode($row->Supplier_Code);	
+			 $supplierArray[$index] = $supplier->setSupplierName($row->Supplier_Name);
+			 
+			 $index++;
+			}
+			return $supplierArray;
+      }
 	}
 ?>

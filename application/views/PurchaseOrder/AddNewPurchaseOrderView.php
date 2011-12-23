@@ -153,7 +153,7 @@
            <input type="text" id="required_fields" name="required_fields" value="false">
            <input type="text" id="po_request_id" name="po_request_id" value=""  />
            <input type="text" id="expected_date_validity" name="expexted_date_validity" value="true"  />
-           <input type="text" id="sup_id_val" name="sup_id_val" value="" />
+           <input type="text" id="supplier_id" name="supplier_id" value="" />
            
 
           </div>

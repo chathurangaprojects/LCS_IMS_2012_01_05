@@ -23,7 +23,7 @@ $().ready(function () {
 	    submitHandler: function (form) {
 	        $('#addnewempmsg').html('<div class="response-msg inf ui-corner-all"><span>Please Wait...</span>New Master Item is being inserted...</div>');
 
-	        $.post(base_url + 'index.php/ItemMaster/ItemMasterManagement/insertItemMasterDetails', $("#insert_master_item_form").serialize(), function (msg) {
+	        $.post(site_url + '/ItemMaster/ItemMasterManagement/insertItemMasterDetails', $("#insert_master_item_form").serialize(), function (msg) {
 	            $('#addnewempmsg').html(msg);
 	        });
 	    }

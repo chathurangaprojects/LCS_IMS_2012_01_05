@@ -6,10 +6,10 @@
 		var $supplierCode;
 		var $supplierName;
 	
-		function getUpplierCode() { return $this->upplier_Code; } 
+		function getSupplierCode() { return $this->upplier_Code; } 
 		function getSupplierName() { return $this->supplierName; } 
 	
-		function setUpplierCode($x) { $this->upplier_Code = $x; } 
+		function setSupplierCode($x) { $this->upplier_Code = $x; } 
 		function setSupplierName($x) { $this->supplierName = $x; } 
 
 		function __construct()

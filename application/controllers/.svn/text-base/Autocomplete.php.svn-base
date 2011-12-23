@@ -7,19 +7,41 @@
 		{
 			parent::__construct();
 		
-			$this->load->model('UserModel');
-			$this->load->model('UserService');
+			$this->load->model('ItemMaster/ItemMasterModel');
+			$this->load->model('ItemMaster/ItemMasterService');
 		}
 		
 		
 		public function loadItemTypes()
 		{
-			echo "aaaaa - bbbbb - 10\n";
-			echo "ccccc - ddddd - 20\n";
-			echo "eeeee - fffff - 30\n";
-			echo "ggggg - hhhhh - 40\n";
-			echo "iiiii - jjjjj - 50\n";
-			echo "jjjjj - kkkkk - 60\n";
+			$itemMasterModel = new ItemMasterModel();
+			$itemMasterService = new ItemMasterService();
+			
+			$keywords = trim(strtolower($this->input->get('q', TRUE)));
+			
+			$itemMasterModel->setItem_Name($keywords);
+			
+			if(!empty($keywords))
+			{
+				$results = $itemMasterService->loadItemTypes($itemMasterModel);
+				
+				if(!empty($results))
+				{
+					foreach ($results->result_array() as $row)
+					{
+						if(! empty($row['Category_Name']))
+						{
+							$cname = $row['Item_Type'] . ' - ' . $row['Category_Name'] . ' - ' . $row['Type_Code'];
+						}
+						else
+						{
+							$cname = $row['Item_Type'] . ' - (Undefined) - ' . $row['Type_Code'];
+						}
+					
+						echo "$cname\n";
+					}
+				}
+			}
 		}
 	}
 ?>

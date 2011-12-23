@@ -10,9 +10,9 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.core.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/superfish.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/live_search.js"></script>
-	
+
 <?php /*?>	 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/sidebar_menu.html"></script> <?php */?>
-	
+
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/tooltip.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/cookie.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.sortable.js"></script>
@@ -20,7 +20,7 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.resizable.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.dialog.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/custom.js"></script>
-	
+
 	<link href="<?php echo base_url(); ?>template_resources/css/ui/ui.base.css" rel="stylesheet" media="all" />
 
 	<link href="<?php echo base_url(); ?>template_resources/css/ui/ui.login.css" rel="stylesheet" media="all" />
@@ -28,21 +28,21 @@
 	<link href="<?php echo base_url(); ?>template_resources/css/themes/black_rose/ui.css" rel="stylesheet" media="all" />
 
 	<link href="<?php echo base_url(); ?>template_resources/css/themes/black_rose/ui.css" rel="stylesheet" title="style" media="all" />
-	
+
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/js-functions.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/livevalidation_standalone.js"></script>
 
         <link href="<?php echo base_url(); ?>template_resources/css/livevalidation_standalone.css" rel="stylesheet" />
-        
+
         <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/autocomplete/jquery.autocomplete.js"></script>
-        
+
         <link href="<?php echo base_url(); ?>template_resources/js/autocomplete/jquery.autocomplete.css" rel="stylesheet" />
-        
+
         <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/LCS.js"></script>
 
 	<!--[if IE 6]>
 	<link href="<?php echo base_url(); ?>template_resources/css/ie6.css" rel="stylesheet" media="all" />
-	
+
 	<script src="<?php echo base_url(); ?>template_resources/js/pngfix.js"></script>
 	<script>
 	  /* Fix IE6 Transparent PNG */
@@ -53,7 +53,7 @@
 	<!--[if IE 7]>
 	<link href="<?php echo base_url(); ?>template_resources/css/ie7.css" rel="stylesheet" media="all" />
 	<![endif]-->
-	
+
 	<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/jquery.validate.js"></script>
 </head>
 <body>
@@ -185,7 +185,7 @@ Password:
 </label>
 
 <div>
-<input type="password" tabindex="1" maxlength="255" class="field text full" name="login_password" id="login_password" value="guest" />
+<input type="password" tabindex="1" maxlength="255" class="field text full" name="login_password" id="login_password" value="123" />
 <script type="text/javascript">
   //  var login_password = new LiveValidation('login_password');
 //                                                                                    login_password.add( Validate.Presence );

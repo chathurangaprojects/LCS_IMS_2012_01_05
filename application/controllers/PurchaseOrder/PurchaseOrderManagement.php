@@ -216,7 +216,7 @@
 		     //purchase order is not in dabase and it should be inserted
 			  $purchaseOrderID = $poService->createNewPurchaseOrder($poRequest);
 				  
-			echo "Purchase Order was succesfully Created.. Click Add Item again for adding new items#".$purchaseOrderID;
+			echo "Purchase Order was succesfully Created.. ".$purchaseOrderID;
 			
 			}
 			else{

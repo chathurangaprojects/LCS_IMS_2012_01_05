@@ -1,0 +1,71 @@
+<?php
+	if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+	class Autocomplete extends CI_Controller
+	{
+		function __construct()
+		{
+			parent::__construct();
+		
+<<<<<<< .mine
+	        $this->load->model('UserModel');
+			$this->load->model('UserService');
+=======
+			$this->load->model('ItemMaster/ItemMasterModel');
+			$this->load->model('ItemMaster/ItemMasterService');
+>>>>>>> .r13
+			$this->load->model(array('Supplier/SupplierModel','Supplier/SupplierService'));
+		}
+		
+		
+		public function loadItemTypes()
+		{
+			$itemMasterModel = new ItemMasterModel();
+			$itemMasterService = new ItemMasterService();
+			
+			$keywords = trim(strtolower($this->input->get('q', TRUE)));
+			
+			$itemMasterModel->setItem_Name($keywords);
+			
+			if(!empty($keywords))
+			{
+				$results = $itemMasterService->loadItemTypes($itemMasterModel);
+				
+				if(!empty($results))
+				{
+					foreach ($results->result_array() as $row)
+					{
+						if(! empty($row['Category_Name']))
+						{
+							$cname = $row['Item_Type'] . ' - ' . $row['Category_Name'] . ' - ' . $row['Type_Code'];
+						}
+						else
+						{
+							$cname = $row['Item_Type'] . ' - (Undefined) - ' . $row['Type_Code'];
+						}
+					
+						echo "$cname\n";
+					}
+				}
+			}
+		}
+		
+		
+		public function loadSuppliers(){
+			
+			
+			//echo $this->input->get('q',TRUE)."hello";
+			
+			$supplierModel = new SupplierModel();
+			
+			$supplierModel->setSupplierName("sup");
+			
+			$supplierService = new SupplierService();
+			
+			$supplierService->retriewSupplierNameAndID($supplierModel);
+			
+		}//loadSuppliers
+		
+	}//Autocomplete
+	
+?>
