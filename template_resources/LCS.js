@@ -353,11 +353,10 @@ $().ready(function() {
 
 $().ready(function() {
     //form name and id
+	//alert('lcs');
 	$("#purchase_order_request").validate
 	({
-	 
-	 //sup_name
-	 
+	 	 
 		rules:
 		{
 			sup_name: "required",			
@@ -389,34 +388,64 @@ $().ready(function() {
 			},
 			
 			submitHandler: function(form) {
-				
-				var isAllFiedsValidated=$('#required_fields').val();
-				if(isAllFiedsValidated=='true'){
+								
+				//var isAllFiedsValidated=$('#required_fields').val();
+			  var expectedDateValidity =  $("#expected_date_validity").val();
+
+				if(expectedDateValidity=='true'){
 					
 					// all the data fields are validated and ready for the submission
-				$('#required_fields').val('true');
+				//$('#required_fields').val('true');
 				//set this id using ajax			
 			$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/createNewPurchaseOrderRequest', $("#purchase_order_request").serialize(), function(msg) {
 					//$('form[name=purchase_order_request] #po_request_id').val(msg);
 					$('#po_request_message').html('<font color="#009900">'+msg.split('#')[0]+'</font>'); 
 					
 					var purchaseOrderID=msg.split('#')[1];
-					
+					//set up the purchase order id for adding items for the purchase order 
+					$('form[name=add_purchase_order_item] #purchase_order_id').val(purchaseOrderID);
 					$('form[name=purchase_order_request] #po_request_id').val(purchaseOrderID);
 					//setting up the valus changed as false... because the insert or update is already done
-					$('#po_details_change').val('false');
+					//$('#po_details_change').val('false');
+					
+					$('#dlg_add_item').dialog('open');
 					
 				});
 								
-				}//if
+				}//if expectedDateValidity
+				
 				
 			}//submitHandler
 
 	});
 	
+	
+		openDialog();
+	
 });
 
 
+
+function openDialog(){
+	
+	
+	$('#dialog').dialog({
+		autoOpen: false,
+		width: 600,
+		bgiframe: false,
+		modal: false,
+		buttons: {
+			"Ok": function() { 
+				$(this).dialog("close"); 
+			}, 
+			"Cancel": function() { 
+				$(this).dialog("close"); 
+			} 
+		}
+	});
+		
+		
+}//openDialog
 
 
 
@@ -580,7 +609,7 @@ function purchaseOrderRequestFormValidation(){
 
 
 
-
+/*
 function purchaseOrderRequestFormValidation(){
 	
 	//po_details_change
@@ -631,7 +660,42 @@ function purchaseOrderRequestFormValidation(){
 	
 }//function
 
+*/
 
+
+
+
+function expectedDateFieldValidation(){
+
+
+	var order_date=trim($('#order_date').val());
+	var expected_date=trim($('#expected_date').val());
+	
+	
+	if(expected_date != "" ){
+
+     
+	 if(expected_date >= order_date ){
+		 
+		 //expected date is valid
+		 $("#expected_date_validity").val('true');
+		 		 $('#date_error_message').html('');
+				 
+		 
+	 }//if inner
+	 else{
+		 //expected date is invalid
+		 $("#expected_date_validity").val('false');
+		 
+		 $('#date_error_message').html('<label style="color:#900" > <b>Expected date should be greater or equal to order date </b></label>');
+		 
+	 }
+	 
+	 
+	}//if outer
+	
+
+}
 
 
 

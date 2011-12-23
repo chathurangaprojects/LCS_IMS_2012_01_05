@@ -21,5 +21,20 @@
 			echo "iiiii - jjjjj - 50\n";
 			echo "jjjjj - kkkkk - 60\n";
 		}
-	}
+		
+		
+		public function loadSuppliers(){
+			
+			
+			echo "aaaaa#bbbbb#10\n";
+			echo "ccccc#ddddd#20\n";
+			echo "eeeee#fffff#30\n";
+			echo "ggggg#hhhhh#40\n";
+			echo "iiiii#jjjjj#50\n";
+			echo "jjjjj#kkkkk#60\n";
+			
+		}//loadSuppliers
+		
+	}//Autocomplete
+	
 ?>

@@ -40,6 +40,7 @@ echo $this->template->getPage_title();
 
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/LCS.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/LCS2.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/Autocomplete.js"></script>
 
 
 <!--[if IE 6]>
@@ -53,6 +54,9 @@ DD_belatedPNG.fix('.logo, ul#dashboard-buttons li a, .response-msg, #search-bar 
 <![endif]-->
 
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/jquery.validate.js"></script>
+
+<!-- <link href="<?php echo base_url(); ?>template_resources/image_upload/styles.css" rel="stylesheet" />
+<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/image_upload/js/ajaxupload.3.5.js"></script> -->
 
 
 </head>
@@ -123,7 +127,7 @@ Logout
 	
 	<ul>
 		<li>
-			<a href="<?php echo site_url(); ?>/ItemMaster/ItemMasterManagement/insertItemMasterDetails" class="sf-with-ul">Add Master Items</a>
+			<a href="<?php echo site_url(); ?>/ItemMaster/ItemMasterManagement/insertItemMasterDetailsForm" class="sf-with-ul">Add Master Items</a>
 		</li>
 	</ul>
 </li>

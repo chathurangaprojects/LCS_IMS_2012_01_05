@@ -20,26 +20,26 @@
       <tr>
         <td style="padding: 5px 5px 5px 0;"><b>Order Date *</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="order_date" class="field text full" name="order_date" value="<?php echo date("Y-m-d"); ?>" readonly="readonly" onchange="purchaseOrderRequestFormValidation()"/>
+            <input type="text" id="order_date" class="field text full" name="order_date" value="<?php echo date("Y-m-d"); ?>" readonly="readonly" />
           </div></td>
         <td style="padding: 5px 5px 5px 0;"><b>Expected Date</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="expected_date" class="field text full" name="expected_date" onchange="purchaseOrderRequestFormValidation()"/>
+            <input type="text" id="expected_date" class="field text full" name="expected_date" onchange="expectedDateFieldValidation()"/>
           </div>
           <div id="date_error_message"> </div></td>
         <td style="padding: 5px 5px 5px 0;"><b>Quotation No.</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="quatation_no" class="field text full" name="quatation_no" onchange="purchaseOrderRequestFormValidation()" />
+            <input type="text" id="quatation_no" class="field text full" name="quatation_no"  />
           </div></td>
         <td style="padding: 5px 5px 5px 0;"><b>Attention</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="attention" class="field text full" name="attention" onchange="purchaseOrderRequestFormValidation()" />
+            <input type="text" id="attention" class="field text full" name="attention"  />
           </div></td>
       </tr>
       <tr>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Department *</b></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><div>
-            <select id="Department_Code" class="field select full" name="Department_Code" onchange="purchaseOrderRequestFormValidation()">
+            <select id="Department_Code" class="field select full" name="Department_Code" >
               <option value="">Please select</option>
               <?php
 								 
@@ -87,7 +87,7 @@
       </tr>
       <tr>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Payment Type *</b></td>
-        <td colspan="3" style="padding: 5px 5px 5px 0;"><select id="payment_type" class="field select full" name="payment_type" onchange="purchaseOrderRequestFormValidation()">
+        <td colspan="3" style="padding: 5px 5px 5px 0;"><select id="payment_type" class="field select full" name="payment_type" >
             <option value="">- - Select Payment Type- - </option>
                                <?php
                                     foreach ($paymentTypeObjectArray as $paymentTypeModel)
@@ -115,7 +115,7 @@
         <td style="padding: 5px 5px 5px 0;"><b>Conversion Rate *</b></td>
         <td style="padding: 5px 5px 5px 0;">
         <div>
-        <input type="text" id="conversion_rate" class="field text full" name="conversion_rate" onchange="purchaseOrderRequestFormValidation()"/>
+        <input type="text" id="conversion_rate" class="field text full" name="conversion_rate" />
         </div>
         </td>
       </tr>
@@ -152,8 +152,9 @@
           <div id="add_new_po_msg">
            <input type="text" id="required_fields" name="required_fields" value="false">
            <input type="text" id="po_request_id" name="po_request_id" value=""  />
-           <input type="text" id="po_details_change" name="po_details_change" value="true"  />
-
+           <input type="text" id="expected_date_validity" name="expexted_date_validity" value="true"  />
+           <input type="text" id="sup_id_val" name="sup_id_val" value="" />
+           
 
           </div>
           <div id="po_request_message">  </div>
@@ -165,7 +166,7 @@
   </form>
   <?php //ordeer item add start ?>
   <div id="dlg_add_item" title="Add Item to Purchase Order">
-    <form>
+    <form name="add_purchase_order_item" id="add_purchase_order_item">
       <table style="width: 100%">
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Item Name *</b></td>
@@ -209,6 +210,8 @@
           <td style="padding: 5px 5px 5px 0;" colspan="5"><textarea id="po_desc" class="field text full" name="txt_po_desc" rows="2"></textarea></td>
         </tr>
       </table>
+      Hidden<input  name="purchase_order_id" id="purchase_order_id" type="text" value="" />
+      
       <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>
     </form>
   </div>
