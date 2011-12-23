@@ -42,11 +42,7 @@
 			//foreach($supplierArray as $supplier){
 			for($index=0; $index<sizeof($supplierArray);$index++){
 				
-			$arr=$supplierArray[$index];
-		
-			echo $arr->getSupplierCode1();
-			
-	        //."###".$supplierArray[$index]->getSupplierName();
+			echo $supplierArray[$index]->getSupplierCode()."###".$supplierArray[$index]->getSupplierName()."\n";
 						
 			}
 			

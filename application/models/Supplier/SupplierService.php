@@ -26,9 +26,11 @@
 			{
 			$supplier = new SupplierModel();
 				
-			 $supplierArray[$index] = $supplier->setSupplierCode($row->Supplier_Code);	
-			 $supplierArray[$index] = $supplier->setSupplierName($row->Supplier_Name);
+			 $supplier->setSupplierCode($row->Supplier_Code);	
+			 $supplier->setSupplierName($row->Supplier_Name);
 			 
+			  $supplierArray[$index] = $supplier; 
+			  
 			 $index++;
 			}
 			return $supplierArray;
