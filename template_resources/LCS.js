@@ -750,3 +750,49 @@ purchaseOrderRequestFormValidation();
 
 
 
+
+
+
+
+//validate discount percentage and  discount amount
+
+
+function validateDiscount(){
+	
+	
+	var discount_percentage = $('form[name=add_purchase_order_item] #discount_percentage').val();
+	var discount_amount = $('form[name=add_purchase_order_item] #discount_amount').val();
+
+
+    //alert(discount_percentage+" and "+discount_amount);
+	
+	// $("#textbox1").attr("disabled", "disabled");
+	
+	if(trim(discount_percentage)!=""){
+		
+		$('form[name=add_purchase_order_item] #discount_amount').attr("disabled", "disabled");
+		alert('disabled - amount');
+	}
+	else{
+		
+	//$('form[name=add_purchase_order_item] #discount_amount').attr("enabled", "enabled");
+	    $("form[name=add_purchase_order_item] #discount_amount").removeAttr("disabled"); 
+    alert('enabled - amount');
+	}
+	
+	
+	
+	
+	if(trim(discount_amount)!=""){
+		
+		$('form[name=add_purchase_order_item] #discount_percentage').attr("disabled", "disabled");
+		alert('disabled - persa');
+	}
+	else{
+		
+	//$('form[name=add_purchase_order_item] #discount_percentage').attr("enabled", "enabled");
+	$("form[name=add_purchase_order_item] #discount_percentage").removeAttr("disabled"); 
+    alert('enabled - persa');
+	}
+	
+}//validateDiscount

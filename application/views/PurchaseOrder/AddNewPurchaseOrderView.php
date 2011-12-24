@@ -191,9 +191,9 @@
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Discount %</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_disc_per" class="field text full" name="txt_po_disc_per" style="text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="discount_percentage" class="field text full" name="discount_percentage" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateDiscount()" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Discount Amount</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_disc" class="field text full" name="txt_po_disc" style="text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="discount_amount" class="field text full" name="discount_amount" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateDiscount()" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"></td>
           <td style="padding: 5px 5px 5px 0;width: 18%"></td>
         </tr>

@@ -42,7 +42,8 @@
 			//foreach($supplierArray as $supplier){
 			for($index=0; $index<sizeof($supplierArray);$index++){
 				
-			echo $supplierArray[$index]->getSupplierCode()."###".$supplierArray[$index]->getSupplierName()."\n";
+			//echo $supplierArray[$index]->getSupplierCode()."###".$supplierArray[$index]->getSupplierName()."\n";
+			echo $supplierArray[$index]->getSupplierCode()."###".$supplierArray[$index]->getSupplierName()."".$this->input->get('sup_type',TRUE)."\n";
 						
 			}
 			

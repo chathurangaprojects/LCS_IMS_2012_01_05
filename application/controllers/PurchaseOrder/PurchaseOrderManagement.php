@@ -194,7 +194,7 @@
 			   	 
 				 $poRequest->setSupplier_Code($this->input->post('supplier_id',TRUE));
 				 $poRequest->setOrder_Date($this->input->post('order_date',TRUE)); 
-				 $poRequest->setExpected_Date($this->input->post('expected_date',TRUE));
+				 //$poRequest->setExpected_Date($this->input->post('expected_date',TRUE));
 				 $poRequest->setQuote_No($this->input->post('quatation_no',TRUE));
 				 $poRequest->setAttn($this->input->post('attention',TRUE)); 
 				 $poRequest->setRequested_Dept($this->input->post('Department_Code',TRUE));
@@ -218,7 +218,7 @@
 		     //purchase order is not in dabase and it should be inserted
 			  $purchaseOrderID = $poService->createNewPurchaseOrder($poRequest);
 				  
-		 	echo "Purchase Order was succesfully Created.. #".$purchaseOrderID;
+		 	  echo "Purchase Order was succesfully Created.. #".$purchaseOrderID;
 			
 			}
 			else{
@@ -227,7 +227,7 @@
 			
 			//purchase order already exists and it should be updated
 		      $poService->updatePurchaseOrder($poRequest);	
-		  echo "Purchase Order was succesfully Updated..#".$purchase_order_id;
+	    	  echo "Purchase Order was succesfully Updated..#".$purchase_order_id;
 				
 			}
 				  
