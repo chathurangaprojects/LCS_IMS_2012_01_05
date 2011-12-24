@@ -14,20 +14,30 @@
 		public function retriewSupplierNameAndID($supplierModel)
 		{
 			//get supplier name
-			$supplierName = $supplierModel->getSupplierName();
+			$supplierName = $supplierModel->getSupplier_Name();
 			
 			//database select query based on like operator on name
              $this->db->like('Supplier_Name',$supplierName);  
-             $query = $this->db->get('ta_ims_supplier_header');
-			
+			 
+			 //getting supplier type
+			 $supType = $supplierModel->getSupplier_Type();
+			 
+			 if($supType!=-1){
+             $query = $this->db->get_where('ta_ims_supplier_header',array('Supplier_Type' => $supplierModel->getSupplier_Type()));
+			 }
+			 else{
+			  //user havent selected a supplier type yet. therefore we must display all suppliers at the moment
+			   $query = $this->db->get('ta_ims_supplier_header');
+			 }
+			 
 			$supplierArray = array();
 			$index = 0;
             foreach ($query->result() as $row)
 			{
 			$supplier = new SupplierModel();
 				
-			 $supplier->setSupplierCode($row->Supplier_Code);	
-			 $supplier->setSupplierName($row->Supplier_Name);
+			 $supplier->setSupplier_Code($row->Supplier_Code);	
+			 $supplier->setSupplier_Name($row->Supplier_Name);
 			 
 			  $supplierArray[$index] = $supplier; 
 			  

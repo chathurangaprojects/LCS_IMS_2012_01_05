@@ -706,7 +706,6 @@ function select_currency(){
 	//check whether the field value is set
 	purchaseOrderRequestFormValidation();
 	
-	
 }//function
 	
 

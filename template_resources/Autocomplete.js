@@ -40,11 +40,15 @@ $().ready(function () {
 	
 	$("#sup_name").autocomplete(site_url + "/Autocomplete/loadSuppliers", {
 	    width: 525,
-		extraParams: {sup_type: function() { return $("#sup_type").val(); } },
+		//autoFill : true,
+		
+		extraParams: {sup_type: function() {  return $("#sup_type").val(); } },
         matchContains: true,
         selectFirst: false,
+		cacheLength: 0,
 formatItem: function (data, i, n, value) {
 var x = value.split("-")[2];
+        //jQuery(this).flushCache();
 
 return "<span>" + value + "</span>";
 
@@ -57,7 +61,7 @@ formatResult: function (data, value) {
     }).result(function(event, data, formatted){ 
 	
 	var selectedID = formatted.split("###")[0];
-
+    // $("#sup_type").flushCache();
     // $('form[name=purchase_order_request] #supplier_id').val(selectedID);
 	 $('#supplier_id').val(selectedID);
 	
