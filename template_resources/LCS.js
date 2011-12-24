@@ -388,11 +388,11 @@ $().ready(function() {
 			},
 			
 			submitHandler: function(form) {
-								
+							
 				//var isAllFiedsValidated=$('#required_fields').val();
 			  var expectedDateValidity =  $("#expected_date_validity").val();
 
-				if(expectedDateValidity=='true'){
+            if(expectedDateValidity=='true'){
 					
 					// all the data fields are validated and ready for the submission
 				//$('#required_fields').val('true');
@@ -400,16 +400,14 @@ $().ready(function() {
 			$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/createNewPurchaseOrderRequest', $("#purchase_order_request").serialize(), function(msg) {
 					//$('form[name=purchase_order_request] #po_request_id').val(msg);
 					$('#po_request_message').html('<font color="#009900">'+msg.split('#')[0]+'</font>'); 
-					
+
 					var purchaseOrderID=msg.split('#')[1];
 					//set up the purchase order id for adding items for the purchase order 
 					$('form[name=add_purchase_order_item] #purchase_order_id').val(purchaseOrderID);
 					$('form[name=purchase_order_request] #po_request_id').val(purchaseOrderID);
 					//setting up the valus changed as false... because the insert or update is already done
 					//$('#po_details_change').val('false');
-					
 					$('#dlg_add_item').dialog('open');
-					
 				});
 								
 				}//if expectedDateValidity

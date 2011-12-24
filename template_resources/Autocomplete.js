@@ -87,10 +87,10 @@ formatResult: function (data, value) {
 
     }).result(function(event, data, formatted){ 
 	
-	var selectedID = formatted.split("-")[2];
+	var selectedID = formatted.split("###")[0];
 
-     $('form[name=purchase_order_request] #supplier_id').val(selectedID);
-	 //$('#supplier_id').val(selectedID);
+    // $('form[name=purchase_order_request] #supplier_id').val(selectedID);
+	 $('#supplier_id').val(selectedID);
 	
 	}//result
 	

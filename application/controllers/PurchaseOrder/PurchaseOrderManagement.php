@@ -184,15 +184,15 @@
 				 $poRequest->setPO_Remarks('remarks');
 				 $poRequest->setPO_Payment_Remarks('paymet'); 
 			     $poRequest->setPrint_Original(0);
-			   */
 			   
+			   */
 			   $user_id = $this->session->userdata('emp_id');
 			   
+
 			   //getting the purchase order id			   
 			   $purchase_order_id = $this->input->post('po_request_id',TRUE);
-			   			   
-			    // $poRequest->setSupplier_Code($this->input->post('sup_type',TRUE));
-				 $poRequest->setSupplier_Code(1);
+			   	 
+				 $poRequest->setSupplier_Code($this->input->post('supplier_id',TRUE));
 				 $poRequest->setOrder_Date($this->input->post('order_date',TRUE)); 
 				 $poRequest->setExpected_Date($this->input->post('expected_date',TRUE));
 				 $poRequest->setQuote_No($this->input->post('quatation_no',TRUE));
@@ -200,23 +200,25 @@
 				 $poRequest->setRequested_Dept($this->input->post('Department_Code',TRUE));
 				 $poRequest->setRequested_By($this->input->post('requested_by',TRUE));
 				 $poRequest->setCreated_By($user_id);
-				 $poRequest->setCurrency_Code($this->input->post('currrency_selector',TRUE)); 
+				 $poRequest->setCurrency_Code($this->input->post('currrency_selector',TRUE));
 				 $poRequest->setCurrency_Rate($this->input->post('conversion_rate',TRUE));
 				 $poRequest->setPayment_Type_Code($this->input->post('payment_type',TRUE));
 				 $poRequest->setPO_Purpose($this->input->post('po_purpose',TRUE));
 				 $poRequest->setPO_Remarks($this->input->post('pay_remark',TRUE));
 				 $poRequest->setPO_Payment_Remarks($this->input->post('pay_remark',TRUE)); 
 			     $poRequest->setPrint_Original(0);
-				 //$poRequest->setStatus_Code(1);
+				 $poRequest->setStatus_Code(1); //change the status based on status table
+			   
 			   
 			   //setting the values end
+			   
 			   
             if($purchase_order_id==""){
 		  
 		     //purchase order is not in dabase and it should be inserted
 			  $purchaseOrderID = $poService->createNewPurchaseOrder($poRequest);
 				  
-			echo "Purchase Order was succesfully Created.. ".$purchaseOrderID;
+		 	echo "Purchase Order was succesfully Created.. #".$purchaseOrderID;
 			
 			}
 			else{

@@ -14,7 +14,7 @@
         </div>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Supplier Name *</b></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="sup_name" name="sup_name" class="field text full" name="sup_name" onchange="purchaseOrderRequestFormValidation()" />
+            <input type="text" id="sup_name"  class="field text full" name="sup_name" onchange="purchaseOrderRequestFormValidation()" />
           </div></td>
       </tr>
       <tr>
@@ -121,15 +121,15 @@
       </tr>
       <tr>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Payment Remarks</b></td>
-        <td colspan="7" style="padding: 5px 5px 5px 0;"><textarea id="pay_remark" class="field text full" name="txt_pay_remark" rows="2"></textarea></td>
+        <td colspan="7" style="padding: 5px 5px 5px 0;"><textarea id="pay_remark" class="field text full" name="pay_remark" rows="2"></textarea></td>
       </tr>
       <tr>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><label class="desc">PO Purpose</label></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><!-- <input type="text" id="po_purpose" class="field text full" name="txt_po_purpose" /> -->
-          <textarea id="po_purpose" class="field text full" name="txt_po_purpose" rows="2"></textarea></td>
+          <textarea id="po_purpose" class="field text full" name="po_purpose" rows="2"></textarea></td>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><label class="desc">PO Remarks</label></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><!-- <input type="text" id="po_remarks" class="field text full" name="txt_po_remarks" /> -->
-          <textarea id="po_remarks" class="field text full" name="txt_po_remarks" rows="2"></textarea></td>
+          <textarea id="po_remarks" class="field text full" name="po_remarks" rows="2"></textarea></td>
       </tr>
       <tr>
         <td colspan="8"><!--                            <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
