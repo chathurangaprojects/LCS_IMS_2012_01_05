@@ -15,10 +15,10 @@
 		
 		public function loadItemTypes()
 		{ 
-					$supplierType = $this->input->get('sup_type',TRUE);
+					//$supplierType = $this->input->get('sup_type',TRUE);
 
-			echo $supplierType." aaaaa - bbbbb - 10\n";
-			echo $supplierType." ccccc - ddddd - 20\n";
+			echo " aaaaa - bbbbb - 10\n";
+			echo " ccccc - ddddd - 20\n";
 			echo "eeeee - fffff - 30\n";
 			echo "ggggg - hhhhh - 40\n";
 			echo "iiiii - jjjjj - 50\n";
@@ -56,7 +56,7 @@
 			for($index=0; $index<sizeof($supplierArray);$index++){
 				
 			//echo $supplierArray[$index]->getSupplier_Code()."###".$supplierArray[$index]->getSupplier_Name()."\n";
-			echo $supplierArray[$index]->getSupplier_Code()."###".$supplierArray[$index]->getSupplier_Name()."".$this->input->get('sup_type',TRUE)."\n";
+			echo $supplierArray[$index]->getSupplier_Code()."###".$supplierArray[$index]->getSupplier_Name()."###".$this->input->get('sup_type',TRUE)."\n";
 						
 			}
 			

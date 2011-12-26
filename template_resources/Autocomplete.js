@@ -47,14 +47,14 @@ $().ready(function () {
         selectFirst: false,
 		cacheLength: 0,
 formatItem: function (data, i, n, value) {
-var x = value.split("-")[2];
+var supplierName = value.split("###")[1];
         //jQuery(this).flushCache();
 
-return "<span>" + value + "</span>";
+return "<span>" + supplierName + "</span>";
 
 },
 formatResult: function (data, value) {
-	return value.split("-")[0];
+	return value.split("###")[1];
 }
 
 

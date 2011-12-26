@@ -199,9 +199,9 @@
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Individual Tax %</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_ind_tax" class="field text full" name="txt_po_ind_tax" style="text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="tax_percentage" class="field text full" name="tax_percentage" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateTax()"/></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Tax Value</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_tax_val" class="field text full" name="txt_po_tax_val" style="text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="tax_value" class="field text full" name="tax_value" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateTax()" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%;text-align: right;font-size: 15px;"><b>Item Value</b></td>
           <td style="padding: 5px 5px 5px 0;width: 18%;"><input type="text" readonly="readonly" id="po_item_val" class="field text full" name="txt_po_item_val" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" /></td>
         </tr>

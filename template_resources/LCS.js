@@ -761,22 +761,14 @@ function validateDiscount(){
 	
 	var discount_percentage = $('form[name=add_purchase_order_item] #discount_percentage').val();
 	var discount_amount = $('form[name=add_purchase_order_item] #discount_amount').val();
-
-
-    //alert(discount_percentage+" and "+discount_amount);
-	
-	// $("#textbox1").attr("disabled", "disabled");
 	
 	if(trim(discount_percentage)!=""){
 		
 		$('form[name=add_purchase_order_item] #discount_amount').attr("disabled", "disabled");
-		alert('disabled - amount');
 	}
 	else{
 		
-	//$('form[name=add_purchase_order_item] #discount_amount').attr("enabled", "enabled");
 	    $("form[name=add_purchase_order_item] #discount_amount").removeAttr("disabled"); 
-    alert('enabled - amount');
 	}
 	
 	
@@ -785,13 +777,108 @@ function validateDiscount(){
 	if(trim(discount_amount)!=""){
 		
 		$('form[name=add_purchase_order_item] #discount_percentage').attr("disabled", "disabled");
-		alert('disabled - persa');
 	}
 	else{
 		
 	//$('form[name=add_purchase_order_item] #discount_percentage').attr("enabled", "enabled");
 	$("form[name=add_purchase_order_item] #discount_percentage").removeAttr("disabled"); 
-    alert('enabled - persa');
 	}
 	
 }//validateDiscount
+
+
+
+
+
+
+// validate discount
+
+function validateTax(){
+	
+	
+	var tax_percentage = $('form[name=add_purchase_order_item] #tax_percentage').val();
+	var tax_value = $('form[name=add_purchase_order_item] #tax_value').val();
+	
+	if(trim(tax_percentage)!=""){
+		
+		$('form[name=add_purchase_order_item] #tax_value').attr("disabled", "disabled");
+	}
+	else{
+		
+	    $("form[name=add_purchase_order_item] #tax_value").removeAttr("disabled"); 
+	}
+	
+	
+	
+	
+	if(trim(tax_value)!=""){
+		
+		$('form[name=add_purchase_order_item] #tax_percentage').attr("disabled", "disabled");
+	}
+	else{
+		
+	$("form[name=add_purchase_order_item] #tax_percentage").removeAttr("disabled"); 
+	}
+	
+}//validateDiscount
+
+
+
+
+
+
+//calculate po item value
+function calculate_item_value()
+{
+    //alert($('#po_item_unit_price').val());
+    
+    var up = jQuery.trim($('#po_item_unit_price').val());
+    var qty = jQuery.trim($('#po_qty').val());
+    var dp = jQuery.trim($('#discount_percentage').val());
+    var d = jQuery.trim($('#po_disc').val());
+    var it = jQuery.trim($('#tax_percentage').val());
+    var tv = jQuery.trim($('#tax_value').val());
+    
+    if(up == '')
+    {
+        up = 0;
+    }
+    
+    if(qty == '')
+    {
+        qty = 0;
+    }
+    
+    if(dp == '')
+    {
+        dp = 0;
+    }
+    
+    if(d == '')
+    {
+        d = 0;
+    }
+    
+    if(it == '')
+    {
+        it = 0;
+    }
+    
+    if(tv == '')
+    {
+        tv = 0;
+    }
+    
+
+    
+    var iv = ((parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100) + (parseFloat(parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100)) * parseFloat(it) / 100)) * parseFloat(qty)) - parseFloat(d) + parseFloat(tv);
+    
+    $('#po_item_val').val(iv);
+}
+
+
+
+
+
+
+
