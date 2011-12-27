@@ -13,18 +13,48 @@ class PurchaseOrderItemService extends CI_Model {
  
  
  
-
  function addNewItemForPurchaseOrder($purchaseOrderItemModel){
 	 
-	 
-   $this->db->insert('ta_ims_po_details', $purchaseOrderItemModel); 
-
-   return $this->db->insert_id();
-
+  $isAvailable = $this->checkWhethertheItemIsAlreadyInPurchaseOrder($purchaseOrderItemModel);
+  
+  if($isAvailable==1){
+   //item is already in the po request (cant be added again)
+   return 0;
+   
+  }
+  else{
+   //item was succesfully added to the po
+   return  $this->db->insert('ta_ims_po_details', $purchaseOrderItemModel); 
+ 
+  }
+   
+   
  }//addNewItemForPurchaseOrder
  
  
  
+ 
+ 
+ function checkWhethertheItemIsAlreadyInPurchaseOrder($purchaseOrderItemModel){
+ 
+ $query = $this->db->query('select * from ta_ims_po_details where Order_Code = '.$purchaseOrderItemModel->getOrder_Code().' AND Master_Item_Code = '.$purchaseOrderItemModel->getMaster_Item_Code());
+ 
+ if ($query->num_rows() > 0)
+  {
+
+  return 1;
+
+  }
+  else{
+
+   return 0;
+   
+  }
+
+ }//function 
+ 
+ 
+
  
  
  function getAddedItemForGivenPurchaseOrderRequest($poItemModel){

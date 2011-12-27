@@ -915,9 +915,10 @@ $().ready(function() {
 			},
 			
 			submitHandler: function(form) {
-				// $('#addnewempmsg').html('<font color="#CC0000"> Please wait............ </font>'); 
+				
+				 
 				$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/addItemsToPurchaseOrder', $("#add_purchase_order_item").serialize(), function(msg) {
-
+				 /*
 				$('form[name=add_purchase_order_item] #po_item_name').val('');
 				$('form[name=add_purchase_order_item] #po_item_unit').val('');
                 $('form[name=add_purchase_order_item] #po_item_unit_price').val('');
@@ -928,13 +929,17 @@ $().ready(function() {
 				$('form[name=add_purchase_order_item] #tax_value').val('');
 				$('form[name=add_purchase_order_item] #po_description').val('');
 				$('form[name=add_purchase_order_item] #item_id').val('');
-
-				validateTax();
-
-	/*			
-				$('#addNewItemMessage').html('<div class="response-msg success ui-corner-all"><span> Item Added</span>New Item was succesfully added for the purchase order</div>');
 */
-	$('#addNewItemMessage').html(msg);
+				validateTax();
+                validateDiscount();
+			
+			var ItemAddingMessage = msg.split("#######----#######")[0];
+            var itemTableView = msg.split("#######----#######")[1];
+			
+			$('#addNewItemMessage').html(ItemAddingMessage);
+            $('#addedItemTable').html(itemTableView);
+			
+	//$('#addNewItemMessage').html(msg);
 				 
 				});
 			}

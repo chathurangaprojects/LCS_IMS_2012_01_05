@@ -68,12 +68,14 @@ formatResult: function (data, value) {
 	var selectedID = formatted.split("###")[0];
 	 $('#item_id').val(selectedID);
 	
+	 //clear the previous item added message 
+	 $('#addNewItemMessage').html('');
+
 	}//result
 	
 	);
 	
 	//item name
-	
 
     });
 	

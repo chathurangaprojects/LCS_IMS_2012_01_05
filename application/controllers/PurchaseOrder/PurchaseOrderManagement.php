@@ -264,14 +264,62 @@
 		
 		
 		
-		function addItemsToPurchaseOrder(){
+function addItemsToPurchaseOrder(){
+		
+		//check the priviledges
 			
-		//echo "add items to po";
 		$poItemService = new PurchaseOrderItemService();
 		$poItemModel =new PurchaseOrderItemModel();
 		
 		
-
+		$discountVal = $this->input->post('discount_amount',TRUE);
+		$discountPercentage = $this->input->post('discount_percentage',TRUE);
+		
+		$taxVal = $this->input->post('tax_value',TRUE);
+		$taxPercentage = $this->input->post('tax_percentage',TRUE);
+		
+		if($discountVal==""){
+		
+		 $discountVal = 0;
+		 
+		}
+		
+		
+		if($discountPercentage==""){
+		
+		$discountPercentage = 0.0;
+		
+		}
+		
+		
+		if($taxVal==""){
+		
+		 $taxVal = 0;
+		 
+		}
+		
+		
+		if($taxPercentage==""){
+		
+		$taxPercentage = 0.0;
+		
+		}
+		
+	
+ $poItemModel->setOrder_Code($this->input->post('purchase_order_id',TRUE));
+ $poItemModel->setMaster_Item_Code($this->input->post('item_id',TRUE));
+ $poItemModel->setUnit($this->input->post('po_item_unit',TRUE));
+ $poItemModel->setUnit_Price($this->input->post('po_item_unit_price',TRUE));
+ $poItemModel->setQuantity($this->input->post('po_item_qty',TRUE));
+ $poItemModel->setDiscount($discountPercentage);
+ $poItemModel->setDiscount_Value($discountVal);
+ $poItemModel->setItem_Value($this->input->post('po_item_value',TRUE));
+ $poItemModel->setInd_Tax($taxPercentage);
+ $poItemModel->setTax_Value($taxVal);
+ $poItemModel->setDescription($this->input->post('po_description',TRUE));
+ $poItemModel->setItem_added_by($this->session->userdata('emp_id'));
+	
+/*
  $poItemModel->setOrder_Code($this->input->post('purchase_order_id',TRUE));
  $poItemModel->setMaster_Item_Code($this->input->post('item_id',TRUE));
  $poItemModel->setUnit($this->input->post('po_item_unit',TRUE));
@@ -284,24 +332,38 @@
  $poItemModel->setTax_Value($this->input->post('tax_value',TRUE));
  $poItemModel->setDescription($this->input->post('po_description',TRUE));
  $poItemModel->setItem_added_by($this->session->userdata('emp_id'));
-
+*/
 		
- $insertedID = $poItemService->addNewItemForPurchaseOrder($poItemModel);
+ $insertID = $poItemService->addNewItemForPurchaseOrder($poItemModel);
 	
+	$message="";
+	
+	if($insertID==1){
+	
+	$message= '<div class="response-msg success ui-corner-all"><span> Item Added</span>New Item was succesfully added for the purchase order </div>';
+	
+	}
+	else{
+	
+	$message= '<div class="response-msg error ui-corner-all"><span> Item exists</span>the item is already included in the purchase order request</div>';
+	
+	}
+
+$purchaseOrderID = $this->input->post('purchase_order_id',TRUE);
+
+$poItemTableView = $this->loadItemTable($purchaseOrderID);
+
+echo $message.'#######----#######'.$poItemTableView;
+
+
+}//function
+		
+		
+		
+		
 
 	
- $this->loadItemTable(129);
-
-
-
-		}//function
-		
-		
-		
-		
-
-	
-	
+	/*
    function loadItemTable($poID){
 			
 			
@@ -385,12 +447,101 @@
 			
 			
 			
-			echo "item added";
+			
 			
 			
    }//loadItemTable
 		
+*/
 
+
+
+ function loadItemTable($poID){
+			
+			$resultTbl="";
+			//$pono = trim($_POST['pono']);
+            $pono=$poID;
+
+            $poItemModel = new PurchaseOrderItemModel();
+			$poItemService = new PurchaseOrderItemService();
+			 
+			$poItemModel->setOrder_Code($pono);
+			
+			$poItemModelArray = $poItemService->getAddedItemForGivenPurchaseOrderRequest($poItemModel);
+			
+            if(!empty($poItemModelArray))
+            {
+                 $resultTbl= $resultTbl.'<table width="100%">';
+                 $resultTbl= $resultTbl.'<tr style="background-color: #CDB79E;height: 25px;margine: 5px;" valign="middle">';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Item Description</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Quantity</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Unit</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Price</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Item Value</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Discount %</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Discount Value</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Ind Tax %</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Ind Tax Value</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Net Value</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Action</th>';
+                 $resultTbl= $resultTbl.'</tr>';
+                
+                $i = 1;
+                
+               // foreach ($result->result_array() as $row)
+			   for($index=0;$index<sizeof($poItemModelArray);$index++)
+                {
+                   // $iv = ((floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100) + (floatval(floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100)) * floatval($row['Ind_Tax']) / 100)) * floatval($row['Quantity'])) - floatval($row['Discount_Value']) + floatval($row['Tax_Value']);
+				  $iv =100;
+				  
+                    $i = 1 - $i;
+                    
+                    if($i == 0)
+                    {
+                         $resultTbl= $resultTbl.'<tr style="background-color: #FFFFFF;">';
+                    }
+                    else
+                    {
+                         $resultTbl= $resultTbl.'<tr style="background-color: #F5F5DC;">';
+                    }
+                    
+                    //echo '<td style="padding: 5px 5px 5px 0;">' . $row['Master_Item_Code'] . '</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">Item name</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getQuantity(). '</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;"> Description </td>';
+                   $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getUnit_Price(). '</td>';
+                    $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getItem_Value(). '</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getDiscount(). '</td>';
+                $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getDiscount_Value(). '</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getInd_Tax(). '</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getTax_Value(). '</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' . $iv . '<input type="hidden" id="net_val_' . $poItemModelArray[$index]->getMaster_Item_Code(). '" name="txt_net_val_' . $poItemModelArray[$index]->getMaster_Item_Code(). '" value="' . $iv . '"/></td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">
+
+                            <a class="lnk_edit_item" href="#" title="Edit Item" onclick="load_item_to_edit(' . $poItemModelArray[$index]->getMaster_Item_Code(). ');">
+                                <img src="' . base_url() . 'resources/images/edit_item.png" alt="Edit Item"/>
+                            </a>
+
+                            <a class="lnk_delete_item" href="#" onclick="delete_po_items(' .$poItemModelArray[$index]->getMaster_Item_Code(). ');" title="Delete Item">
+                                <img src="' . base_url() . 'resources/images/delete_item.png" alt="Delete"/>
+                            </a>
+                            
+                            <a class="lnk_read_more" href="#" title="Read More">
+                                <img src="' . base_url() . 'resources/images/read_more.png" alt="Read More"/>
+                            </a>
+                        </td>';
+                     $resultTbl= $resultTbl.'</tr>';
+                }//for
+                
+                 $resultTbl= $resultTbl.'</table>';
+            }//if
+			
+			return  $resultTbl;
+			
+			
+			
+			
+   }//loadItemTable
 
 
 		

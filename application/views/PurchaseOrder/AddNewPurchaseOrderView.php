@@ -162,6 +162,11 @@
           </td>
       </tr>
     </table>
+	
+	<div id="addedItemTable">
+	
+	</div>
+	
   </fieldset>
   </form>
   <?php //ordeer item add start ?>
