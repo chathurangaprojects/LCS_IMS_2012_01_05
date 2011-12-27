@@ -947,6 +947,21 @@ $().ready(function() {
 		
 	});
 	
+var po_request_id = trim($('#po_request_id').val());	
+
+if(po_request_id!=""){
+	
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/displayAddedItemsForPurchaseOrder/'+po_request_id,
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+         $('#addedItemTable').html(msg);
+
+        }
+    });
+}
 
 });//function add_purchase_order_item
 
@@ -977,6 +992,7 @@ $.ajax({
 
 }//load_added_items
 */
+
 
 
 

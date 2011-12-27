@@ -138,8 +138,8 @@
                                     Add Item
                                 </a>
                             </span>-->
-          <!--                                                        <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
-                                <a id="lnk_add_item" class="btn ui-state-default ui-corner-all" href="#" onclick="validate();"  >
+<!--                                                                  <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+                                <a id="lnk_add_item" class="btn ui-state-default ui-corner-all" href="#" name="lnk_add_item">
                                    <span class="ui-icon ui-icon-newwin"></span>
                                     Add Item
                                 </a>

@@ -544,6 +544,14 @@ echo $message.'#######----#######'.$poItemTableView;
    }//loadItemTable
 
 
+
+
+     function displayAddedItemsForPurchaseOrder($po_request_id){
+	 
+	 echo $this->loadItemTable($po_request_id);
+		 
+	 }
+	 
 		
 		
 	}//class
