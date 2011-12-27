@@ -7,7 +7,7 @@
 		{
 			parent::__construct();
 		
-			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService'));
+			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService','PurchaseOrder/UnitModelService','PurchaseOrder/PurchaseOrderItemModel','PurchaseOrder/PurchaseOrderItemService'));
 		   
 			if(!$this->session->userdata('logged_in'))
 			{
@@ -50,9 +50,12 @@
 			$paymentTypeObjectArray = $paymentTypeService->retriveAllPaymentTypes();
 			
 			
+			$unitService = new UnitModelService();
+			
+			$unitModelObjArr = $unitService->retrieveAllUnitDetails();
 			
 			//setting up the data array
-			$data=array('departmentName'=>$departmentName,'currencyObjectArray'=>$currencyObjectArray,'paymentTypeObjectArray'=>$paymentTypeObjectArray);
+			$data=array('departmentName'=>$departmentName,'currencyObjectArray'=>$currencyObjectArray,'paymentTypeObjectArray'=>$paymentTypeObjectArray,'UnitArray'=>$unitModelObjArr);
 			
 			
 						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidiry of Singapoor Telecom', 'Create New Purchase Order', 'Please Fill All The Mandatory Fields...');
@@ -255,6 +258,141 @@
 		}//function
 		
 		
+		
+		
+		
+		
+		
+		
+		function addItemsToPurchaseOrder(){
+			
+		//echo "add items to po";
+		$poItemService = new PurchaseOrderItemService();
+		$poItemModel =new PurchaseOrderItemModel();
+		
+		
+
+ $poItemModel->setOrder_Code($this->input->post('purchase_order_id',TRUE));
+ $poItemModel->setMaster_Item_Code($this->input->post('item_id',TRUE));
+ $poItemModel->setUnit($this->input->post('po_item_unit',TRUE));
+ $poItemModel->setUnit_Price($this->input->post('po_item_unit_price',TRUE));
+ $poItemModel->setQuantity($this->input->post('po_item_qty',TRUE));
+ $poItemModel->setDiscount($this->input->post('discount_percentage',TRUE));
+ $poItemModel->setDiscount_Value($this->input->post('discount_amount',TRUE));
+ $poItemModel->setItem_Value($this->input->post('po_item_value',TRUE));
+ $poItemModel->setInd_Tax($this->input->post('tax_percentage',TRUE));
+ $poItemModel->setTax_Value($this->input->post('tax_value',TRUE));
+ $poItemModel->setDescription($this->input->post('po_description',TRUE));
+ $poItemModel->setItem_added_by($this->session->userdata('emp_id'));
+
+		
+ $insertedID = $poItemService->addNewItemForPurchaseOrder($poItemModel);
+	
+
+	
+ $this->loadItemTable(129);
+
+
+
+		}//function
+		
+		
+		
+		
+
+	
+	
+   function loadItemTable($poID){
+			
+			
+			//$pono = trim($_POST['pono']);
+            $pono=$poID;
+
+            $poItemModel = new PurchaseOrderItemModel();
+			$poItemService = new PurchaseOrderItemService();
+			 
+			$poItemModel->setOrder_Code($pono);
+			
+			$poItemModelArray = $poItemService->getAddedItemForGivenPurchaseOrderRequest($poItemModel);
+			
+            if(!empty($poItemModelArray))
+            {
+                echo '<table width="100%">';
+                echo '<tr style="background-color: #CDB79E;height: 25px;margine: 5px;" valign="middle">';
+                //echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Item Code</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Item Description</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Quantity</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Unit</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Price</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Item Value</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Discount %</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Discount Value</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Ind Tax %</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Ind Tax Value</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Net Value</th>';
+                echo '<th style="padding: 5px 5px 5px 0;font-weight:bold;">Action</th>';
+                echo '</tr>';
+                
+                $i = 1;
+                
+               // foreach ($result->result_array() as $row)
+			   for($index=0;$index<sizeof($poItemModelArray);$index++)
+                {
+                   // $iv = ((floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100) + (floatval(floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100)) * floatval($row['Ind_Tax']) / 100)) * floatval($row['Quantity'])) - floatval($row['Discount_Value']) + floatval($row['Tax_Value']);
+				  $iv =100;
+				  
+                    $i = 1 - $i;
+                    
+                    if($i == 0)
+                    {
+                        echo '<tr style="background-color: #FFFFFF;">';
+                    }
+                    else
+                    {
+                        echo '<tr style="background-color: #F5F5DC;">';
+                    }
+                    
+                    //echo '<td style="padding: 5px 5px 5px 0;">' . $row['Master_Item_Code'] . '</td>';
+                    echo '<td style="padding: 5px 5px 5px 0;">Item name</td>';
+                    echo '<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getQuantity(). '</td>';
+                    echo '<td style="padding: 5px 5px 5px 0;"> Description </td>';
+                  echo '<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getUnit_Price(). '</td>';
+                   echo '<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getItem_Value(). '</td>';
+                    echo '<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getDiscount(). '</td>';
+               echo '<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getDiscount_Value(). '</td>';
+                    echo '<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getInd_Tax(). '</td>';
+                    echo '<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getTax_Value(). '</td>';
+                    echo '<td style="padding: 5px 5px 5px 0;">' . $iv . '<input type="hidden" id="net_val_' . $poItemModelArray[$index]->getMaster_Item_Code(). '" name="txt_net_val_' . $poItemModelArray[$index]->getMaster_Item_Code(). '" value="' . $iv . '"/></td>';
+                    echo '<td style="padding: 5px 5px 5px 0;">
+
+                            <a class="lnk_edit_item" href="#" title="Edit Item" onclick="load_item_to_edit(' . $poItemModelArray[$index]->getMaster_Item_Code(). ');">
+                                <img src="' . base_url() . 'resources/images/edit_item.png" alt="Edit Item"/>
+                            </a>
+
+                            <a class="lnk_delete_item" href="#" onclick="delete_po_items(' .$poItemModelArray[$index]->getMaster_Item_Code(). ');" title="Delete Item">
+                                <img src="' . base_url() . 'resources/images/delete_item.png" alt="Delete"/>
+                            </a>
+                            
+                            <a class="lnk_read_more" href="#" title="Read More">
+                                <img src="' . base_url() . 'resources/images/read_more.png" alt="Read More"/>
+                            </a>
+                        </td>';
+                    echo '</tr>';
+                }//for
+                
+                echo '</table>';
+            }//if
+			
+			
+			
+			echo "item added";
+			
+			
+   }//loadItemTable
+		
+
+
+
 		
 		
 	}//class

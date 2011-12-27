@@ -7,25 +7,49 @@
 		{
 			parent::__construct();
 		
-	        $this->load->model('UserModel');
-			$this->load->model('UserService');
-			$this->load->model(array('Supplier/SupplierModel','Supplier/SupplierService'));
+	        //$this->load->model('UserModel');
+			//$this->load->model('UserService');
+			//$this->load->model(array('Supplier/SupplierModel','Supplier/SupplierService'));
+			
+			$this->load->model(array('UserModel', 'UserService'));
+			$this->load->model(array('ItemMaster/ItemMasterModel', 'ItemMaster/ItemMasterService'));
+			$this->load->model(array('Supplier/SupplierModel', 'Supplier/SupplierService'));
 		}
 		
 		
 		public function loadItemTypes()
-		{ 
-					//$supplierType = $this->input->get('sup_type',TRUE);
-
-			echo " aaaaa - bbbbb - 10\n";
-			echo " ccccc - ddddd - 20\n";
-			echo "eeeee - fffff - 30\n";
-			echo "ggggg - hhhhh - 40\n";
-			echo "iiiii - jjjjj - 50\n";
-			echo "jjjjj - kkkkk - 60\n";
+		{
+			$itemMasterModel = new ItemMasterModel();
+			$itemMasterService = new ItemMasterService();
+			
+			$itemMasterModel->setItem_Name($this->input->get('q', TRUE));
+			
+			$results = $itemMasterService->loadItemTypes($itemMasterModel);
+			
+			if(!empty($results))
+			{
+				foreach($results->result() as $result)
+				{
+					$itemType = trim($result->Item_Type);
+					$itemCategory = trim($result->Category_Name);
+					
+					if(empty($itemType))
+					{
+						$itemType = "&lt;Type Not Available&gt;";
+					}
+					
+					if(empty($itemCategory))
+					{
+						$itemCategory = "&lt;Category Not Available&gt;";
+					}
+					
+					echo $itemType . " !@#$%^&*() " . $itemCategory . " !@#$%^&*() " . trim($result->Type_Code) . "\n";
+				}
+			}
 		}
 		
 		
+	
 		public function loadSuppliers(){
 			
 			
@@ -61,6 +85,43 @@
 			}
 			
 		}//loadSuppliers
+		
+		
+		
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		function loadItemNames(){
+			
+			
+			//echo "1###name###cat";
+			 $charactersTypingforitemName = $this->input->get('q',TRUE);
+
+	
+	          $itemModel = new ItemMasterModel();
+			  $itemService = new ItemMasterService();
+			
+			 $itemModel->setItem_Name($charactersTypingforitemName);
+			 
+			 $itemArray = $itemService->retrieveItemNames($itemModel);
+			 
+	        // echo "1###name".$charactersTypingforitemName.sizeof($itemArray)."###cat";
+	        
+		     for($index=0;$index<sizeof($itemArray);$index++){
+	         
+			 echo  $itemArray[$index]->getMaster_Item_Code()."###".$itemArray[$index]->getItem_Name()."\n";
+	
+			 }
+			 
+			 
+		}//loadItemNames
 		
 		
 		

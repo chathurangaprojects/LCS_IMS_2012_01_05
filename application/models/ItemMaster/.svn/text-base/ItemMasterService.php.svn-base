@@ -29,7 +29,7 @@
 				$i += 1;
 			}
 		
-			$sql = "SELECT ta_ims_item_type.*, ta_ims_main_category.Category_Name FROM ta_ims_item_type INNER JOIN ta_ims_main_category ON ta_ims_item_type.Category_Code = ta_ims_main_category.Category_Code WHERE " . trim($qry) . " OR ta_ims_item_type.Description LIKE '%" . trim($itemMasterModel->getItem_Name()) . "%'";
+			$sql = "SELECT ta_ims_item_type.*, ta_ims_main_category.Category_Name FROM ta_ims_item_type INNER JOIN ta_ims_main_category ON ta_ims_item_type.Category_Code = ta_ims_main_category.Category_Code WHERE " . trim($qry) . " OR ta_ims_item_type.Description LIKE '%" . trim($itemMasterModel->getItem_Name()) . "%' AND (ta_ims_item_type.Item_Type != '' OR ta_ims_item_type.Item_Type != NULL)";
 		
 			$results = $this->db->query($sql);
 
@@ -42,5 +42,12 @@
 				return NULL;
 			}
 		}
+		
+	//Insert Master Items
+	public function insertItemMasterDetails($itemMsaterModel)
+	{
+		$x = $this->db->insert('ta_ims_item_master', $itemMsaterModel);
+		return $x;
 	}
+}
 ?>

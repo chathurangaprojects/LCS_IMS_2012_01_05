@@ -10,10 +10,11 @@ echo $this->template->getPage_title();
 ?>
 </title>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script> -->
 
-<!--<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/jquery-1.3.2.js"></script>
---><script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.core.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/jquery-1.3.2.js"></script>
+
+<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/ui/ui.core.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/superfish.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/live_search.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/tooltip.js"></script>
@@ -41,6 +42,9 @@ echo $this->template->getPage_title();
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/LCS.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/LCS2.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/Autocomplete.js"></script>
+
+<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/Autocomplete2.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>template_resources/Dialog2.js"></script>
 
 
 <!--[if IE 6]>

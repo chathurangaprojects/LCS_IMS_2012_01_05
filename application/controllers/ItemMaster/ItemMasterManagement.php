@@ -19,6 +19,8 @@
 		//Load Insert Master Item Form
 		public function insertItemMasterDetailsForm()
 		{
+			//$data['AddNewItemTypeDialog'] = $this->load->view('Dialogs/AddNewItemType');
+            
 			$this->template->setTitles('Insert Master Items', '', 'Add New Master Items', '');
 			
 			$this->template->load('template', 'ItemMaster/InsertItemMasterDetails');
@@ -30,33 +32,15 @@
 			$itemMasterModel = new ItemMasterModel();
 			$itemMasterService = new ItemMasterService();
 			
-			$itemMasterModel->setItem_Name($this->input->post('Item_Name', TRUE));
-			$itemMasterModel->setItem_Type_Code($this->input->post('Item_Name', TRUE));
+			$itemMasterModel->setItem_Name(trim($this->input->post('Item_Name', TRUE)));
+			$itemMasterModel->setType_Code(trim($this->input->post('Item_Type_Hidden', TRUE)));
+            $itemMasterModel->setImage(trim($this->input->post('Item_Image', TRUE)));
+            $itemMasterModel->setDescription(trim($this->input->post('Description', TRUE)));
+            $itemMasterModel->setR_Level((trim($this->input->post('Reorder_Level', TRUE)))!=''?trim($this->input->post('Reorder_Level', TRUE)):0);
+            $itemMasterModel->setR_Qty((trim($this->input->post('Reorder_Quantity', TRUE)))!=''?trim($this->input->post('Reorder_Quantity', TRUE)):0);
+			$itemMasterModel->setEmployee_Code(trim($this->session->userdata('emp_id')));
+            
+            echo $itemMasterService->insertItemMasterDetails($itemMasterModel);
 		}
-		
-//		public function autoComplete()
-//		{
-			//echo "aaaaa - bbbbb - 10\n";
-			//echo "ccccc - ddddd - 20\n";
-			//echo "eeeee - fffff - 30\n";
-			//echo "ggggg - hhhhh - 40\n";
-			//echo "iiiii - jjjjj - 50\n";
-			//echo "jjjjj - kkkkk - 60\n";
-//			
-//			
-//			
-//			
-//	//		$this->load->model('model','get_data');
-//	//		$query= $this->get_data->get_autocomplete();
-// //       
-//	//		foreach($query->result() as $row):
-// //       
-//	//		//echo "<li>id ."\")'>".$row->ciudad."</li>";
-//	//	
-//	//		echo "<li>".$row->Item_Name."</li>";
-//
-//////
-//			//endforeach;
-//		}
 	}
 ?>

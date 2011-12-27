@@ -353,11 +353,10 @@ $().ready(function() {
 
 $().ready(function() {
     //form name and id
+	//alert('lcs');
 	$("#purchase_order_request").validate
 	({
-	 
-	 //sup_name
-	 
+	 	 
 		rules:
 		{
 			sup_name: "required",			
@@ -389,34 +388,62 @@ $().ready(function() {
 			},
 			
 			submitHandler: function(form) {
-				
-				var isAllFiedsValidated=$('#required_fields').val();
-				if(isAllFiedsValidated=='true'){
+							
+				//var isAllFiedsValidated=$('#required_fields').val();
+			  var expectedDateValidity =  $("#expected_date_validity").val();
+
+            if(expectedDateValidity=='true'){
 					
 					// all the data fields are validated and ready for the submission
-				$('#required_fields').val('true');
+				//$('#required_fields').val('true');
 				//set this id using ajax			
 			$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/createNewPurchaseOrderRequest', $("#purchase_order_request").serialize(), function(msg) {
 					//$('form[name=purchase_order_request] #po_request_id').val(msg);
 					$('#po_request_message').html('<font color="#009900">'+msg.split('#')[0]+'</font>'); 
-					
+
 					var purchaseOrderID=msg.split('#')[1];
-					
+					//set up the purchase order id for adding items for the purchase order 
+					$('form[name=add_purchase_order_item] #purchase_order_id').val(purchaseOrderID);
 					$('form[name=purchase_order_request] #po_request_id').val(purchaseOrderID);
 					//setting up the valus changed as false... because the insert or update is already done
-					$('#po_details_change').val('false');
-					
+					//$('#po_details_change').val('false');
+					$('#dlg_add_item').dialog('open');
 				});
 								
-				}//if
+				}//if expectedDateValidity
+				
 				
 			}//submitHandler
 
 	});
 	
+	
+		openDialog();
+	
 });
 
 
+
+function openDialog(){
+	
+	
+	$('#dialog').dialog({
+		autoOpen: false,
+		width: 600,
+		bgiframe: false,
+		modal: false,
+		buttons: {
+			"Ok": function() { 
+				$(this).dialog("close"); 
+			}, 
+			"Cancel": function() { 
+				$(this).dialog("close"); 
+			} 
+		}
+	});
+		
+		
+}//openDialog
 
 
 
@@ -580,7 +607,7 @@ function purchaseOrderRequestFormValidation(){
 
 
 
-
+/*
 function purchaseOrderRequestFormValidation(){
 	
 	//po_details_change
@@ -631,7 +658,42 @@ function purchaseOrderRequestFormValidation(){
 	
 }//function
 
+*/
 
+
+
+
+function expectedDateFieldValidation(){
+
+
+	var order_date=trim($('#order_date').val());
+	var expected_date=trim($('#expected_date').val());
+	
+	
+	if(expected_date != "" ){
+
+     
+	 if(expected_date >= order_date ){
+		 
+		 //expected date is valid
+		 $("#expected_date_validity").val('true');
+		 		 $('#date_error_message').html('');
+				 
+		 
+	 }//if inner
+	 else{
+		 //expected date is invalid
+		 $("#expected_date_validity").val('false');
+		 
+		 $('#date_error_message').html('<label style="color:#900" > <b>Expected date should be greater or equal to order date </b></label>');
+		 
+	 }
+	 
+	 
+	}//if outer
+	
+
+}
 
 
 
@@ -643,7 +705,6 @@ function purchaseOrderRequestFormValidation(){
 function select_currency(){
 	//check whether the field value is set
 	purchaseOrderRequestFormValidation();
-	
 	
 }//function
 	
@@ -685,6 +746,182 @@ purchaseOrderRequestFormValidation();
 
 	
 }//select_conversion_rate
+
+
+
+
+
+
+
+//validate discount percentage and  discount amount
+
+
+function validateDiscount(){
+	
+	
+	var discount_percentage = $('form[name=add_purchase_order_item] #discount_percentage').val();
+	var discount_amount = $('form[name=add_purchase_order_item] #discount_amount').val();
+	
+	if(trim(discount_percentage)!=""){
+		
+		$('form[name=add_purchase_order_item] #discount_amount').attr("disabled", "disabled");
+	}
+	else{
+		
+	    $("form[name=add_purchase_order_item] #discount_amount").removeAttr("disabled"); 
+	}
+	
+	
+	
+	
+	if(trim(discount_amount)!=""){
+		
+		$('form[name=add_purchase_order_item] #discount_percentage').attr("disabled", "disabled");
+	}
+	else{
+		
+	//$('form[name=add_purchase_order_item] #discount_percentage').attr("enabled", "enabled");
+	$("form[name=add_purchase_order_item] #discount_percentage").removeAttr("disabled"); 
+	}
+	
+}//validateDiscount
+
+
+
+
+
+
+// validate discount
+
+function validateTax(){
+	
+	
+	var tax_percentage = $('form[name=add_purchase_order_item] #tax_percentage').val();
+	var tax_value = $('form[name=add_purchase_order_item] #tax_value').val();
+	
+	if(trim(tax_percentage)!=""){
+		
+		$('form[name=add_purchase_order_item] #tax_value').attr("disabled", "disabled");
+	}
+	else{
+		
+	    $("form[name=add_purchase_order_item] #tax_value").removeAttr("disabled"); 
+	}
+	
+	
+	
+	
+	if(trim(tax_value)!=""){
+		
+		$('form[name=add_purchase_order_item] #tax_percentage').attr("disabled", "disabled");
+	}
+	else{
+		
+	$("form[name=add_purchase_order_item] #tax_percentage").removeAttr("disabled"); 
+	}
+	
+}//validateDiscount
+
+
+
+
+
+
+//calculate po item value
+function calculate_item_value()
+{
+    //alert($('#po_item_unit_price').val());
+    
+    var up = jQuery.trim($('#po_item_unit_price').val());
+    var qty = jQuery.trim($('#po_qty').val());
+    var dp = jQuery.trim($('#discount_percentage').val());
+    var d = jQuery.trim($('#po_disc').val());
+    var it = jQuery.trim($('#tax_percentage').val());
+    var tv = jQuery.trim($('#tax_value').val());
+    
+    if(up == '')
+    {
+        up = 0;
+    }
+    
+    if(qty == '')
+    {
+        qty = 0;
+    }
+    
+    if(dp == '')
+    {
+        dp = 0;
+    }
+    
+    if(d == '')
+    {
+        d = 0;
+    }
+    
+    if(it == '')
+    {
+        it = 0;
+    }
+    
+    if(tv == '')
+    {
+        tv = 0;
+    }
+    
+
+    
+    var iv = ((parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100) + (parseFloat(parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100)) * parseFloat(it) / 100)) * parseFloat(qty)) - parseFloat(d) + parseFloat(tv);
+    
+    $('#po_item_val').val(iv);
+}
+
+
+
+
+//add items to the purchase order 
+
+
+$().ready(function() {
+    //form name and id
+	$("#add_purchase_order_item").validate
+	({
+	 
+	 
+	 
+		rules:
+		{
+			po_item_name: "required",
+			po_item_unit: "required",
+			po_item_unit_price: "required",
+			po_item_qty: { 
+                required: true, 
+                number: true 
+             } 
+		},
+			messages:
+			{
+				po_item_name: "Item Name is required",
+				po_item_unit: "Item Unit is required",
+				po_item_unit_price: "Unit price is required",
+				po_item_qty: {
+				required:"Item quantity is required",
+				number:"Item quantity is invalid"
+					
+				}
+				
+			},
+			
+			submitHandler: function(form) {
+				// $('#addnewempmsg').html('<font color="#CC0000"> Please wait............ </font>'); 
+				$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/addItemsToPurchaseOrder', $("#user_registration_form").serialize(), function(msg) {
+				//	$('#addnewempmsg').html(msg);
+				});
+			}
+
+	});
+});
+
 
 
 

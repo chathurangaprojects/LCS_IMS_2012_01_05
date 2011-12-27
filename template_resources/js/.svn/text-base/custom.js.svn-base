@@ -304,6 +304,7 @@ $(document).ready(function() {
         //po request add starts
        $('#lnk_add_item').click(function(){
          
+		
 		/* var po_id=$('#required_fields').val();
 		
 		 if(po_id!="false"){
@@ -313,8 +314,9 @@ $(document).ready(function() {
 		 }
 		 */
 		 
+		 
 	 //po_request_id will be set if and only if the purchase order is properly placed and stored in the database
-	
+	/*
 	  var po_id=$('#po_request_id').val();
 	  var required_fields=$('#required_fields').val();
 	  var po_details_change=$('#po_details_change').val();
@@ -327,7 +329,7 @@ $(document).ready(function() {
           return false;
 		 }
 	 
-		 
+	*/	 
 		 
     });
     

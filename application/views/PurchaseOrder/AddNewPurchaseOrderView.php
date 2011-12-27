@@ -170,12 +170,12 @@
       <table style="width: 100%">
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Item Name *</b></td>
-          <td style="padding: 5px 5px 5px 0;" colspan="5"><input type="text" id="po_item_name" class="field text full" name="txt_po_item_name" onkeypress="get_po_item_name(this.value);" onchange="get_po_item_name(this.value);" onblur="get_po_item_name(this.value);"/></td>
+          <td style="padding: 5px 5px 5px 0;" colspan="5"><input type="text" id="po_item_name" class="field text full" name="po_item_name" onkeypress="get_po_item_name(this.value);" onchange="get_po_item_name(this.value);" onblur="get_po_item_name(this.value);"/></td>
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Unit *</b></td>
           <td style="padding: 5px 5px 5px 0;width: 17%"><!-- <input type="text" id="po_item_unit" class="field text full" name="txt_po_item_unit" /> -->
-            <select id="po_item_unit" class="field select full" name="cmb_po_item_unit">
+            <select id="po_item_unit" class="field select full" name="po_item_unit">
               <option value=""></option>
               <?php
                                    /* foreach ($units->result_array() as $row)
@@ -183,11 +183,20 @@
                                         echo '<option value="' . $row['Unit_Code'] . '">' . $row['Description'] . '</option>';
                                     }*/
                                 ?>
+                              <?php
+                                    foreach ($UnitArray as $unitModel)
+                                    {
+                                   ?>
+            <option value="<?php echo $unitModel->getUnit_Code(); ?>"><?php echo $unitModel->getDescription(); ?></option>
+            <?php
+                                    }
+                                ?>              
+                                
             </select></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Unit Price *</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_item_unit_price" class="field text full" name="txt_po_item_unit_price" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_item_unit_price" class="field text full" name="po_item_unit_price" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Quantity *</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 18%"><input type="text" id="po_qty" class="field text full" name="txt_po_qty" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%"><input type="text" id="po_item_qty" class="field text full" name="po_item_qty" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Discount %</b></td>
@@ -207,15 +216,22 @@
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%;"><b>Description</b></td>
-          <td style="padding: 5px 5px 5px 0;" colspan="5"><textarea id="po_desc" class="field text full" name="txt_po_desc" rows="2"></textarea></td>
+          <td style="padding: 5px 5px 5px 0;" colspan="5"><textarea id="po_description" class="field text full" name="po_description" rows="2"></textarea></td>
         </tr>
       </table>
       Hidden<input  name="purchase_order_id" id="purchase_order_id" type="text" value="" />
+      <input type="text" name="item_id" id="item_id" />
       
-      <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>
+<!--      <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>-->
+<div id="addNewItemMessage" >
+
+</div>
+
+      <button class="ui-state-default ui-corner-all float-left ui-button" type="submit" >Add</button>
+      
     </form>
   </div>
-  <?php //ordeer item add ends ?>
+  <?php //order item add ends ?>
   <?php //order item edit start ?>
   <div id="dlg_edit_item" title="Edit Item">
     <form>
@@ -229,12 +245,14 @@
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Unit *</b></td>
           <td style="padding: 5px 5px 5px 0;width: 17%"><select id="po_item_unit2" class="field select full" name="cmb_po_item_unit2">
               <option value=""></option>
-              <?php
-                                    /*foreach ($units->result_array() as $row)
+                              <?php
+                                    foreach ($UnitArray as $unitModel)
                                     {
-                                        echo '<option value="' . $row['Unit_Code'] . '">' . $row['Description'] . '</option>';
-                                    }*/
-                                ?>
+                                   ?>
+            <option value="<?php echo $unitModel->getUnit_Code(); ?>"><?php echo $unitModel->getDescription(); ?></option>
+            <?php
+                                    }
+                                ?>  
             </select></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Unit Price *</b></td>
           <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_item_unit_price2" class="field text full" name="txt_po_item_unit_price2" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
@@ -255,7 +273,7 @@
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Tax Value</b></td>
           <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_tax_val2" class="field text full" name="txt_po_tax_val2" style="text-align: right;" onkeyup="calculate_item_value();" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%;text-align: right;font-size: 15px;"><b>Item Value</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 18%;"><input type="text" readonly="readonly" id="po_item_val2" class="field text full" name="txt_po_item_val2" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%;"><input type="text" readonly="readonly" id="po_item_value" class="field text full" name="po_item_value" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" /></td>
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%;"><b>Description</b></td>

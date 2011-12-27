@@ -833,7 +833,7 @@ function calculate_item_value()
     //alert($('#po_item_unit_price').val());
     
     var up = jQuery.trim($('#po_item_unit_price').val());
-    var qty = jQuery.trim($('#po_qty').val());
+    var qty = jQuery.trim($('#po_item_qty').val());
     var dp = jQuery.trim($('#discount_percentage').val());
     var d = jQuery.trim($('#po_disc').val());
     var it = jQuery.trim($('#tax_percentage').val());
@@ -875,6 +875,103 @@ function calculate_item_value()
     
     $('#po_item_val').val(iv);
 }
+
+
+
+
+//add items to the purchase order 
+
+
+$().ready(function() {
+    //form name and id
+	$("#add_purchase_order_item").validate
+	({
+		rules:
+		{
+			po_item_name: "required",
+			po_item_unit: "required",
+			po_item_unit_price: { 
+                required: true, 
+                number: true 
+             },
+			po_item_qty: { 
+                required: true, 
+                number: true 
+             } 
+		},
+			messages:
+			{
+				po_item_name: "Item Name is required",
+				po_item_unit: "Item Unit is required",
+				po_item_unit_price: {
+				required:"Unit Price is required",
+				number:"Unit Price is invalid"					
+				},
+				po_item_qty: {
+				required:"Item quantity is required",
+				number:"Item quantity is invalid"				
+				}
+				
+			},
+			
+			submitHandler: function(form) {
+				// $('#addnewempmsg').html('<font color="#CC0000"> Please wait............ </font>'); 
+				$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/addItemsToPurchaseOrder', $("#add_purchase_order_item").serialize(), function(msg) {
+
+				$('form[name=add_purchase_order_item] #po_item_name').val('');
+				$('form[name=add_purchase_order_item] #po_item_unit').val('');
+                $('form[name=add_purchase_order_item] #po_item_unit_price').val('');
+                $('form[name=add_purchase_order_item] #po_item_qty').val('');
+				$('form[name=add_purchase_order_item] #discount_percentage').val('');
+				$('form[name=add_purchase_order_item] #discount_amount').val('');
+				$('form[name=add_purchase_order_item] #tax_percentage').val('');
+				$('form[name=add_purchase_order_item] #tax_value').val('');
+				$('form[name=add_purchase_order_item] #po_description').val('');
+				$('form[name=add_purchase_order_item] #item_id').val('');
+
+				validateTax();
+
+	/*			
+				$('#addNewItemMessage').html('<div class="response-msg success ui-corner-all"><span> Item Added</span>New Item was succesfully added for the purchase order</div>');
+*/
+	$('#addNewItemMessage').html(msg);
+				 
+				});
+			}
+			
+		
+	});
+	
+
+});//function add_purchase_order_item
+
+
+
+
+
+
+
+
+/*
+function load_added_items(){
+	
+	//alert('hello1');
+	
+
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/loadItemTable',
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+			alert('hello2');
+           $('#addNewItemMessage2').html('chathuranga');
+
+        }
+    });
+
+}//load_added_items
+*/
 
 
 

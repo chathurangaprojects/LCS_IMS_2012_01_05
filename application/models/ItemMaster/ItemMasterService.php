@@ -6,6 +6,7 @@
 			// Call the Model constructor
 			parent::__construct();
 			$this->load->database();
+			$this->load->model('ItemMasterModel');
 		}//constructor
 	
 		public function loadItemTypes($itemMasterModel)
@@ -29,7 +30,7 @@
 				$i += 1;
 			}
 		
-			$sql = "SELECT ta_ims_item_type.*, ta_ims_main_category.Category_Name FROM ta_ims_item_type INNER JOIN ta_ims_main_category ON ta_ims_item_type.Category_Code = ta_ims_main_category.Category_Code WHERE " . trim($qry) . " OR ta_ims_item_type.Description LIKE '%" . trim($itemMasterModel->getItem_Name()) . "%'";
+			$sql = "SELECT ta_ims_item_type.*, ta_ims_main_category.Category_Name FROM ta_ims_item_type INNER JOIN ta_ims_main_category ON ta_ims_item_type.Category_Code = ta_ims_main_category.Category_Code WHERE " . trim($qry) . " OR ta_ims_item_type.Description LIKE '%" . trim($itemMasterModel->getItem_Name()) . "%' AND (ta_ims_item_type.Item_Type != '' OR ta_ims_item_type.Item_Type != NULL)";
 		
 			$results = $this->db->query($sql);
 
@@ -42,5 +43,83 @@
 				return NULL;
 			}
 		}
+		
+	//Insert Master Items
+	public function insertItemMasterDetails($itemMsaterModel)
+	{
+		$x = $this->db->insert('ta_ims_item_master', $itemMsaterModel);
+		return $x;
 	}
+	
+	
+	
+	
+	
+	
+	function retrieveItemNames($itemModel){
+		
+		$val = explode(' ', trim($itemModel->getItem_Name()));
+
+            $qry = '';
+
+            $i = 0;
+            while($i < count($val))
+            {
+                if($i == 0)
+                {
+                    $qry = "ta_ims_item_master.Item_Name LIKE '%" . $val[$i] . "%'";
+                }
+                else
+                {
+                    $qry = $qry . " AND ta_ims_item_master.Item_Name LIKE '%" . $val[$i] . "%'";
+                }
+
+                $i += 1;
+            }
+
+            $sql = "SELECT * FROM ta_ims_item_master WHERE " . trim($qry) . " ORDER BY Item_Name ASC";
+/*
+            $results = $this->db->query($sql);
+            
+            if($results->num_rows() > 0)
+            {
+                return $results;
+            }
+            else
+            {
+                return NULL;
+            }
+		*/
+		$query = $this->db->query($sql);
+		
+		$itemArray=array();
+		$index=0;
+		
+		foreach ($query->result() as $row)
+		{
+			$itemModel=new ItemMasterModel();
+			
+			$itemModel->setMaster_Item_Code($row->Master_Item_Code);
+			$itemModel->setItem_Name($row->Item_Name);
+			
+    		$itemArray[$index]=$itemModel;
+			$index++;
+		}
+		
+		
+		return $itemArray;
+		
+		
+		
+	}//addNewItemForPurchaseOrder
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}//class
 ?>

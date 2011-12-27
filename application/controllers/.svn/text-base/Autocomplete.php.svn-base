@@ -7,8 +7,13 @@
 		{
 			parent::__construct();
 		
-			$this->load->model('ItemMaster/ItemMasterModel');
-			$this->load->model('ItemMaster/ItemMasterService');
+	        //$this->load->model('UserModel');
+			//$this->load->model('UserService');
+			//$this->load->model(array('Supplier/SupplierModel','Supplier/SupplierService'));
+			
+			$this->load->model(array('UserModel', 'UserService'));
+			$this->load->model(array('ItemMaster/ItemMasterModel', 'ItemMaster/ItemMasterService'));
+			$this->load->model(array('Supplier/SupplierModel', 'Supplier/SupplierService'));
 		}
 		
 		
@@ -17,31 +22,71 @@
 			$itemMasterModel = new ItemMasterModel();
 			$itemMasterService = new ItemMasterService();
 			
-			$keywords = trim(strtolower($this->input->get('q', TRUE)));
+			$itemMasterModel->setItem_Name($this->input->get('q', TRUE));
 			
-			$itemMasterModel->setItem_Name($keywords);
+			$results = $itemMasterService->loadItemTypes($itemMasterModel);
 			
-			if(!empty($keywords))
+			if(!empty($results))
 			{
-				$results = $itemMasterService->loadItemTypes($itemMasterModel);
-				
-				if(!empty($results))
+				foreach($results->result() as $result)
 				{
-					foreach ($results->result_array() as $row)
-					{
-						if(! empty($row['Category_Name']))
-						{
-							$cname = $row['Item_Type'] . ' - ' . $row['Category_Name'] . ' - ' . $row['Type_Code'];
-						}
-						else
-						{
-							$cname = $row['Item_Type'] . ' - (Undefined) - ' . $row['Type_Code'];
-						}
+					$itemType = trim($result->Item_Type);
+					$itemCategory = trim($result->Category_Name);
 					
-						echo "$cname\n";
+					if(empty($itemType))
+					{
+						$itemType = "&lt;Type Not Available&gt;";
 					}
+					
+					if(empty($itemCategory))
+					{
+						$itemCategory = "&lt;Category Not Available&gt;";
+					}
+					
+					echo $itemType . " !@#$%^&*() " . $itemCategory . " !@#$%^&*() " . trim($result->Type_Code) . "\n";
 				}
 			}
 		}
-	}
+		
+		
+		public function loadSuppliers(){
+			
+			
+			$charactersTypingforSupplierName = $this->input->get('q',TRUE);
+			
+			$supplierModel = new SupplierModel();
+			
+			$supplierType = $this->input->get('sup_type',TRUE);
+			
+			if($supplierType !=""){
+			//user has selected a supplier type
+			$supplierModel->setSupplier_Type($supplierType);
+            }
+			else{
+			//user haven selected a supplier type
+			$supplierModel->setSupplier_Type(-1);
+			}
+			
+			$supplierModel->setSupplier_Name($charactersTypingforSupplierName);
+			
+			$supplierService = new SupplierService();
+			
+			$supplierArray = array();
+			
+			$supplierArray = $supplierService->retriewSupplierNameAndID($supplierModel);
+			
+			//foreach($supplierArray as $supplier){
+			for($index=0; $index<sizeof($supplierArray);$index++){
+				
+			//echo $supplierArray[$index]->getSupplier_Code()."###".$supplierArray[$index]->getSupplier_Name()."\n";
+			echo $supplierArray[$index]->getSupplier_Code()."###".$supplierArray[$index]->getSupplier_Name()."###".$this->input->get('sup_type',TRUE)."\n";
+						
+			}
+			
+		}//loadSuppliers
+		
+		
+		
+	}//Autocomplete
+	
 ?>
