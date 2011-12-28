@@ -506,7 +506,7 @@ function onValueChange(id){
 	
 	alert("lcs value["+value+"]");
 	
-	if(trim(value)==""){
+	if(jQuery.trim(value)==""){
 		
 		$('#required_fields').val('false');
 	}
@@ -516,49 +516,24 @@ function onValueChange(id){
 
 
 
-// Removes leading whitespaces
-function LTrim( value ) {
-	
-	var re = /\s*((\S+\s*)*)/;
-	return value.replace(re, "$1");
-	
-}
-
-// Removes ending whitespaces
-function RTrim( value ) {
-	
-	var re = /((\s*\S+)*)\s*/;
-	return value.replace(re, "$1");
-	
-}
-
-// Removes leading and ending whitespaces
-function trim( value ) {
-	
-	return LTrim(RTrim(value));
-	
-}
-
-
-
 /*
 
 function purchaseOrderRequestFormValidation(){
 	
 	
-	var order_date=trim($('#order_date').val());
-	var expected_date=trim($('#expected_date').val());
+	var order_date=jQuery.trim($('#order_date').val());
+	var expected_date=jQuery.trim($('#expected_date').val());
 	
 	var date_result=order_date<=expected_date;
-	var sup_name=trim($('#sup_name').val());
-	var sup_type=trim($('#sup_type').val());
-	var attention=trim($('#attention').val());
-	var quatation_no=trim($('#quatation_no').val());
-	var Department_Code=trim($('#Department_Code').val());
+	var sup_name=jQuery.trim($('#sup_name').val());
+	var sup_type=jQuery.trim($('#sup_type').val());
+	var attention=jQuery.trim($('#attention').val());
+	var quatation_no=jQuery.trim($('#quatation_no').val());
+	var Department_Code=jQuery.trim($('#Department_Code').val());
 	//displaying the date validation errors
-    var Currency = trim($('#currrency_selector').val());
-    var conversion_rate = trim($('#conversion_rate').val());
-	var payment_type =  trim($('#payment_type').val());
+    var Currency = jQuery.trim($('#currrency_selector').val());
+    var conversion_rate = jQuery.trim($('#conversion_rate').val());
+	var payment_type =  jQuery.trim($('#payment_type').val());
 	
 	if(date_result==false){
 		
@@ -613,18 +588,18 @@ function purchaseOrderRequestFormValidation(){
 	//po_details_change
 	$('#po_details_change').val('true');
 	
-	var order_date=trim($('#order_date').val());
-	var expected_date=trim($('#expected_date').val());
+	var order_date=jQuery.trim($('#order_date').val());
+	var expected_date=jQuery.trim($('#expected_date').val());
 	
 	var date_result=order_date<=expected_date;
-	var sup_name=trim($('#sup_name').val());
-	var sup_type=trim($('#sup_type').val());
-	var attention=trim($('#attention').val());
-	var quatation_no=trim($('#quatation_no').val());
-	var Department_Code=trim($('#Department_Code').val());
-    var Currency = trim($('#currrency_selector').val());
-    var conversion_rate = trim($('#conversion_rate').val());
-	var payment_type =  trim($('#payment_type').val());
+	var sup_name=jQuery.trim($('#sup_name').val());
+	var sup_type=jQuery.trim($('#sup_type').val());
+	var attention=jQuery.trim($('#attention').val());
+	var quatation_no=jQuery.trim($('#quatation_no').val());
+	var Department_Code=jQuery.trim($('#Department_Code').val());
+    var Currency = jQuery.trim($('#currrency_selector').val());
+    var conversion_rate = jQuery.trim($('#conversion_rate').val());
+	var payment_type =  jQuery.trim($('#payment_type').val());
 		
 	// validating the all required fields in the form
 	if(sup_name!="" & order_date != "" & Department_Code!="" & sup_type!= "" & Currency!="" & conversion_rate!="" & payment_type != "" ){
@@ -666,8 +641,8 @@ function purchaseOrderRequestFormValidation(){
 function expectedDateFieldValidation(){
 
 
-	var order_date=trim($('#order_date').val());
-	var expected_date=trim($('#expected_date').val());
+	var order_date=jQuery.trim($('#order_date').val());
+	var expected_date=jQuery.trim($('#expected_date').val());
 	
 	
 	if(expected_date != "" ){
@@ -727,7 +702,7 @@ if(currencyCode != ""){
    
    success: function(msg){
  
-   $('form[name=purchase_order_request] #conversion_rate').val(trim(msg));
+   $('form[name=purchase_order_request] #conversion_rate').val(jQuery.trim(msg));
 
    }
    });
@@ -762,7 +737,7 @@ function validateDiscount(){
 	var discount_percentage = $('form[name=add_purchase_order_item] #discount_percentage').val();
 	var discount_amount = $('form[name=add_purchase_order_item] #discount_amount').val();
 	
-	if(trim(discount_percentage)!=""){
+	if(jQuery.trim(discount_percentage)!=""){
 		
 		$('form[name=add_purchase_order_item] #discount_amount').attr("disabled", "disabled");
 	}
@@ -774,7 +749,7 @@ function validateDiscount(){
 	
 	
 	
-	if(trim(discount_amount)!=""){
+	if(jQuery.trim(discount_amount)!=""){
 		
 		$('form[name=add_purchase_order_item] #discount_percentage').attr("disabled", "disabled");
 	}
@@ -799,7 +774,7 @@ function validateTax(){
 	var tax_percentage = $('form[name=add_purchase_order_item] #tax_percentage').val();
 	var tax_value = $('form[name=add_purchase_order_item] #tax_value').val();
 	
-	if(trim(tax_percentage)!=""){
+	if(jQuery.trim(tax_percentage)!=""){
 		
 		$('form[name=add_purchase_order_item] #tax_value').attr("disabled", "disabled");
 	}
@@ -811,7 +786,7 @@ function validateTax(){
 	
 	
 	
-	if(trim(tax_value)!=""){
+	if(jQuery.trim(tax_value)!=""){
 		
 		$('form[name=add_purchase_order_item] #tax_percentage').attr("disabled", "disabled");
 	}
@@ -832,12 +807,12 @@ function calculate_item_value()
 {
     //alert($('#po_item_unit_price').val());
     
-    var up = jQuery.trim($('#po_item_unit_price').val());
-    var qty = jQuery.trim($('#po_qty').val());
-    var dp = jQuery.trim($('#discount_percentage').val());
-    var d = jQuery.trim($('#po_disc').val());
-    var it = jQuery.trim($('#tax_percentage').val());
-    var tv = jQuery.trim($('#tax_value').val());
+    var up = jQuery.jQuery.trim($('#po_item_unit_price').val());
+    var qty = jQuery.jQuery.trim($('#po_item_qty').val());
+    var dp = jQuery.jQuery.trim($('#discount_percentage').val());
+    var d = jQuery.jQuery.trim($('#po_disc').val());
+    var it = jQuery.jQuery.trim($('#tax_percentage').val());
+    var tv = jQuery.jQuery.trim($('#tax_value').val());
     
     if(up == '')
     {
@@ -874,6 +849,7 @@ function calculate_item_value()
     var iv = ((parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100) + (parseFloat(parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100)) * parseFloat(it) / 100)) * parseFloat(qty)) - parseFloat(d) + parseFloat(tv);
     
     $('#po_item_val').val(iv);
+	 $('#edit_po_item_val').val(iv);
 }
 
 
@@ -886,14 +862,14 @@ $().ready(function() {
     //form name and id
 	$("#add_purchase_order_item").validate
 	({
-	 
-	 
-	 
 		rules:
 		{
 			po_item_name: "required",
 			po_item_unit: "required",
-			po_item_unit_price: "required",
+			po_item_unit_price: { 
+                required: true, 
+                number: true 
+             },
 			po_item_qty: { 
                 required: true, 
                 number: true 
@@ -903,24 +879,107 @@ $().ready(function() {
 			{
 				po_item_name: "Item Name is required",
 				po_item_unit: "Item Unit is required",
-				po_item_unit_price: "Unit price is required",
+				po_item_unit_price: {
+				required:"Unit Price is required",
+				number:"Unit Price is invalid"					
+				},
 				po_item_qty: {
 				required:"Item quantity is required",
-				number:"Item quantity is invalid"
-					
+				number:"Item quantity is invalid"				
 				}
 				
 			},
 			
 			submitHandler: function(form) {
-				// $('#addnewempmsg').html('<font color="#CC0000"> Please wait............ </font>'); 
-				$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/addItemsToPurchaseOrder', $("#user_registration_form").serialize(), function(msg) {
-				//	$('#addnewempmsg').html(msg);
+				
+				 
+				$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/addItemsToPurchaseOrder', $("#add_purchase_order_item").serialize(), function(msg) {
+				 /*
+				$('form[name=add_purchase_order_item] #po_item_name').val('');
+				$('form[name=add_purchase_order_item] #po_item_unit').val('');
+                $('form[name=add_purchase_order_item] #po_item_unit_price').val('');
+                $('form[name=add_purchase_order_item] #po_item_qty').val('');
+				$('form[name=add_purchase_order_item] #discount_percentage').val('');
+				$('form[name=add_purchase_order_item] #discount_amount').val('');
+				$('form[name=add_purchase_order_item] #tax_percentage').val('');
+				$('form[name=add_purchase_order_item] #tax_value').val('');
+				$('form[name=add_purchase_order_item] #po_description').val('');
+				$('form[name=add_purchase_order_item] #item_id').val('');
+*/
+				validateTax();
+                validateDiscount();
+			
+			var ItemAddingMessage = msg.split("#######----#######")[0];
+            var itemTableView = msg.split("#######----#######")[1];
+			
+			$('#addNewItemMessage').html(ItemAddingMessage);
+            $('#addedItemTable').html(itemTableView);
+			
+	//$('#addNewItemMessage').html(msg);
+				 
 				});
 			}
-
+			
+		
 	});
-});
+	
+var po_request_id = jQuery.trim($('#po_request_id').val());	
+
+if(po_request_id!=""){
+	
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/displayAddedItemsForPurchaseOrder/'+po_request_id,
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+         $('#addedItemTable').html(msg);
+
+        }
+    });
+}
+
+});//function add_purchase_order_item
+
+
+
+
+
+
+
+
+/*
+function load_added_items(){
+	
+	//alert('hello1');
+	
+
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/loadItemTable',
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+			alert('hello2');
+           $('#addNewItemMessage2').html('chathuranga');
+
+        }
+    });
+
+}//load_added_items
+*/
+
+
+
+
+
+
+function load_item_details_for_edit(itemID){
+	
+	
+	alert('edit'+itemID);
+	
+}//function
 
 
 

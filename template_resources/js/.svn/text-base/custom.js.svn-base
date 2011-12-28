@@ -352,7 +352,7 @@ $(document).ready(function() {
 	
 	
 	//po request edit start
-	    $('#lnk_update_item').click(function(){
+	    $('.lnk_update_item').click(function(){
 
 	
         $('#dlg_edit_item').dialog('open');

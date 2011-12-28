@@ -7,7 +7,7 @@
 		{
 			parent::__construct();
 		
-			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService','PurchaseOrder/UnitModelService','PurchaseOrder/PurchaseOrderItemModel','PurchaseOrder/PurchaseOrderItemService'));
+			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService','PurchaseOrder/UnitModelService','PurchaseOrder/PurchaseOrderItemModel','PurchaseOrder/PurchaseOrderItemService','ItemMaster/ItemMasterModel','ItemMaster/ItemMasterService'));
 		   
 			if(!$this->session->userdata('logged_in'))
 			{
@@ -458,6 +458,10 @@ echo $message.'#######----#######'.$poItemTableView;
 
  function loadItemTable($poID){
 			
+		   ?>
+             <script type="text/javascript" src="<?php echo base_url(); ?>template_resources/js/custom.js"></script>
+          <?php
+			 
 			$resultTbl="";
 			//$pono = trim($_POST['pono']);
             $pono=$poID;
@@ -473,7 +477,7 @@ echo $message.'#######----#######'.$poItemTableView;
             {
                  $resultTbl= $resultTbl.'<table width="100%">';
                  $resultTbl= $resultTbl.'<tr style="background-color: #CDB79E;height: 25px;margine: 5px;" valign="middle">';
-                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Item Description</th>';
+                 $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Item Name</th>';
                  $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Quantity</th>';
                  $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Unit</th>';
                  $resultTbl= $resultTbl.'<th style="padding: 5px 5px 5px 0;font-weight:bold;">Price</th>';
@@ -492,8 +496,31 @@ echo $message.'#######----#######'.$poItemTableView;
 			   for($index=0;$index<sizeof($poItemModelArray);$index++)
                 {
                    // $iv = ((floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100) + (floatval(floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100)) * floatval($row['Ind_Tax']) / 100)) * floatval($row['Quantity'])) - floatval($row['Discount_Value']) + floatval($row['Tax_Value']);
-				  $iv =100;
-				  
+				   
+				   //retirve Item name
+				   $itemMasterModel =  new ItemMasterModel();
+				   $itemMasterModel->setMaster_Item_Code($poItemModelArray[$index]->getMaster_Item_Code());
+				   
+				   $itemMasterService = new ItemMasterService();
+				   $itemMasterModelRetrieved = $itemMasterService->retrieveItemDetails($itemMasterModel);
+				
+				   //retieve unit details
+				   $unitService = new UnitModelService();
+				   $unitService->setUnit_Code($poItemModelArray[$index]->getUnit());
+				   
+				   $unitRetrieved = $unitService->retrieveUnitDetails($unitService);
+				   $unitDescription = $unitRetrieved->getDescription();
+				   
+				   
+				 $unitPrice=$poItemModelArray[$index]->getUnit_Price();
+				 $discount=$poItemModelArray[$index]->getDiscount();
+				 $discountVal=$poItemModelArray[$index]->getDiscount_Value();
+				 $indTax= $poItemModelArray[$index]->getInd_Tax();
+				 $taxVal=$poItemModelArray[$index]->getTax_Value();
+				 $quantity=$poItemModelArray[$index]->getQuantity();
+				 
+				 $iv = ((($unitPrice) - (floatval($unitPrice) * floatval($discount) / 100) + (floatval(floatval($unitPrice) - (floatval($unitPrice) * floatval($discount) / 100)) * floatval($indTax) / 100)) * floatval($quantity)) - floatval($discountVal) + floatval($taxVal);
+				 
                     $i = 1 - $i;
                     
                     if($i == 0)
@@ -506,9 +533,9 @@ echo $message.'#######----#######'.$poItemTableView;
                     }
                     
                     //echo '<td style="padding: 5px 5px 5px 0;">' . $row['Master_Item_Code'] . '</td>';
-                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">Item name</td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">'.substr($itemMasterModelRetrieved->getItem_Name(),0,25).'</td>';
                      $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getQuantity(). '</td>';
-                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;"> Description </td>';
+                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;"> '.$unitDescription.' </td>';
                    $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' . $poItemModelArray[$index]->getUnit_Price(). '</td>';
                     $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getItem_Value(). '</td>';
                      $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' .$poItemModelArray[$index]->getDiscount(). '</td>';
@@ -518,7 +545,7 @@ echo $message.'#######----#######'.$poItemTableView;
                      $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">' . $iv . '<input type="hidden" id="net_val_' . $poItemModelArray[$index]->getMaster_Item_Code(). '" name="txt_net_val_' . $poItemModelArray[$index]->getMaster_Item_Code(). '" value="' . $iv . '"/></td>';
                      $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">
 
-                            <a class="lnk_edit_item" href="#" title="Edit Item" onclick="load_item_to_edit(' . $poItemModelArray[$index]->getMaster_Item_Code(). ');">
+                            <a  class="lnk_update_item" href="#" onclick="load_item_details_for_edit(' .$poItemModelArray[$index]->getMaster_Item_Code(). ','.$poItemModelArray[$index]->getOrder_Code().')">
                                 <img src="' . base_url() . 'resources/images/edit_item.png" alt="Edit Item"/>
                             </a>
 
@@ -550,8 +577,150 @@ echo $message.'#######----#######'.$poItemTableView;
 	 
 	 echo $this->loadItemTable($po_request_id);
 		 
-	 }
+	 }//function
 	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 function editItemsInPurchaseOrder(){
+		
+		//check the priviledges
+			
+		$poItemService = new PurchaseOrderItemService();
+		$poItemModel =new PurchaseOrderItemModel();
+		
+	//	$poOldItemModel =new PurchaseOrderItemModel();
+
+		
+		$discountVal = $this->input->post('edit_discount_amount',TRUE);
+		$discountPercentage = $this->input->post('edit_discount_percentage',TRUE);
+		
+		$taxVal = $this->input->post('edit_tax_value',TRUE);
+		$taxPercentage = $this->input->post('edit_tax_percentage',TRUE);
+		
+		if($discountVal==""){
+		
+		 $discountVal = 0;
+		 
+		}
+		
+		
+		if($discountPercentage==""){
+		
+		$discountPercentage = 0.0;
+		
+		}
+		
+		
+		if($taxVal==""){
+		
+		 $taxVal = 0;
+		 
+		}
+		
+		
+		if($taxPercentage==""){
+		
+		$taxPercentage = 0.0;
+		
+		}
+		
+	
+ //$previousItemID = $this->input->post('previous_item_id',TRUE);
+ 
+ $poItemModel->setOrder_Code($this->input->post('updating_po_id',TRUE));
+ $poItemModel->setMaster_Item_Code($this->input->post('updating_item_id',TRUE));
+ $poItemModel->setUnit($this->input->post('edit_po_item_unit',TRUE));
+ $poItemModel->setUnit_Price($this->input->post('edit_po_item_unit_price',TRUE));
+ $poItemModel->setQuantity($this->input->post('edit_po_item_qty',TRUE));
+ $poItemModel->setDiscount($discountPercentage);
+ $poItemModel->setDiscount_Value($discountVal);
+// $poItemModel->setItem_Value($this->input->post('edit_po_item_value',TRUE));
+ $poItemModel->setInd_Tax($taxPercentage);
+ $poItemModel->setTax_Value($taxVal);
+ $poItemModel->setDescription($this->input->post('edit_po_description',TRUE));
+ $poItemModel->setItem_added_by($this->session->userdata('emp_id'));
+	
+
+ //setting up the old PO Item data moderl
+ /* $poOldItemModel->setMaster_Item_Code($previousItemID);
+  $poOldItemModel->setOrder_Code($this->input->post('updating_po_id',TRUE));*/
+  
+ // echo "updated 123";
+  
+ $poItemService->updateItemInPurchaseOrder($poItemModel);
+  
+/*
+ $insertID = $poItemService->addNewItemForPurchaseOrder($poItemModel);
+	
+	$message="";
+	
+	if($insertID==1){
+	
+	$message= '<div class="response-msg success ui-corner-all"><span> Item Added</span>New Item was succesfully added for the purchase order </div>';
+	
+	}
+	else{
+	
+	$message= '<div class="response-msg error ui-corner-all"><span> Item exists</span>the item is already included in the purchase order request</div>';
+	
+	}
+*/
+
+$message= '<div class="response-msg success ui-corner-all"><span> Item Updated</span>Item was succesfully updated for the purchase order </div>';
+
+$purchaseOrderID = $this->input->post('updating_po_id',TRUE);
+
+$poItemTableView = $this->loadItemTable($purchaseOrderID);
+
+echo $message.'#######----#######'.$poItemTableView;
+
+
+}//function
+		
+		
+	 
+	 
+	 
+	 
+	 function retrivePurchaseOrderItemDetails(){
+		 
+		 
+		 //echo "retriveItemDetails".$this->input->post('itemID',TRUE);
+		
+		  $poItemModel = new PurchaseOrderItemModel();
+		  $poItemModel->setOrder_Code($this->input->post('purchaseOrderID',TRUE));
+          $poItemModel->setMaster_Item_Code($this->input->post('itemID',TRUE));
+ 
+		$poItemService = new PurchaseOrderItemService();
+		$poItemModelRetrieved = $poItemService->retrieveSelectedPurchaseOrderItemDetails($poItemModel);
+		 
+		 $arr = (array) $poItemModelRetrieved;
+		 
+		 		   $itemMasterModel =  new ItemMasterModel();
+				   $itemMasterModel->setMaster_Item_Code($poItemModelRetrieved->getMaster_Item_Code());
+				   
+				   $itemMasterService = new ItemMasterService();
+				   $itemMasterModelRetrieved = $itemMasterService->retrieveItemDetails($itemMasterModel);
+		 
+		// echo "retrived datab ".print_r($arr);
+		 
+		// echo "item name ".$itemMasterModelRetrieved->getItem_Name();
+		
+		$data = $itemMasterModelRetrieved->getItem_Name();
+		$data = $data."####".$poItemModelRetrieved->getUnit()."####".$poItemModelRetrieved->getUnit_Price()."####".$poItemModelRetrieved->getQuantity()."####".$poItemModelRetrieved->getDiscount()."####".$poItemModelRetrieved->getDiscount_Value()."####".$poItemModelRetrieved->getInd_Tax()."####".$poItemModelRetrieved->getTax_Value()."####".$poItemModelRetrieved->getDescription();
+		
+		echo $data;
+		
+	 }//retriveItemDetails
+	 
+	 
+
+	
 		
 		
 	}//class

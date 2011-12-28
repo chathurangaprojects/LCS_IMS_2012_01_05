@@ -148,7 +148,10 @@
           <input type="submit" value="Add Item"  id="lnk_add_item" name="lnk_add_item" class="btn ui-state-default ui-corner-all" />
           </span>
           <!-- <button class="ui-state-default ui-corner-all float-left ui-button" type="submit" disabled="disabled">Save</button> -->
-          <span class="cont tooltip ui-corner-all" title="Click here to update an Item"> <a id="lnk_update_item" class="btn ui-state-default ui-corner-all" href="#"> <span class="ui-icon ui-icon-newwin"></span> Update Item </a> </span>
+<!--          <span class="cont tooltip ui-corner-all" title="Click here to update an Item"> <a id="lnk_update_item" class="btn ui-state-default ui-corner-all" href="#"> <span class="ui-icon ui-icon-newwin"></span> Update Item </a> 
+</span>-->
+
+
           <div id="add_new_po_msg">
            <input type="text" id="required_fields" name="required_fields" value="false">
            <input type="text" id="po_request_id" name="po_request_id" value=""  />
@@ -182,12 +185,6 @@
           <td style="padding: 5px 5px 5px 0;width: 17%"><!-- <input type="text" id="po_item_unit" class="field text full" name="txt_po_item_unit" /> -->
             <select id="po_item_unit" class="field select full" name="po_item_unit">
               <option value=""></option>
-              <?php
-                                   /* foreach ($units->result_array() as $row)
-                                    {
-                                        echo '<option value="' . $row['Unit_Code'] . '">' . $row['Description'] . '</option>';
-                                    }*/
-                                ?>
                               <?php
                                     foreach ($UnitArray as $unitModel)
                                     {
@@ -239,7 +236,7 @@
   <?php //order item add ends ?>
   <?php //order item edit start ?>
   <div id="dlg_edit_item" title="Edit Item">
-    <form>
+   <?php /*?> <form>
       <table style="width: 100%">
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Item Name *</b></td>
@@ -287,7 +284,78 @@
         </tr>
       </table>
       <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="edit_po_items();">Update</button>
+    </form><?php */?>
+    
+    
+    <!-- edit start -->
+    
+     <form name="update_purchase_order_item" id="update_purchase_order_item">
+      <table style="width: 100%">
+        <tr>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Item Name *</b></td>
+          <td style="padding: 5px 5px 5px 0;" colspan="5"><input type="text" id="edit_po_item_name" class="field text full" name="edit_po_item_name" onkeypress="get_po_item_name(this.value);" onchange="get_po_item_name(this.value);" onblur="get_po_item_name(this.value);" readonly="readonly"/></td>
+        </tr>
+        <tr>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Unit *</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><!-- <input type="text" id="po_item_unit" class="field text full" name="txt_po_item_unit" /> -->
+            <select id="edit_po_item_unit" class="field select full" name="edit_po_item_unit">
+              <option value=""></option>
+                              <?php
+                                    foreach ($UnitArray as $unitModel)
+                                    {
+                                   ?>
+            <option value="<?php echo $unitModel->getUnit_Code(); ?>"><?php echo $unitModel->getDescription(); ?></option>
+            <?php
+                                    }
+                                ?>              
+                                
+            </select></td>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Unit Price *</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_po_item_unit_price" class="field text full" name="edit_po_item_unit_price" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Quantity *</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%"><input type="text" id="edit_po_item_qty" class="field text full" name="edit_po_item_qty" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
+        </tr>
+        <tr>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Discount %</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_discount_percentage" class="field text full" name="edit_discount_percentage" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateDiscount()" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Discount Amount</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_discount_amount" class="field text full" name="edit_discount_amount" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateDiscount()" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 16%"></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%"></td>
+        </tr>
+        <tr>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Individual Tax %</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_tax_percentage" class="field text full" name="edit_tax_percentage" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateTax()"/></td>
+          <td style="padding: 5px 5px 5px 0;width: 16%"><b>Tax Value</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_tax_value" class="field text full" name="edit_tax_value" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateTax()" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 16%;text-align: right;font-size: 15px;"><b>Item Value</b></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%;"><!--<input type="text" readonly="readonly" id="edit_po_item_val" class="field text full" name="edit_txt_po_item_val" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" />--></td>
+        </tr>
+        <tr>
+          <td style="padding: 5px 5px 5px 0;width: 16%;"><b>Description</b></td>
+          <td style="padding: 5px 5px 5px 0;" colspan="5"><textarea id="edit_po_description" class="field text full" name="edit_po_description" rows="2"></textarea></td>
+        </tr>
+      </table>
+     
+<!--      Previous item<input type="text" name="previous_item_id" id="previous_item_id"/>
+-->      updating item <input type="text" name="updating_item_id" id="updating_item_id" />
+     purchase order <input type="text" name="updating_po_id" id="updating_po_id" />
+      
+<!--      <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>-->
+<div id="editItemMessage" >
+
+</div>
+
+      <button class="ui-state-default ui-corner-all float-left ui-button" type="submit" >Update</button>
+      
     </form>
+
+    
+    
+    
+    <!--edit ends -->
+    
+    
   </div>
 </div>
 <?php //order item edit ends ?>

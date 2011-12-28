@@ -49,6 +49,7 @@
 		}
 		
 		
+	
 		public function loadSuppliers(){
 			
 			
@@ -84,6 +85,43 @@
 			}
 			
 		}//loadSuppliers
+		
+		
+		
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		function loadItemNames(){
+			
+			
+			//echo "1###name###cat";
+			 $charactersTypingforitemName = $this->input->get('q',TRUE);
+
+	
+	          $itemModel = new ItemMasterModel();
+			  $itemService = new ItemMasterService();
+			
+			 $itemModel->setItem_Name($charactersTypingforitemName);
+			 
+			 $itemArray = $itemService->retrieveItemNames($itemModel);
+			 
+	        // echo "1###name".$charactersTypingforitemName.sizeof($itemArray)."###cat";
+	        
+		     for($index=0;$index<sizeof($itemArray);$index++){
+	         
+			 echo  $itemArray[$index]->getMaster_Item_Code()."###".$itemArray[$index]->getItem_Name()."\n";
+	
+			 }
+			 
+			 
+		}//loadItemNames
 		
 		
 		

@@ -47,6 +47,29 @@ function retrieveAllUnitDetails(){
 
 
 
+
+function retrieveUnitDetails($unitModelGiven){
+	
+		$query = $this->db->get_where('ta_ims_unit',array('Unit_Code'=>$unitModelGiven->getUnit_Code()));
+		
+	$unitModel=new UnitModelService();
+	
+		foreach ($query->result() as $row)
+		{
+					
+			$unitModel->setUnit_Code($row->Unit_Code);
+			$unitModel->setDescription($row->Description);
+			 
+		}
+		
+		
+		return $unitModel;
+	
+	
+}//retrieveUnitDetails
+
+
+
 }//class
 ?>
 	

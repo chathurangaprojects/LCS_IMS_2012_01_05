@@ -220,14 +220,18 @@
         </tr>
       </table>
       Hidden<input  name="purchase_order_id" id="purchase_order_id" type="text" value="" />
+      <input type="text" name="item_id" id="item_id" />
       
 <!--      <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>-->
+<div id="addNewItemMessage" >
+
+</div>
 
       <button class="ui-state-default ui-corner-all float-left ui-button" type="submit" >Add</button>
       
     </form>
   </div>
-  <?php //ordeer item add ends ?>
+  <?php //order item add ends ?>
   <?php //order item edit start ?>
   <div id="dlg_edit_item" title="Edit Item">
     <form>
@@ -269,7 +273,7 @@
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Tax Value</b></td>
           <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="po_tax_val2" class="field text full" name="txt_po_tax_val2" style="text-align: right;" onkeyup="calculate_item_value();" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%;text-align: right;font-size: 15px;"><b>Item Value</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 18%;"><input type="text" readonly="readonly" id="po_item_val2" class="field text full" name="txt_po_item_val2" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%;"><input type="text" readonly="readonly" id="po_item_value" class="field text full" name="po_item_value" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" /></td>
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%;"><b>Description</b></td>

@@ -17,7 +17,7 @@
 			$supplierName = $supplierModel->getSupplier_Name();
 			
 			//database select query based on like operator on name
-             $this->db->like('Supplier_Name',$supplierName);  
+             $this->db->like('Supplier_Name',$supplierName,'both');  
 			 
 			 //getting supplier type
 			 $supType = $supplierModel->getSupplier_Type();
