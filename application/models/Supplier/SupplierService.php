@@ -44,6 +44,44 @@
 			 $index++;
 			}
 			return $supplierArray;
-      }
-	}
+      }//retriewSupplierNameAndID
+	
+	
+	
+	 function getGivenSupplierDetails($supplierModel){
+		 
+		 	 	 $supplierCode=$supplierModel->getSupplier_Code();
+	 
+	  $query = $this->db->get_where('ta_ims_supplier_header', array('Supplier_Code' =>$supplierCode));
+	 
+	  $supplier = new SupplierModel();
+	  
+									  
+	 	foreach ($query->result() as $row)
+		{
+			
+			 $supplier->setSupplier_Code($row->Supplier_Code);	
+			 $supplier->setSupplier_Name($row->Supplier_Name);
+			 $supplier->setAddress($row->Address);	
+			 $supplier->setCity($row->City);
+			 $supplier->setCountry_Code($row->Country_Code);	
+			 $supplier->setPhone($row->Phone);
+			 $supplier->setFax($row->Fax);	
+			 $supplier->setSupplier_Type($row->Supplier_Type);
+			 $supplier->setEmail($row->Email);	
+			 $supplier->setReg_No($row->Reg_No);
+			 $supplier->setWebsite($row->Website);	
+			 $supplier->setActive($row->Active);
+			 
+
+		}//foreach
+		 
+		 return $supplier; 
+		 
+	 }//function
+
+
+	
+	}//class
+	
 ?>

@@ -974,13 +974,116 @@ $.ajax({
 
 
 
-function load_item_details_for_edit(itemID){
+function load_item_details_for_edit(itemID,poID){
 	
 	
-	alert('edit'+itemID);
+	//alert('edit'+itemID+' and '+poID);
+	 $('#updating_item_id').val(itemID);
+	 $('#updating_po_id').val(poID);
+	 
+	
+	//reteive data for edit 
+	$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/retrivePurchaseOrderItemDetails/',
+        data: "itemID="+itemID+"&purchaseOrderID="+poID,
+        success: function(msg)
+        {
+         $('#editItemMessage').html(msg);
+
+         var dataArray = msg.split('####');
+
+         $('#edit_po_item_name').val(jQuery.trim(dataArray[0]));
+		 $('#edit_po_description').val(jQuery.trim(dataArray[8]));
+		 $('#edit_po_item_unit_price').val(jQuery.trim(dataArray[2]));
+		 $('#edit_po_item_unit').val(jQuery.trim(dataArray[1]));
+		 $('#edit_po_item_qty').val(jQuery.trim(dataArray[3]));
+		 $('#edit_discount_percentage').val(jQuery.trim(dataArray[4]));
+		 $('#edit_discount_amount').val(jQuery.trim(dataArray[5]));
+		 $('#edit_tax_percentage').val(jQuery.trim(dataArray[6]));
+		 $('#edit_tax_value').val(jQuery.trim(dataArray[7]));
+
+		 
+        }
+    });
 	
 }//function
 
 
 
+
+
+
+$().ready(function() {
+    //form name and id
+	$("#update_purchase_order_item").validate
+	({
+		rules:
+		{
+			//edit_po_item_name: "required",
+			edit_po_item_unit: "required",
+			edit_po_item_unit_price: { 
+                required: true, 
+                number: true 
+             },
+			edit_po_item_qty: { 
+                required: true, 
+                number: true 
+             } 
+		},
+			messages:
+			{
+				//edit_po_item_name: "Item Name is required",
+				edit_po_item_unit: "Item Unit is required",
+				edit_po_item_unit_price: {
+				required:"Unit Price is required",
+				number:"Unit Price is invalid"					
+				},
+				edit_po_item_qty: {
+				required:"Item quantity is required",
+				number:"Item quantity is invalid"				
+				}
+				
+			},
+			
+			submitHandler: function(form) {
+				
+				//alert('updated');
+				
+				$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/editItemsInPurchaseOrder', $("#update_purchase_order_item").serialize(), function(msg) {
+
+				validateTax();
+                validateDiscount();
+			
+			var ItemAddingMessage = msg.split("#######----#######")[0];
+            var itemTableView = msg.split("#######----#######")[1];
+			
+			$('#editItemMessage').html(ItemAddingMessage);
+            $('#addedItemTable').html(itemTableView);
+			
+				 
+				});//post
+				
+			}
+			
+		
+	});
+	
+var po_request_id = jQuery.trim($('#po_request_id').val());	
+
+if(po_request_id!=""){
+	
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/displayAddedItemsForPurchaseOrder/'+po_request_id,
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+         $('#addedItemTable').html(msg);
+
+        }
+    });
+}
+
+});//function update_purchase_order_item
 

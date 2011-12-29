@@ -38,6 +38,60 @@ class PurchaseOrderRequestService extends CI_Model {
  
  
  
+ function getPurchaseOrderDetailsPlacedByGivenUser($poReqModel){
+	 
+
+	 
+	  $query = $this->db->get_where('ta_ims_po_header', array('Created_By' =>$poReqModel->getCreated_By()));
+	 
+	 
+	  $poRequestArray =array();
+		$index=0;
+		
+		foreach ($query->result() as $row)
+		{
+			$poRequestModel=new PurchaseOrderRequestModel();
+			
+			$poRequestModel->setOrder_Code($row->Order_Code);
+			$poRequestModel->setSupplier_Code($row->Supplier_Code );
+			$poRequestModel->setOrder_Date($row->Order_Date);
+			$poRequestModel->setExpected_Date($row->Expected_Date);
+			$poRequestModel->setQuote_No($row->Quote_No);
+			$poRequestModel->setAttn($row->Attn);
+			$poRequestModel->setRequested_Dept($row->Requested_Dept);
+			$poRequestModel->setRequested_By($row->Requested_By);
+			$poRequestModel->setCreated_By($row->Created_By);
+			$poRequestModel->setDiscount($row->Discount);
+            $poRequestModel->setDiscount_Value($row->Discount_Value);
+            $poRequestModel->setPO_Total($row->PO_Total);
+			$poRequestModel->setCurrency_Code($row->Currency_Code);
+			$poRequestModel->setPayment_Type_Code($row->Payment_Type_Code);
+			$poRequestModel->setPayment_Status($row->Payment_Status);
+			$poRequestModel->setPO_Purpose($row->PO_Purpose);
+			$poRequestModel->setPO_Remarks($row->PO_Remarks);
+			$poRequestModel->setPO_Payment_Remarks($row->PO_Payment_Remarks);
+			$poRequestModel->setPO_Close_Date($row->PO_Close_Date);
+			$poRequestModel->setPO_Close_By($row->PO_Close_By);
+			$poRequestModel->setPO_Close_Remarks($row->PO_Close_Remarks);
+            $poRequestModel->setPO_Cancel_Date($row->PO_Cancel_Date);
+		    $poRequestModel->setPO_Cancel_By($row->PO_Cancel_By);
+            $poRequestModel->setPO_Cancel_Remarks($row->PO_Cancel_Remarks);
+            $poRequestModel->setPrint_Original($row->Print_Original);
+            $poRequestModel->setStatus_Code($row->Status_Code);
+
+    		$poRequestArray[$index]=$poRequestModel;
+			$index++;
+		}
+		
+		
+		
+		return $poRequestArray;
+		
+		
+	 
+ }//function
+ 
+ 
  
 }//class
 

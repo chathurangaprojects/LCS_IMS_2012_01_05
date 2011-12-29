@@ -94,6 +94,63 @@ class PurchaseOrderItemService extends CI_Model {
  
  
  
+ 
+ 
+
+ 
+  function updateItemInPurchaseOrder($purchaseOrderItemModel){
+	  
+	  //echo "method".$purchaseOrderOldItemModel->getOrder_Code()."#".$purchaseOrderOldItemModel->getMaster_Item_Code();
+	  //echo 'start';
+	  
+	  $dataForWhere = array('Order_Code'=>$purchaseOrderItemModel->getOrder_Code(),'Master_Item_Code'=>$purchaseOrderItemModel->getMaster_Item_Code());
+	  
+//$arr = (array) $purchaseOrderItemModel;
+
+	$this->db->where($dataForWhere);
+	$this->db->update('ta_ims_po_details',$purchaseOrderItemModel);
+	
+	
+  }//function
+  
+  
+  
+  
+  
+  function retrieveSelectedPurchaseOrderItemDetails($poItemModel){
+	 
+	 
+	 $query = $this->db->get_where('ta_ims_po_details', array('Order_Code' => $poItemModel->getOrder_Code(),'Master_Item_Code'=>$poItemModel->getMaster_Item_Code()));
+	 
+		$poItemModel=new PurchaseOrderItemModel();
+		
+		foreach ($query->result() as $row)
+		{
+			
+			$poItemModel->setMaster_Item_Code($row->Master_Item_Code);
+			$poItemModel->setOrder_Code ($row->Order_Code );
+			$poItemModel->setUnit($row->Unit);
+			$poItemModel->setUnit_Price($row->Unit_Price);
+			$poItemModel->setQuantity($row->Quantity);
+			$poItemModel->setDiscount($row->Discount);
+			$poItemModel->setDiscount_Value($row->Discount_Value);
+			$poItemModel->setItem_Value($row->Item_Value);
+			$poItemModel->setInd_Tax($row->Ind_Tax);
+			$poItemModel->setTax_Value($row->Tax_Value);
+            $poItemModel->setDescription($row->Description);
+
+
+		}
+		
+		
+		return $poItemModel;
+	 
+ }//retrieveSelectedPurchaseOrderItemDetails
+ 
+  
+  
+ 
+ 
 }//class
 
 ?>

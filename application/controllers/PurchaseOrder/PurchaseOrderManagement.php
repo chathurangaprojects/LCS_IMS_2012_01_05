@@ -720,6 +720,73 @@ echo $message.'#######----#######'.$poItemTableView;
 	 
 	 
 
+
+
+
+
+
+
+     function viewListOfPurchaseOrders(){
+		 
+		 
+		 if($this->session->userdata('logged_in'))
+			{
+		     //the user is logged and priviledges should be checked
+			$userPriviledgeModel=new UserPriviledge();
+			
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(5);//priviledge 5 is for creating purchase order requests
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 
+			 $employeeID = $this->session->userdata('emp_id');
+			 
+			  // echo "user has the priviledges";
+			  
+			  $poReqModel = new PurchaseOrderRequestModel();
+			  
+			  
+			  $poReqModel->setCreated_By($employeeID);
+
+			  $poReqService = new PurchaseOrderRequestService();
+			  
+			  $purchaseOrders = $poReqService->getPurchaseOrderDetailsPlacedByGivenUser($poReqModel);
+			  
+			  			//setting up the data array
+			       $data = array('PurchaseOrders'=>$purchaseOrders);
+			
+						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidiry of Singapoor Telecom', 'Purchase Orders', 'Your List of Purchase Orders...');
+		
+			$this->template->load('template', 'PurchaseOrder/viewPurchaseOrdersList',$data);
+			 			//$this->template->load('template', 'PurchaseOrder/viewPurchaseOrdersList');
+
+			      
+				  
+		     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";
+			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+						
+			}
+			
+			}//if
+			else{
+				
+				
+			redirect(base_url().'index.php');
+	
+			
+			}
+			
+		 
+	 }//function
 	
 		
 		

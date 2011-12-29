@@ -118,6 +118,35 @@
 	
 	
 	
+	function retrieveItemDetails($itemModel){
+		
+		
+		
+	$query = $this->db->get_where('ta_ims_item_master', array('Master_Item_Code' => $itemModel->getMaster_Item_Code()));
+
+        $itemMasterModel = new ItemMasterModel();
+		
+		
+			foreach ($query->result() as $row)
+		{
+				
+		$itemMasterModel->setItem_Name($row->Item_Name);
+		$itemMasterModel->setType_Code($row->Type_Code);
+		$itemMasterModel->setImage($row->Image);
+		$itemMasterModel->setDescription($row->Description);
+		$itemMasterModel->setR_Level($row->R_Level);
+		$itemMasterModel->setR_Qty($row->R_Qty);
+		$itemMasterModel->setEmployee_Code($row->Employee_Code);
+		$itemMasterModel->setMaster_Item_Code($row->Master_Item_Code);
+		$itemMasterModel->setPrimary_cat($row->Primary_cat);
+		$itemMasterModel->setSecondary_cat($row->Secondary_cat);
+			
+		}
+		
+		
+		return  $itemMasterModel;
+	
+	}//retrieveItemDetails
 	
 	
 	
