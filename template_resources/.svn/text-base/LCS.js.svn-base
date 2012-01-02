@@ -452,6 +452,124 @@ function openDialog(){
 
 
 
+//edit po request start
+
+
+$().ready(function() {
+    //form name and id
+	//alert('lcs');
+	$("#purchase_order_request_edit").validate
+	({
+	 	 
+		rules:
+		{
+			sup_name: "required",			
+			order_date: {				
+			   required: true,
+			   date : true
+			},
+			expected_date: {				
+			   date : true
+			},
+			sup_type:"required",
+			Department_Code:"required",
+			currrency_selector:"required",
+			conversion_rate : "required",
+			payment_type:"required"
+		},
+			messages:
+			{
+				sup_name: "Supplier Name is required",
+				sup_type: "Supplier type is required",
+				order_date: "Order date is required",
+				expected_date: "Expected date is invalid",
+				Department_Code:"Department is required",
+				currrency_selector: "Please select the currency",
+				conversion_rate : "Conversion rate is required",
+				payment_type:"Please select the payment type"
+				
+				
+			},
+			
+			submitHandler: function(form) {
+							
+				//var isAllFiedsValidated=$('#required_fields').val();
+			  var expectedDateValidity =  $("#expected_date_validity").val();
+
+            if(expectedDateValidity=='true'){
+					
+					// all the data fields are validated and ready for the submission
+				//$('#required_fields').val('true');
+				//set this id using ajax			
+			$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/createNewPurchaseOrderRequest', $("#purchase_order_request_edit").serialize(), function(msg) {
+					//$('form[name=purchase_order_request] #po_request_id').val(msg);
+					$('#po_request_message').html('<font color="#009900">'+msg.split('#')[0]+'</font>'); 
+
+					var purchaseOrderID=msg.split('#')[1];
+					//set up the purchase order id for adding items for the purchase order 
+					$('form[name=add_purchase_order_item] #purchase_order_id').val(purchaseOrderID);
+					$('form[name=purchase_order_request] #po_request_id').val(purchaseOrderID);
+					//setting up the valus changed as false... because the insert or update is already done
+					//$('#po_details_change').val('false');
+					$('#dlg_add_item').dialog('open');
+				});
+								
+				}//if expectedDateValidity
+				
+				
+			}//submitHandler
+
+	});
+	
+	
+		//openDialog();
+	
+});
+
+
+
+
+
+
+
+
+
+//edit po request ends
+
+
+
+
+function sendForApprvalByEmployee(){
+ 
+   var PoRequestID = $('#po_request_id').val();
+
+   
+   $('#addnewempmsg').html('<font color="#CC0000"> Please wait............ </font>'); 
+	  
+   $.ajax({
+   type: "POST",   
+   url: base_url+"index.php/PurchaseOrder/PurchaseOrderManagement/sendForHODapproval", 
+   data: "PO_Request_ID="+PoRequestID,
+   
+   success: function(msg){
+	 $('#po_request_message').html(msg); 
+   // window.location="http://www.google.lk";
+     document.getElementById("lnk_add_item_edit").disabled = true;
+	 document.getElementById("item_for_approval").disabled = true;
+   }
+  
+ });   
+   
+  
+}//sendForApprvalByEmployee
+
+	
+
+
+
+
+
+
 function retriveDepartment(){
 	
 	
@@ -689,8 +807,8 @@ function select_currency(){
 
 function select_conversion_rate(){
 	
-var currencyCode = $('form[name=purchase_order_request] #currrency_selector').val();
-
+//var currencyCode = $('form[name=purchase_order_request] #currrency_selector').val();
+var currencyCode = $('#currrency_selector').val();
 if(currencyCode != ""){
 //$('form[name=purchase_order_request] #conversion_rate').val('10');
 
@@ -702,8 +820,8 @@ if(currencyCode != ""){
    
    success: function(msg){
  
-   $('form[name=purchase_order_request] #conversion_rate').val(jQuery.trim(msg));
-
+ //  $('form[name=purchase_order_request] #conversion_rate').val(jQuery.trim(msg));
+$('#conversion_rate').val(jQuery.trim(msg));
    }
    });
 
@@ -711,9 +829,8 @@ if(currencyCode != ""){
 }
 else{
 
-$('form[name=purchase_order_request] #conversion_rate').val('');
-//$('form[name=purchase_order_request] #required_fields').val('false');
-
+//$('form[name=purchase_order_request] #conversion_rate').val('');
+$('#conversion_rate').val('');
 }
 
 //check whther the all required fields are set and validated
@@ -989,7 +1106,7 @@ function load_item_details_for_edit(itemID,poID){
         data: "itemID="+itemID+"&purchaseOrderID="+poID,
         success: function(msg)
         {
-         $('#editItemMessage').html(msg);
+        // $('#editItemMessage').html(msg);
 
          var dataArray = msg.split('####');
 
@@ -1086,4 +1203,13 @@ $.ajax({
 }
 
 });//function update_purchase_order_item
+
+
+
+
+
+
+
+
+
 

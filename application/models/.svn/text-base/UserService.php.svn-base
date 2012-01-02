@@ -342,8 +342,33 @@ class UserService extends CI_Model {
 	  }
 	  
   }//check the user email availability
+  
+  
+  
+  
+  
+  function isAdministrativeUser($empID){
+	  
+	  //implemetation here
+	 	  
+	  $query = $this->db->get_where('ta_ims_employee', array('Department_Code' =>'1','Employee_Code'=>$empID));
+
+      if($query->num_rows()>0){
+		
+		return TRUE;
+		  
+	  }
+	  else{
+		  
+		 return FALSE;
+	  
+	  }
+	  
+  }//function
+  
+  
    
-} 
+} //UserService
 ?>
 
 	

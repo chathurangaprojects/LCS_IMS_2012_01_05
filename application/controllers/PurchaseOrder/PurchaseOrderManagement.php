@@ -866,7 +866,7 @@ echo $message.'#######----#######'.$poItemTableView;
 			}
 			else{
 				
-				//$this->viewListOfPurchaseOrders();
+				
 				redirect(base_url()."index.php/PurchaseOrder/PurchaseOrderManagement/viewListOfPurchaseOrders");
 				
 			}//else

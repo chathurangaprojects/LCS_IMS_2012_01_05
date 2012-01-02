@@ -107,6 +107,17 @@ Logout
 <li>
 <a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/createNewPurchaseOrder" class="sf-with-ul">Create PO Request</a>
 </li>
+
+<li>
+<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewListOfPurchaseOrders" class="sf-with-ul">View Pending PO Requests</a>
+</li>
+
+
+<li>
+<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/displayApprovedPO" class="sf-with-ul">View Approved PO</a>
+</li>
+
+
 </ul>
 </li>
 

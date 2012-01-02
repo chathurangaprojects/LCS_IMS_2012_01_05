@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 27, 2011 at 05:43 PM
+-- Generation Time: Jan 02, 2012 at 05:18 PM
 -- Server version: 5.1.41
--- PHP Version: 5.3.2-1ubuntu4.10
+-- PHP Version: 5.3.2-1ubuntu4.11
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -197,10 +197,10 @@ CREATE TABLE IF NOT EXISTS `ta_ims_department` (
 --
 
 INSERT INTO `ta_ims_department` (`Department_Code`, `Department_ID`, `Department_Name`, `Active`) VALUES
-(1, 'All', 'All', '1'),
+(1, 'A', 'Admin', '1'),
 (2, 'K', 'Marketing', '1'),
 (3, 'C', 'Customer Support', '1'),
-(4, 'A', 'Admin', '1'),
+(4, 'rm', 'remove', '1'),
 (5, 'F', 'Finance', '1'),
 (6, 'B', 'Credit control', '1'),
 (7, 'W', 'Web', '1'),
@@ -260,8 +260,8 @@ CREATE TABLE IF NOT EXISTS `ta_ims_employee` (
 
 INSERT INTO `ta_ims_employee` (`Employee_Code`, `Employee_Name`, `Designation`, `Level_Code`, `Department_Code`, `Email`, `Password`, `Confirmation_Code`, `Status`) VALUES
 (1, 'Guest1', 'Engineer', 1, 1, 'guest@lankacom.net', '202cb962ac59075b964b07152d234b70', '3IFMX872YBEGE1F2BJSW8V79K1C8643TKT6N86XG', '1'),
-(2, 'Viran Fernando', 'Software Engineer', 1, 7, 'viranf@lankacom.net', '202cb962ac59075b964b07152d234b70', '', '0'),
-(33, 'fhdh', 'so', 1, 3, 'chathuranga.t@gmail.com', '5ef25348aa232791d6687afcb1a5f106', '123', '1'),
+(2, 'Viran Fernando', 'Software Engineer', 1, 7, 'viranf@lankacom.net', '202cb962ac59075b964b07152d234b70', '', '1'),
+(33, 'fhdh', 'so', 1, 3, 'chathuranga.t@gmail.com', '202cb962ac59075b964b07152d234b70', '123', '1'),
 (34, 'sample', 'sample', 5, 2, 'sample@sample.sample', '94158280095e1bcfd55cce67ed662aba', '123', '0'),
 (35, 'samplename', 'sampleDesignation', 2, 2, 'ssss@ssss.ls', 'ed3360e2460f3c11e183c406af66999e', '123', '1'),
 (36, 'sample3', 'sample3', 3, 4, 'hhshs2@hshsh.gg', 'eaaa02c665aca1837298cb7a078c698a', '123', '1'),
@@ -280,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `ta_ims_employee_moderation` (
   `modifiedStatus` varchar(100) NOT NULL,
   `dateModified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`moderationID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=41 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=42 ;
 
 --
 -- Dumping data for table `ta_ims_employee_moderation`
@@ -313,7 +313,8 @@ INSERT INTO `ta_ims_employee_moderation` (`moderationID`, `userID`, `modifiedByU
 (37, 1, 1, 'edited', '2011-12-20 13:20:07'),
 (38, 1, 1, 'edited', '2011-12-20 13:20:12'),
 (39, 1, 1, 'edited', '2011-12-20 13:20:19'),
-(40, 1, 1, 'edited', '2011-12-20 13:52:38');
+(40, 1, 1, 'edited', '2011-12-20 13:52:38'),
+(41, 2, 1, 'enabled', '2012-01-02 15:12:34');
 
 -- --------------------------------------------------------
 
@@ -4897,7 +4898,7 @@ CREATE TABLE IF NOT EXISTS `ta_ims_item_type` (
   KEY `Category_Code` (`Category_Code`),
   KEY `Bulk_Code` (`Bulk_Code`),
   KEY `Unit_Code` (`Unit_Code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
 
 --
 -- Dumping data for table `ta_ims_item_type`
@@ -4918,7 +4919,13 @@ INSERT INTO `ta_ims_item_type` (`Type_Code`, `Item_Type`, `Category_Code`, `Bulk
 (12, 'fgfdh', 1, 1, 1, ''),
 (13, '6546', 2, 1, 1, 'frg'),
 (14, 'fvdf', 2, 2, 3, 'cvsd'),
-(15, 'Motor Car', 3, 1, 1, 'motor car description');
+(15, 'Motor Car', 3, 1, 1, 'motor car description'),
+(17, 'safa', 2, 1, 1, 'asf'),
+(18, 'safa', 2, 1, 1, 'asf'),
+(19, 'safa', 3, 1, 1, 'asf'),
+(20, 'safa', 1, 1, 1, 'asf'),
+(21, 'safa', 1, 2, 1, 'asf'),
+(22, 'safa', 1, 2, 2, 'asf');
 
 -- --------------------------------------------------------
 
@@ -5001,16 +5008,21 @@ CREATE TABLE IF NOT EXISTS `ta_ims_main_category` (
   `Category_Name` varchar(100) NOT NULL,
   `Description` varchar(1000) NOT NULL,
   PRIMARY KEY (`Category_Code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
 -- Dumping data for table `ta_ims_main_category`
 --
 
 INSERT INTO `ta_ims_main_category` (`Category_Code`, `Category_Name`, `Description`) VALUES
-(1, '', 'Undefined'),
+(1, 'Undefined', 'Undefined'),
 (2, 'Computer Equipment', 'Computer Equipment'),
-(3, 'Furniture', 'Furniture');
+(3, 'Furniture', 'Furniture'),
+(14, 'Antena', 'Antena'),
+(15, 'Routerts', 'Routerts'),
+(16, 'Stationaries', 'Stationaries'),
+(24, 'hello', 'hello'),
+(25, '123', '123');
 
 -- --------------------------------------------------------
 
@@ -5106,13 +5118,28 @@ CREATE TABLE IF NOT EXISTS `ta_ims_po_details` (
 --
 
 INSERT INTO `ta_ims_po_details` (`Order_Code`, `Master_Item_Code`, `Unit`, `Unit_Price`, `Quantity`, `Discount`, `Discount_Value`, `Item_Value`, `Ind_Tax`, `Tax_Value`, `Description`, `Breakable`, `Breakable_Unit`, `Breakable_Qty`, `item_added_by`, `date_added`) VALUES
+(1, 776, 1, '45.00000', '41.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2012-01-02 16:14:24'),
+(2, 6, 1, '11.00000', '11.00', 0, '0.00', NULL, 0, '0.00', '', NULL, NULL, NULL, 1, '2012-01-02 15:43:32'),
 (129, 242, 2, '10.00000', '11.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:29:14'),
 (129, 312, 1, '10.00000', '10.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:41:11'),
 (129, 2653, 2, '11.00000', '1111.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:33:28'),
 (129, 2654, 1, '10.00000', '11.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:30:59'),
 (129, 3361, 1, '10.00000', '10000.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:30:15'),
 (129, 3901, 3, '11.00000', '111.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:38:10'),
-(129, 4050, 1, '11.00000', '111.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:40:18');
+(129, 4050, 1, '11.00000', '111.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-27 17:40:18'),
+(130, 242, 2, '1.00000', '251.00', 0, '0.00', NULL, 0, '0.00', 'test', NULL, NULL, NULL, 1, '2011-12-28 14:33:55'),
+(130, 776, 1, '1.00000', '111.00', 0, '0.00', NULL, 0, '0.00', 'test', NULL, NULL, NULL, 1, '2011-12-28 11:42:26'),
+(130, 2653, 2, '1.00000', '11111.00', 0, '0.00', NULL, 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-28 17:11:45'),
+(130, 3361, 1, '1.00000', '251.00', 0, '0.00', NULL, 0, '0.00', 'test', NULL, NULL, NULL, 1, '2011-12-28 13:37:53'),
+(130, 3849, 3, '1.00000', '456.00', 0, '1.00', NULL, 1, '0.00', 'test description', NULL, NULL, NULL, 1, '2011-12-28 17:12:03'),
+(130, 3871, 1, '1.00000', '251.00', 0, '0.00', NULL, 0, '0.00', 'test', NULL, NULL, NULL, 1, '2011-12-28 13:37:42'),
+(130, 3937, 1, '1.00000', '251.00', 0, '0.00', NULL, 0, '0.00', 'test', NULL, NULL, NULL, 1, '2011-12-28 13:27:10'),
+(130, 4051, 1, '1.00000', '251.00', 0, '0.00', NULL, 0, '0.00', 'dddddddddddddddd', NULL, NULL, NULL, 1, '2011-12-28 14:32:15'),
+(131, 3901, 2, '1.00000', '1.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-28 07:39:08'),
+(133, 776, 1, '111.00000', '1111.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-28 09:07:40'),
+(133, 2653, 2, '11.00000', '11.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-28 09:34:24'),
+(133, 3241, 2, '99999.99999', '22222.00', 0, '0.00', '0.00', 0, '0.00', '', NULL, NULL, NULL, 1, '2011-12-28 09:05:43'),
+(134, 596, 1, '34.00000', '35.00', 46, '0.00', '0.00', 46, '0.00', 'yery', NULL, NULL, NULL, 1, '2011-12-28 16:38:29');
 
 -- --------------------------------------------------------
 
@@ -5156,15 +5183,15 @@ CREATE TABLE IF NOT EXISTS `ta_ims_po_header` (
   KEY `Status_Code` (`Status_Code`),
   KEY `Requested_By` (`Requested_By`),
   KEY `Requested_Dept` (`Requested_Dept`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=130 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=135 ;
 
 --
 -- Dumping data for table `ta_ims_po_header`
 --
 
 INSERT INTO `ta_ims_po_header` (`Order_Code`, `Supplier_Code`, `Order_Date`, `Expected_Date`, `Quote_No`, `Attn`, `Requested_Dept`, `Requested_By`, `Created_By`, `Discount`, `Discount_Value`, `PO_Total`, `Currency_Code`, `Currency_Rate`, `Payment_Type_Code`, `Payment_Status`, `PO_Purpose`, `PO_Remarks`, `PO_Payment_Remarks`, `PO_Close_Date`, `PO_Close_By`, `PO_Close_Remarks`, `PO_Cancel_Date`, `PO_Cancel_By`, `PO_Cancel_Remarks`, `Print_Original`, `Status_Code`) VALUES
-(1, 1, '2011-10-25 00:00:00', '2011-10-30 00:00:00', 'a', 'b', 1, 1, 1, 10, '0', '0', 1, 10.00, 1, 1, '', '', '', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '', 0, 1),
-(2, 1, '2011-10-25 00:00:00', '2011-10-30 00:00:00', '111', '222', 5, 2, 1, 0, '0', '0', 1, 100.00, 3, 0, 'jlkjjo', 'jjoljhojholjh', 'kjkjkjn', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '', 0, 1),
+(1, 1, '2011-10-25 00:00:00', NULL, 'a', 'b', 1, 1, 1, NULL, NULL, NULL, 1, 10.00, 4, NULL, '        sample purpose                    ', '        sample remarks                    ', '                  sample payment remarks       \n                 \n          ', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(2, 1, '2011-10-25 00:00:00', NULL, '1115', '2225', 8, 1, 1, NULL, NULL, NULL, 1, 1.00, 3, NULL, '                                                    purpose 123                                                                                                                                                                                                                                                                        ', '                                        po remarks\n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                                                                                                                        ', '                                                                                 payment remarks\n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n                 \n          ', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (3, 1, '2011-10-25 00:00:00', '2011-10-30 00:00:00', '111', '222', 5, 2, 1, 0, '0', '0', 1, 100.00, 3, 0, 'jlkjjo', 'jjoljhojholjh', 'kjkjkjn', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '', 0, 1),
 (4, 1, '2011-10-26 00:00:00', '2011-10-26 00:00:00', 'ml;kkljm', 'joljjm', 3, 2, 1, 0, '0', '0', 1, 1.00, 2, 0, 'k;', 'k;lk;k', 'ljhkhkh', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '', 0, 1),
 (5, 1, '2011-10-26 00:00:00', '2011-10-26 00:00:00', 'ml;kkljm', 'joljjm', 3, 2, 1, 0, '0', '0', 1, 1.00, 2, 0, 'k;', 'k;lk;k', 'ljhkhkh', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00', '', '', 0, 1),
@@ -5172,21 +5199,26 @@ INSERT INTO `ta_ims_po_header` (`Order_Code`, `Supplier_Code`, `Order_Date`, `Ex
 (112, 1, '2011-12-23 00:00:00', '0000-00-00 00:00:00', 'ssss', 'sss', 4, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '0', '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL),
 (113, 1, '2011-12-23 00:00:00', '0000-00-00 00:00:00', '', '', 2, 1, 1, NULL, NULL, NULL, 1, 1.00, 1, NULL, '0', '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL),
 (114, 1, '2011-12-23 00:00:00', '0000-00-00 00:00:00', '', '', 3, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '0', '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL),
-(115, 1, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
-(116, 2, '2011-12-27 00:00:00', NULL, '', '', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
-(117, 2, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 2, 110.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(115, 1, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 2),
+(116, 2, '2011-12-27 00:00:00', NULL, 'sss', 'att', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 4, NULL, '                             ggjnd nfnnf  fnnfnnf             ', 'jfhhfhhfffd                                          ', '                                  \n                 jajjAMKSKMKM M\n                 \n          ', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(117, 2, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 2, 110.00, 4, NULL, '              ', '              ', '                \n          ', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (118, 2, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 2, 110.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (119, 2, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 2, 110.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (120, 1, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 1, 1.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (121, 2, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 1, 1.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (122, 2, '2011-12-27 00:00:00', NULL, '', '', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (123, 1, '2011-12-27 00:00:00', NULL, '', '', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 3, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
-(124, 2, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(124, 2, '2011-12-27 00:00:00', NULL, '', '', 2, 1, 1, NULL, NULL, NULL, 1, 1.00, 4, NULL, '                                                        ', '                                                        ', '                                           \n                 \n                 \n                 \n          ', NULL, NULL, NULL, NULL, NULL, NULL, 0, 2),
 (125, 2, '2011-12-27 00:00:00', NULL, '', '', 1, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (126, 1, '2011-12-27 00:00:00', NULL, '', '', 1, 1, 1, NULL, NULL, NULL, 1, 1.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (127, 2, '2011-12-27 00:00:00', NULL, '', '', 4, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
 (128, 2, '2011-12-27 00:00:00', NULL, 'ssss', '', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
-(129, 1, '2011-12-27 00:00:00', NULL, 'ssss', '', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1);
+(129, 1, '2011-12-27 00:00:00', NULL, 'ssss', '', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(130, 3, '2011-12-29 00:00:00', NULL, '', '', 3, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(131, 2, '2011-12-28 00:00:00', NULL, '', '', 1, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(132, 1, '2011-12-28 00:00:00', NULL, '', '', 1, 1, 1, NULL, NULL, NULL, 1, 1.00, 2, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(133, 2, '2011-12-28 00:00:00', NULL, '', '', 3, 1, 1, NULL, NULL, NULL, 2, 110.00, 1, NULL, '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1),
+(134, 1, '2011-12-28 00:00:00', NULL, '', '', 6, 1, 1, NULL, NULL, NULL, 1, 1.00, 4, NULL, '                                          ', '                                          ', '                                  \n                 \n                 \n          ', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -5198,19 +5230,21 @@ CREATE TABLE IF NOT EXISTS `ta_ims_po_status` (
   `Status_Code` int(11) NOT NULL AUTO_INCREMENT,
   `Status` varchar(100) NOT NULL,
   PRIMARY KEY (`Status_Code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `ta_ims_po_status`
 --
 
 INSERT INTO `ta_ims_po_status` (`Status_Code`, `Status`) VALUES
-(1, 'New'),
-(2, 'Pending PO Request Approval'),
-(3, 'Pending PO Approval'),
-(4, 'PO Approved'),
-(5, 'PO Cancelled'),
-(6, 'PO Closed');
+(1, ' New'),
+(2, 'Pending PO Request '),
+(3, ' PO Request Cancel - HOD'),
+(4, 'PO Request Approved - HOD'),
+(5, 'PO Request Return - HOD'),
+(6, 'PO Request Approved - ACD'),
+(7, 'PO Request Cancel - ACD'),
+(8, 'PO Approved - ACD');
 
 -- --------------------------------------------------------
 
