@@ -5,35 +5,47 @@
     <table width="100%" border="1px" class="flexme2">
       <tr>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Supplier Type *</b></td>
-        <div>
+        <div>   
           <td colspan="3" style="padding: 5px 5px 5px 0;"><select id="sup_type" class="field select full" name="sup_type" onchange="select_currency();" >
               <option value=""> - -Select Supplier Type- -</option>
-              <option value="0">Local Supplier</option>
-              <option value="1">Foreign Supplier</option>
+              <option value="0" <?php if($SupplierType==0){ ?> selected="selected"<?php } ?> >Local Supplier</option>
+              <option value="1" <?php if($SupplierType==1){ ?> selected="selected"<?php } ?> >Foreign Supplier</option>
             </select></td>
         </div>
+        <?php
+		//retrieving the supplier name
+		$this->load->model(array('Supplier/SupplierModel','Supplier/SupplierService'));
+		
+		$supplierModel = new SupplierModel();
+		$supplierService = new SupplierService();
+		
+		$supplierModel->setSupplier_Code($PurchaseOrderRequestObject->getSupplier_Code());
+		
+		$supplierModelRetrieved = $supplierService->getGivenSupplierDetails($supplierModel);
+										  
+		?>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Supplier Name *</b></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="sup_name"  class="field text full" name="sup_name" onchange="purchaseOrderRequestFormValidation()" />
+            <input type="text" id="sup_name"  class="field text full" name="sup_name" onchange="purchaseOrderRequestFormValidation()" value="<?php echo $supplierModelRetrieved->getSupplier_Name(); ?>" />
           </div></td>
       </tr>
       <tr>
         <td style="padding: 5px 5px 5px 0;"><b>Order Date *</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="order_date" class="field text full" name="order_date" value="<?php echo date("Y-m-d"); ?>" readonly="readonly" />
+            <input type="text" id="order_date" class="field text full" name="order_date" value="<?php echo substr($PurchaseOrderRequestObject->getOrder_Date(),0,10); ?>" readonly="readonly" />
           </div></td>
         <td style="padding: 5px 5px 5px 0;"><b>Expected Date</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="expected_date" class="field text full" name="expected_date" onchange="expectedDateFieldValidation()"/>
+            <input type="text" id="expected_date" class="field text full" name="expected_date" onchange="expectedDateFieldValidation()" value="<?php echo substr($PurchaseOrderRequestObject->getExpected_Date(),0,10); ?>"/>
           </div>
           <div id="date_error_message"> </div></td>
         <td style="padding: 5px 5px 5px 0;"><b>Quotation No.</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="quatation_no" class="field text full" name="quatation_no"  />
+            <input type="text" id="quatation_no" class="field text full" name="quatation_no" value="<?php echo $PurchaseOrderRequestObject->getQuote_No(); ?>" />
           </div></td>
         <td style="padding: 5px 5px 5px 0;"><b>Attention</b></td>
         <td style="padding: 5px 5px 5px 0;"><div>
-            <input type="text" id="attention" class="field text full" name="attention"  />
+            <input type="text" id="attention" class="field text full" name="attention" value="<?php echo $PurchaseOrderRequestObject->getAttn(); ?>" />
           </div></td>
       </tr>
       <tr>
@@ -50,26 +62,38 @@
 				$departmentData=$departmentService->retriveAllDepartmentDetails();
 					for($index=0;$index<sizeof($departmentData);$index++){
 					?>
-              <option value="<?php echo $departmentData[$index]->getDepartmentCode(); ?>"><?php echo $departmentData[$index]->getDepartmentName(); ?></option>
+              <option value="<?php echo $departmentData[$index]->getDepartmentCode(); ?>" <?php if($departmentData[$index]->getDepartmentCode()==$PurchaseOrderRequestObject->getRequested_Dept()){ ?> selected="selected" <?php } ?> ><?php echo $departmentData[$index]->getDepartmentName(); ?></option>
               <?php
 					}
 				?>
             </select>
           </div></td>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Requested By *</b></td>
-        <td colspan="3" style="padding: 5px 5px 5px 0;"><?php 
-						if($departmentName!='Admin') { 
+        <td colspan="3" style="padding: 5px 5px 5px 0;">
+		 <?php 		
+		                $userService = new UserService();
+										
+						if(!$userService->isAdministrativeUser($this->session->userdata('emp_id'))) { 
 						//retrieve only the logged employee data
+						
+						//$userService =  new UserService();
+						$userMod = new UserModel();
+						
+						$userMod->setEmployeeCode($PurchaseOrderRequestObject->getRequested_By());
+						$userModelRetrieved = $userService->retrieveGivenEmployeeDetails($userMod);
+						
 						?>
           <select id="requested_by" class="field select full" name="requested_by">
-            <option value="<?php echo $this->session->userdata('emp_id'); ?>" ><?php echo $this->session->userdata('email'); ?></option>
+                    
+            <option value="<?php echo $PurchaseOrderRequestObject->getRequested_By(); ?>" ><?php echo $userModelRetrieved->getEmail(); ?></option>
+            
           </select>
           <?php
 						}
 						else{
 							//retrieve a list of all user data 
-							
-							$userService = new UserService();
+						   
+							//$userService = new UserService();
 							$userModelArray=$userService->retrieveAllEmployeeDetails();
 					     ?>
           <select id="requested_by" class="field select full" name="requested_by">
@@ -77,7 +101,7 @@
             <?php		
 							for($index=0;$index<sizeof($userModelArray);$index++){
 					    ?>
-            <option value="<?php echo $userModelArray[$index]->getEmployeeCode(); ?>"> <?php echo $userModelArray[$index]->getEmail(); ?> </option>
+            <option value="<?php echo $userModelArray[$index]->getEmployeeCode(); ?>" <?php if($userModelArray[$index]->getEmployeeCode()==$PurchaseOrderRequestObject->getRequested_By()) { ?> selected="selected" <?php } ?> > <?php echo $userModelArray[$index]->getEmail(); ?> </option>
             <?php
 							}//for
 						}//else
@@ -93,7 +117,7 @@
                                     foreach ($paymentTypeObjectArray as $paymentTypeModel)
                                     {
                                    ?>
-            <option value="<?php echo $paymentTypeModel->getPayment_Type_Code(); ?>"><?php echo $paymentTypeModel->getPayment_Type(); ?></option>
+            <option value="<?php echo $paymentTypeModel->getPayment_Type_Code(); ?>" <?php if($PurchaseOrderRequestObject->getPayment_Type_Code()) { ?> selected="selected" <?php } ?> ><?php echo $paymentTypeModel->getPayment_Type(); ?></option>
             <?php
                                     }
                                 ?>
@@ -107,7 +131,7 @@
                                     foreach ($currencyObjectArray as $currencyModel)
                                     {
                                    ?>
-            <option value="<?php echo $currencyModel->getCurrency_Code(); ?>"><?php echo $currencyModel->getCurrency(); ?></option>
+            <option value="<?php echo $currencyModel->getCurrency_Code(); ?>" <?php if($currencyModel->getCurrency_Code()==$PurchaseOrderRequestObject->getCurrency_Code()){ ?> selected="selected" <?php } ?>  ><?php echo $currencyModel->getCurrency(); ?></option>
             <?php
                                     }
                                 ?>
@@ -115,21 +139,28 @@
         <td style="padding: 5px 5px 5px 0;"><b>Conversion Rate *</b></td>
         <td style="padding: 5px 5px 5px 0;">
         <div>
-        <input type="text" id="conversion_rate" class="field text full" name="conversion_rate" />
+        <input type="text" id="conversion_rate" class="field text full" name="conversion_rate" value="<?php echo $PurchaseOrderRequestObject->getCurrency_Rate();?>"/>
         </div>
         </td>
       </tr>
       <tr>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Payment Remarks</b></td>
-        <td colspan="7" style="padding: 5px 5px 5px 0;"><textarea id="pay_remark" class="field text full" name="pay_remark" rows="2"></textarea></td>
+        <td colspan="7" style="padding: 5px 5px 5px 0;">
+        <textarea id="pay_remark" class="field text full" name="pay_remark" rows="2">
+         <?php echo $PurchaseOrderRequestObject->getPO_Payment_Remarks(); ?>       
+          </textarea></td>
       </tr>
       <tr>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><label class="desc">PO Purpose</label></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><!-- <input type="text" id="po_purpose" class="field text full" name="txt_po_purpose" /> -->
-          <textarea id="po_purpose" class="field text full" name="po_purpose" rows="2"></textarea></td>
+          <textarea id="po_purpose" class="field text full" name="po_purpose" rows="2">
+		  <?php echo $PurchaseOrderRequestObject->getPO_Purpose(); ?>
+          </textarea></td>
         <td colspan="1" style="padding: 5px 5px 5px 0;"><label class="desc">PO Remarks</label></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><!-- <input type="text" id="po_remarks" class="field text full" name="txt_po_remarks" /> -->
-          <textarea id="po_remarks" class="field text full" name="po_remarks" rows="2"></textarea></td>
+          <textarea id="po_remarks" class="field text full" name="po_remarks" rows="2">
+		  <?php echo $PurchaseOrderRequestObject->getPO_Remarks(); ?>
+          </textarea></td>
       </tr>
       <tr>
         <td colspan="8"><!--                            <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
@@ -147,16 +178,26 @@
           <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
           <input type="submit" value="Add Item"  id="lnk_add_item_edit" name="lnk_add_item_edit" class="btn ui-state-default ui-corner-all" />
           </span>
+          
+          <br/><br/>
+          
+                    <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+          <input type="button" value="Send For Approval"  id="item_for_approval" name="item_for_approval" class="btn ui-state-default ui-corner-all" onclick="sendForApprvalByEmployee()" />
+          </span>
+          
+            <br/><br/>
+            
+          
           <!-- <button class="ui-state-default ui-corner-all float-left ui-button" type="submit" disabled="disabled">Save</button> -->
 <!--          <span class="cont tooltip ui-corner-all" title="Click here to update an Item"> <a id="lnk_update_item" class="btn ui-state-default ui-corner-all" href="#"> <span class="ui-icon ui-icon-newwin"></span> Update Item </a> 
 </span>-->
 
 
           <div id="add_new_po_msg">
-           <input type="text" id="required_fields" name="required_fields" value="false">
-           <input type="text" id="po_request_id" name="po_request_id" value="<?php echo $PurchaseOrderID; ?>"  />
-           <input type="text" id="expected_date_validity" name="expexted_date_validity" value="true"  />
-           <input type="text" id="supplier_id" name="supplier_id" value="" />
+           <input type="hidden" id="required_fields" name="required_fields" value="false">
+           <input type="hidden" id="po_request_id" name="po_request_id" value="<?php echo $PurchaseOrderID; ?>"  />
+           <input type="hidden" id="expected_date_validity" name="expexted_date_validity" value="true"  />
+           <input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $PurchaseOrderRequestObject->getSupplier_Code(); ?>" />
            
 
           </div>

@@ -50,7 +50,7 @@
 	
 	 function getGivenSupplierDetails($supplierModel){
 		 
-		 	 	 $supplierCode=$supplierModel->getSupplier_Code();
+      $supplierCode=$supplierModel->getSupplier_Code();
 	 
 	  $query = $this->db->get_where('ta_ims_supplier_header', array('Supplier_Code' =>$supplierCode));
 	 

@@ -7,7 +7,7 @@
 		{
 			parent::__construct();
 		
-			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService','PurchaseOrder/UnitModelService','PurchaseOrder/PurchaseOrderItemModel','PurchaseOrder/PurchaseOrderItemService','ItemMaster/ItemMasterModel','ItemMaster/ItemMasterService'));
+			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService','PurchaseOrder/UnitModelService','PurchaseOrder/PurchaseOrderItemModel','PurchaseOrder/PurchaseOrderItemService','ItemMaster/ItemMasterModel','ItemMaster/ItemMasterService','Supplier/SupplierModel','Supplier/SupplierService'));
 		   
 			if(!$this->session->userdata('logged_in'))
 			{
@@ -207,7 +207,7 @@
 				 $poRequest->setCurrency_Rate($this->input->post('conversion_rate',TRUE));
 				 $poRequest->setPayment_Type_Code($this->input->post('payment_type',TRUE));
 				 $poRequest->setPO_Purpose($this->input->post('po_purpose',TRUE));
-				 $poRequest->setPO_Remarks($this->input->post('pay_remark',TRUE));
+				 $poRequest->setPO_Remarks($this->input->post('po_remarks',TRUE));
 				 $poRequest->setPO_Payment_Remarks($this->input->post('pay_remark',TRUE)); 
 			     $poRequest->setPrint_Original(0);
 				 $poRequest->setStatus_Code(1); //change the status based on status table
@@ -546,16 +546,13 @@ echo $message.'#######----#######'.$poItemTableView;
                      $resultTbl= $resultTbl.'<td style="padding: 5px 5px 5px 0;">
 
                             <a  class="lnk_update_item" href="#" onclick="load_item_details_for_edit(' .$poItemModelArray[$index]->getMaster_Item_Code(). ','.$poItemModelArray[$index]->getOrder_Code().')">
-                                <img src="' . base_url() . 'resources/images/edit_item.png" alt="Edit Item"/>
-                            </a>
+                              <img src="' . base_url() . 'template_resources/images/edit_item.png" alt="Edit Item"/>
+                            </a> &nbsp;&nbsp;
 
                             <a class="lnk_delete_item" href="#" onclick="delete_po_items(' .$poItemModelArray[$index]->getMaster_Item_Code(). ');" title="Delete Item">
-                                <img src="' . base_url() . 'resources/images/delete_item.png" alt="Delete"/>
+                                <img src="' . base_url() . 'template_resources/images/delete_item.png" alt="Delete"/>
                             </a>
                             
-                            <a class="lnk_read_more" href="#" title="Read More">
-                                <img src="' . base_url() . 'resources/images/read_more.png" alt="Read More"/>
-                            </a>
                         </td>';
                      $resultTbl= $resultTbl.'</tr>';
                 }//for
@@ -803,7 +800,7 @@ echo $message.'#######----#######'.$poItemTableView;
 			
 		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
 			$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
-			$userPriviledgeModel->setPriviledgeCode(5);//priviledge 5 is for creating purchase order requests
+			$userPriviledgeModel->setPriviledgeCode(5);//priviledge 5 is for creating purchase order request
 			
 			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
 						
@@ -812,17 +809,6 @@ echo $message.'#######----#######'.$poItemTableView;
 			 $employeeID = $this->session->userdata('emp_id');
 			 
 			  // echo "user has the priviledges";
-			 /* 
-			  $poReqModel = new PurchaseOrderRequestModel();
-			  
-			  
-			  $poReqModel->setCreated_By($employeeID);
-
-			  $poReqService = new PurchaseOrderRequestService();
-			  
-			  $purchaseOrders = $poReqService->getPurchaseOrderDetailsPlacedByGivenUser($poReqModel);
-			  */
-			  
 			  
 			  //start
 			  
@@ -847,25 +833,43 @@ echo $message.'#######----#######'.$poItemTableView;
 			$unitService = new UnitModelService();
 			
 			$unitModelObjArr = $unitService->retrieveAllUnitDetails();
+			//retrieving all details related to the purchase order request
+			
+			$poReqService = new PurchaseOrderRequestService();
+			
+			$poModel = new PurchaseOrderRequestModel();
+			
+			$poModel->setOrder_Code($purchaseOrderCode);
+			
+			$poModelRetrieved = $poReqService->getPurchaseOrderDetailsForGivenOrderID($poModel);
+			
+			
+			//supplier type retrieving
+			$supplierModelObject = new SupplierModel();
+			
+			$supplierModelObject->setSupplier_Code($poModelRetrieved->getSupplier_Code());
+			$supService = new SupplierService();
+			$supModRetrieved = $supService->getGivenSupplierDetails($supplierModelObject);
 			
 			//setting up the data array
-			$data=array('departmentName'=>$departmentName,'currencyObjectArray'=>$currencyObjectArray,'paymentTypeObjectArray'=>$paymentTypeObjectArray,'UnitArray'=>$unitModelObjArr,'PurchaseOrderID'=>$purchaseOrderCode);
-			  
-			  
-			  
+			$data=array('departmentName'=>$departmentName,'currencyObjectArray'=>$currencyObjectArray,'paymentTypeObjectArray'=>$paymentTypeObjectArray,'UnitArray'=>$unitModelObjArr,'PurchaseOrderID'=>$purchaseOrderCode,'PurchaseOrderRequestObject'=>$poModelRetrieved,'SupplierType'=>$supModRetrieved->getSupplier_Type());
+			  		  
 			  //end
 			  
-			  
-			  
-			  			//setting up the data array
-			      // $data = array('poIDDATA'=>'130');
 			
 						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidiry of Singapoor Telecom', 'Edit Purchase Order', 'Edit Your Purchase Order...');
-		
-			$this->template->load('template', 'PurchaseOrder/EditPurchaseOrderView',$data);
-			 			//$this->template->load('template', 'PurchaseOrder/viewPurchaseOrdersList');
-
-			      
+						
+		    if($poModelRetrieved->getStatus_Code()=='1'){
+			   
+			$this->template->load('template', 'PurchaseOrder/EditPurchaseOrderView',$data);	
+			
+			}
+			else{
+				
+				//$this->viewListOfPurchaseOrders();
+				redirect(base_url()."index.php/PurchaseOrder/PurchaseOrderManagement/viewListOfPurchaseOrders");
+				
+			}//else
 				  
 		     }//hasPriviledges
 			else{
@@ -891,6 +895,37 @@ echo $message.'#######----#######'.$poItemTableView;
 	 }//editPurchaseOrderView
 	 
 	 
+	 
+	 
+	 
+	 function sendForHODapproval(){
+		 
+		 
+		 $poRequestID = $this->input->post('PO_Request_ID',TRUE);
+		 
+		 $poRequestModel = new PurchaseOrderRequestModel();
+		 
+		 $poRequestService = new PurchaseOrderRequestService();
+		 
+		 $poRequestModel->setOrder_Code($poRequestID);
+		 $poRequestModel->setStatus_Code(2);
+		 
+		 $poRequestService->updatePurchaseOrderRequest($poRequestModel);
+		 
+		 echo '<font color="#009900">Purchase Order Request was succesfully sent for the HOD Approval</font>';
+		 
+		 
+	 }//sendForHODapproval
+	 
+	 
+	 
+	 
+	 function displayApprovedPO(){
+			 
+		 echo  "displayApprovedPO";
+		 
+	 }//displayApprovedPO
+
 	
 		
 		

@@ -43,10 +43,19 @@
           <td><?php echo $deptService->retrieveDepartmentName($departmentModel); ?></td>
           <td><?php echo $supplierModel->getSupplier_Name(); ?></td>
           <td><?php echo $poGeneral->retrievePoStatus($PurchaseOrders[$index]->getStatus_Code()); ?></td>
-          <td><a class="btn_no_text btn ui-state-default ui-corner-all tooltip" title="Edit this example" href="<?php  echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/editPurchaseOrderView/<?php echo $PurchaseOrders[$index]->getOrder_Code(); ?>" > <span class="ui-icon ui-icon-wrench"></span> </a> <span id="emp_status<?php //echo $rowallemployees->Employee_Code ; ?>"> <a href="#" class="btn_no_text btn ui-state-default ui-corner-all tooltip" title="Mark as Enabled."  style="cursor:pointer;"> <span class="ui-icon ui-icon-arrowreturnthick-1-n"></span> </a> <a href="#" class="btn_no_text btn ui-state-default ui-corner-all tooltip" title="Mark as Disabled."  style="cursor:pointer;"> <span class="ui-icon ui-icon-arrowreturnthick-1-s"></span> </a> </span></td>
+          <td>
+          <a title="Edit this example" href="<?php  echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/editPurchaseOrderView/<?php echo $PurchaseOrders[$index]->getOrder_Code(); ?>" onclick="retrieveItemDetails()" > <!--<span class="ui-icon ui-icon-wrench"></span> -->
+          <?php echo '<img src="' . base_url() . 'template_resources/images/edit_item.png" alt="Edit Item"/>'; ?>
+          </a> 
+          &nbsp;  &nbsp;  &nbsp;  &nbsp;
+          <span id="emp_status<?php //echo $rowallemployees->Employee_Code ; ?>"> 
+          <a href="#"  title="Delete PO Request"  style="cursor:pointer;"> <?php echo '<img src="' . base_url() . 'template_resources/images/delete_item.png" alt="Edit Item"/>'; ?>
+          </a> 
+
+          </span>
+          </td>
         </tr>
-        
-        
+       
         <?php
 		}//for
 		?>
