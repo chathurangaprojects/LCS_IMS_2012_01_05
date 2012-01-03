@@ -552,10 +552,20 @@ function sendForApprvalByEmployee(){
    data: "PO_Request_ID="+PoRequestID,
    
    success: function(msg){
-	 $('#po_request_message').html(msg); 
-   // window.location="http://www.google.lk";
+	
+
+      var message = msg.split("#######----#######")[0];
+	  var messageType = msg.split("#######----#######")[1];
+	  
+	   $('#po_request_message').html(message); 
+	   
+	  if(messageType=="success"){
+		  
      document.getElementById("lnk_add_item_edit").disabled = true;
 	 document.getElementById("item_for_approval").disabled = true;
+	  
+	  }
+	  
    }
   
  });   
@@ -1350,6 +1360,37 @@ function calculate_item_value_for_edit(){
 	 $('#edit_po_item_val').val(iv);
 	
 }//function
+
+
+
+
+function delete_po_items(po_item_id,po_request_id){
+	
+	var confirmation = confirm('Are you sure to delete this PO Item ?');
+	
+	if(confirmation){
+		
+		
+		$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/removePurchaseOrderItem',
+        data: "po_item_id="+po_item_id+"&po_request_id="+po_request_id,
+        success: function(msg)
+        {
+		 
+ 			var ItemRemovingMessage = msg.split("#######----#######")[0];
+            var itemTableView = msg.split("#######----#######")[1];
+			
+			$('#po_request_message').html(ItemRemovingMessage);
+            $('#addedItemTable').html(itemTableView);
+
+        }
+    });
+		
+	}
+	
+}//delete_po_items
+
 
 
 

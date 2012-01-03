@@ -149,6 +149,16 @@ class PurchaseOrderItemService extends CI_Model {
  
   
   
+  
+  function deletePurchaseOrderItem($poItemModel){
+	  
+	  
+  $this->db->delete('ta_ims_po_details', array('Order_Code' => $poItemModel->getOrder_Code(),'Master_Item_Code'=>$poItemModel->getMaster_Item_Code())); 
+  
+  
+  }//deletePurchaseOrderItem
+ 	  
+  
  
  
 }//class

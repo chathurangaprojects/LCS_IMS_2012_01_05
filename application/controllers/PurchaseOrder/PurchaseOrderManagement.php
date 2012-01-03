@@ -167,28 +167,7 @@
              $poService = new PurchaseOrderRequestService();
 			 
                //setting the values start
-			   /*
-			     $poRequest->setSupplier_Code('1');
-				 $poRequest->setOrder_Date('2011-11-11'); 
-				 $poRequest->setExpected_Date('2011-11-11');
-				 $poRequest->setQuote_No('123');
-				 $poRequest->setAttn('attention'); 
-				 $poRequest->setRequested_Dept('1');
-				 $poRequest->setRequested_By('1');
-				 $poRequest->setCreated_By('1');
-				 //$poRequest->setDiscount('10');
-				 //$poRequest->setDiscount_Value('12');
-				 //$poRequest->setPO_Total('500');
-				 $poRequest->setCurrency_Code('1'); 
-				 $poRequest->setCurrency_Rate('12');
-				 $poRequest->setPayment_Type_Code('1');
-				 //$poRequest->setPayment_Status('1') ;
-				 $poRequest->setPO_Purpose('prpose');
-				 $poRequest->setPO_Remarks('remarks');
-				 $poRequest->setPO_Payment_Remarks('paymet'); 
-			     $poRequest->setPrint_Original(0);
-			   
-			   */
+
 			   $user_id = $this->session->userdata('emp_id');
 			   
 
@@ -549,7 +528,7 @@ echo $message.'#######----#######'.$poItemTableView;
                               <img src="' . base_url() . 'template_resources/images/edit_item.png" alt="Edit Item"/>
                             </a> &nbsp;&nbsp;
 
-                            <a class="lnk_delete_item" href="#" onclick="delete_po_items(' .$poItemModelArray[$index]->getMaster_Item_Code(). ');" title="Delete Item">
+                            <a class="lnk_delete_item" href="#" onclick="delete_po_items(' .$poItemModelArray[$index]->getMaster_Item_Code(). ','.$pono.');" title="Delete Item">
                                 <img src="' . base_url() . 'template_resources/images/delete_item.png" alt="Delete"/>
                             </a>
                             
@@ -840,9 +819,14 @@ echo $message.'#######----#######'.$poItemTableView;
 			$poModel = new PurchaseOrderRequestModel();
 			
 			$poModel->setOrder_Code($purchaseOrderCode);
+			$poModel->setCreated_By( $employeeID);
 			
+			//retrieve the given purchase order if it is placed by this particular user
 			$poModelRetrieved = $poReqService->getPurchaseOrderDetailsForGivenOrderID($poModel);
 			
+			if($poModelRetrieved!=NULL){
+			
+			//Purchase Order Request found with the given ID and it is placed by the currently logged user
 			
 			//supplier type retrieving
 			$supplierModelObject = new SupplierModel();
@@ -857,8 +841,9 @@ echo $message.'#######----#######'.$poItemTableView;
 			  //end
 			  
 			
-						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidiry of Singapoor Telecom', 'Edit Purchase Order', 'Edit Your Purchase Order...');
-						
+						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidary of Singapore Telecom', 'Edit Purchase Order', 'Edit Your Purchase Order...');
+			
+			//user can edit only the purchase order requests that are in new state (save state)
 		    if($poModelRetrieved->getStatus_Code()=='1'){
 			   
 			$this->template->load('template', 'PurchaseOrder/EditPurchaseOrderView',$data);	
@@ -871,6 +856,19 @@ echo $message.'#######----#######'.$poItemTableView;
 				
 			}//else
 				  
+			
+			}//purchase order request was found for given id
+			else{
+				
+			//purchase order requst not found for the given id. therefore the error mesaage is displayed
+			
+					  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+			 	
+			
+			}
+			
 		     }//hasPriviledges
 			else{
 				
@@ -900,6 +898,19 @@ echo $message.'#######----#######'.$poItemTableView;
 	 
 	 function sendForHODapproval(){
 		 
+		 if($this->session->userdata('logged_in'))
+			{
+		     //the user is logged and priviledges should be checked
+			$userPriviledgeModel=new UserPriviledge();
+			
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+		 	$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
+		    $userPriviledgeModel->setPriviledgeCode(5);//priviledge 5 is for creating purchase order request
+			
+		  $hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+		 if($hasPriviledges){			
+		
 		 
 		 $poRequestID = $this->input->post('PO_Request_ID',TRUE);
 		 
@@ -910,12 +921,116 @@ echo $message.'#######----#######'.$poItemTableView;
 		 $poRequestModel->setOrder_Code($poRequestID);
 		 $poRequestModel->setStatus_Code(2);
 		 
-		 $poRequestService->updatePurchaseOrderRequest($poRequestModel);
 		 
-		 echo '<font color="#009900">Purchase Order Request was succesfully sent for the HOD Approval</font>';
 		 
+		 $num_of_po_items = $poRequestService->getNumberOfItemsInPurchaseOrderRequest($poRequestModel);
+		 
+		 if($num_of_po_items>0){
+			 //if there are items in the purchase order
+		 $poRequestService->updatePurchaseOrderRequest($poRequestModel);	 
+			 
+		 echo '<div class="response-msg success ui-corner-all">Purchase Order Request was succesfully sent for the HOD Approval</div>#######----#######success';
+		 }
+		 else{
+			
+		 echo '<div class="response-msg error ui-corner-all">Purchase Order Request should contains at least one item before sending for sending HOD Approval</div>#######----#######error';
+			 
+		 }
+		 
+		 }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";
+			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+						
+			}
+			
+			}//if
+			else{
+				
+				
+			redirect(base_url().'index.php');
+	
+			
+			}
+			
 		 
 	 }//sendForHODapproval
+	 
+	 
+	 
+	 
+	 
+	 
+	 function removePurchaseOrderItem(){
+		 
+	
+	   if($this->session->userdata('logged_in'))
+			{
+		     //the user is logged and priviledges should be checked
+			$userPriviledgeModel=new UserPriviledge();
+			
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(6);//priviledge 6 is for removing po items from the po request
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 
+			 $employeeID = $this->session->userdata('emp_id');
+			 
+			 //po_item_id
+			 $po_item_id=$this->input->post('po_item_id');
+			 
+			 //po_request_id
+			 $po_request_id = $this->input->post('po_request_id');
+			 
+			  // echo "user has the priviledges";
+			//  echo 'deleting item id '.$po_item_id.' and po request id '.$po_request_id;
+			   
+			   $poItemModel = new PurchaseOrderItemModel();
+			   $poItemService = new PurchaseOrderItemService();
+			   
+			   $poItemModel->setOrder_Code($po_request_id);
+			   $poItemModel->setMaster_Item_Code($po_item_id);
+			   
+			   $poItemService->deletePurchaseOrderItem($poItemModel);
+			   
+			   $message= '<div class="response-msg success ui-corner-all"><span> Item Deleted</span>Item was succesfully deleted from the purchase order request </div>';
+
+$poItemTableView = $this->loadItemTable($po_request_id);
+
+echo $message.'#######----#######'.$poItemTableView;
+
+
+				  
+		     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";
+			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+						
+			}
+			
+			}//if logged
+			else{
+							
+			redirect(base_url().'index.php');
+
+			}
+				 
+		 
+	 }//removePurchaseOrderItem
+	 
+	 
+	 
 	 
 	 
 	 
@@ -925,6 +1040,11 @@ echo $message.'#######----#######'.$poItemTableView;
 		 echo  "displayApprovedPO";
 		 
 	 }//displayApprovedPO
+	 
+	 
+	 
+	 
+	 
 
 	
 		

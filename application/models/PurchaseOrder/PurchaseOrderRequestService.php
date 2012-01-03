@@ -101,14 +101,14 @@ class PurchaseOrderRequestService extends CI_Model {
 	 
 
 	 
-	  $query = $this->db->get_where('ta_ims_po_header', array('Order_Code' =>$poReqModel->getOrder_Code()));
+	  $query = $this->db->get_where('ta_ims_po_header', array('Order_Code' =>$poReqModel->getOrder_Code(),'Created_By'=>$poReqModel->getCreated_By()));
 	 
-	 
+	 	$poRequestModel=NULL;
 	 
 		foreach ($query->result() as $row)
-		{
-			$poRequestModel=new PurchaseOrderRequestModel();
-			
+		{	
+		$poRequestModel=new PurchaseOrderRequestModel();
+		
 			$poRequestModel->setOrder_Code($row->Order_Code);
 			$poRequestModel->setSupplier_Code($row->Supplier_Code );
 			$poRequestModel->setOrder_Date($row->Order_Date);
@@ -156,6 +156,18 @@ class PurchaseOrderRequestService extends CI_Model {
 	 
  }//function
  
+ 
+ 
+ 
+ 
+ function getNumberOfItemsInPurchaseOrderRequest($purchaseOrderRequestModel){
+	 
+	 $query = $this->db->get_where('ta_ims_po_details',array('Order_Code'=>$purchaseOrderRequestModel->getOrder_Code()));
+	 
+	 return $query->num_rows();
+	 
+	 
+ }//function
  
  
 }//class

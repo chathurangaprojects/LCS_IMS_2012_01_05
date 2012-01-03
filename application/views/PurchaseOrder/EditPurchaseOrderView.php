@@ -196,8 +196,8 @@
           </span>
           
           <br/><br/>
-          
-                    <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+         
+          <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
           <input type="button" value="Send For Approval"  id="item_for_approval" name="item_for_approval" class="btn ui-state-default ui-corner-all" onclick="sendForApprvalByEmployee()" />
           </span>
           
@@ -278,8 +278,8 @@
           <td style="padding: 5px 5px 5px 0;" colspan="5"><textarea id="po_description" class="field text full" name="po_description" rows="2"></textarea></td>
         </tr>
       </table>
-      Hidden<input  name="purchase_order_id" id="purchase_order_id" type="text" value="" />
-      <input type="text" name="item_id" id="item_id" />
+      <input  name="purchase_order_id" id="purchase_order_id" type="hidden" value="" />
+      <input type="hidden" name="item_id" id="item_id" />
       
 <!--      <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>-->
 <div id="addNewItemMessage" >

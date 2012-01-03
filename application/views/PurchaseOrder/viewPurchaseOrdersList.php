@@ -4,12 +4,13 @@
       <thead>
         <tr>
           <th> Order ID</th>
-          <th>Order Purpose </th>
-          <th>Date Created</th>
-          <th>Order For department</th>
+           <th>Order For department</th>
           <th>Supplier</th>
+          <th>Supplier Type</th>
+          <th>Date Created</th>
+          <th>Order Purpose </th>
           <th>Order Status</th>
-          <th style="width:128px">Options</th>
+          <th style="width:60px">Options</th>
         </tr>
       </thead>
       <tbody>
@@ -38,18 +39,20 @@
 	  ?>
         <tr>
           <td class="center"><?php echo $PurchaseOrders[$index]->getOrder_Code(); ?></td>
-          <td><?php echo $PurchaseOrders[$index]->getPO_Purpose(); ?></td>
-          <td><?php echo $PurchaseOrders[$index]->getOrder_Date(); ?></td>
           <td><?php echo $deptService->retrieveDepartmentName($departmentModel); ?></td>
           <td><?php echo $supplierModel->getSupplier_Name(); ?></td>
+          <td><?php if($supplierModel->getSupplier_Type()==1){ echo "Foreign"; } else if($supplierModel->getSupplier_Type()==0){ echo "Local"; } ?></td>
+           <td><?php echo substr($PurchaseOrders[$index]->getOrder_Date(),0,10); ?></td>
+          <td><?php echo $PurchaseOrders[$index]->getPO_Purpose(); ?></td>
           <td><?php echo $poGeneral->retrievePoStatus($PurchaseOrders[$index]->getStatus_Code()); ?></td>
+           
           <td>
-          <a title="Edit this example" href="<?php  echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/editPurchaseOrderView/<?php echo $PurchaseOrders[$index]->getOrder_Code(); ?>" onclick="retrieveItemDetails()" > <!--<span class="ui-icon ui-icon-wrench"></span> -->
+          <a title="Edit this example" href="<?php  echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/editPurchaseOrderView/<?php echo $PurchaseOrders[$index]->getOrder_Code(); ?>" onclick="return confirm('Are you sure to edit this Purchase Order request? ');retrieveItemDetails();" > <!--<span class="ui-icon ui-icon-wrench"></span> -->
           <?php echo '<img src="' . base_url() . 'template_resources/images/edit_item.png" alt="Edit Item"/>'; ?>
           </a> 
-          &nbsp;  &nbsp;  &nbsp;  &nbsp;
+          &nbsp;  &nbsp;  
           <span id="emp_status<?php //echo $rowallemployees->Employee_Code ; ?>"> 
-          <a href="#"  title="Delete PO Request"  style="cursor:pointer;"> <?php echo '<img src="' . base_url() . 'template_resources/images/delete_item.png" alt="Edit Item"/>'; ?>
+          <a href="#"  title="Delete PO Request"  style="cursor:pointer;" onclick="return confirm('Are you sure to delete this Purchase Order request?');"> <?php echo '<img src="' . base_url() . 'template_resources/images/delete_item.png" alt="Edit Item"/>'; ?>
           </a> 
 
           </span>
