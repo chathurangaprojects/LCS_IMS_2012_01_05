@@ -192,14 +192,22 @@
                                 </a>
                             </span>-->
           <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
-          <input type="submit" value="Add Item"  id="lnk_add_item_edit" name="lnk_add_item_edit" class="btn ui-state-default ui-corner-all" />
+          <input type="button" value="Add Item"  id="lnk_add_item_edit" name="lnk_add_item_edit" class="btn ui-state-default ui-corner-all" onclick="addNewItemDialog()" />
+          
           </span>
           
           <br/><br/>
          
+         <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+        <input type="submit" value="Save"  id="po_save" name="po_save" class="btn ui-state-default ui-corner-all" />
+          </span>
+          
           <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
           <input type="button" value="Send For Approval"  id="item_for_approval" name="item_for_approval" class="btn ui-state-default ui-corner-all" onclick="sendForApprvalByEmployee()" />
           </span>
+          
+
+          
           
             <br/><br/>
             
@@ -210,10 +218,10 @@
 
 
           <div id="add_new_po_msg">
-           <input type="hidden" id="required_fields" name="required_fields" value="false">
-           <input type="hidden" id="po_request_id" name="po_request_id" value="<?php echo $PurchaseOrderID; ?>"  />
-           <input type="hidden" id="expected_date_validity" name="expexted_date_validity" value="true"  />
-           <input type="hidden" id="supplier_id" name="supplier_id" value="<?php echo $PurchaseOrderRequestObject->getSupplier_Code(); ?>" />
+           <input type="text" id="required_fields" name="required_fields" value="false">
+           <input type="text" id="po_request_id" name="po_request_id" value="<?php echo $PurchaseOrderID; ?>"  />
+           <input type="text" id="expected_date_validity" name="expexted_date_validity" value="true"  />
+           <input type="text" id="supplier_id" name="supplier_id" value="<?php echo $PurchaseOrderRequestObject->getSupplier_Code(); ?>" />
            
 
           </div>
@@ -278,8 +286,8 @@
           <td style="padding: 5px 5px 5px 0;" colspan="5"><textarea id="po_description" class="field text full" name="po_description" rows="2"></textarea></td>
         </tr>
       </table>
-      <input  name="purchase_order_id" id="purchase_order_id" type="hidden" value="" />
-      <input type="hidden" name="item_id" id="item_id" />
+      <input  name="purchase_order_id" id="purchase_order_id" type="text" value="" />
+      <input type="text" name="item_id" id="item_id" />
       
 <!--      <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>-->
 <div id="addNewItemMessage" >

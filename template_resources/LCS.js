@@ -170,15 +170,7 @@ $().ready(function() {
 
 */
 
-function adduser(){
-	
-	
-	alert('ddddd');
-	
-	
-	
-	
-}
+
 
 
 
@@ -352,8 +344,7 @@ $().ready(function() {
 
 
 $().ready(function() {
-    //form name and id
-	//alert('lcs');
+
 	$("#purchase_order_request").validate
 	({
 	 	 
@@ -406,7 +397,6 @@ $().ready(function() {
 					$('form[name=add_purchase_order_item] #purchase_order_id').val(purchaseOrderID);
 					$('form[name=purchase_order_request] #po_request_id').val(purchaseOrderID);
 					//setting up the valus changed as false... because the insert or update is already done
-					//$('#po_details_change').val('false');
 					$('#dlg_add_item').dialog('open');
 				});
 								
@@ -451,13 +441,39 @@ function openDialog(){
 
 
 
+//Add item dialog opemn start
+
+
+function addNewItemDialog(){
+	
+	
+	var po_id=$('form[name=purchase_order_request_edit] #po_request_id').val();
+	
+	
+	if(po_id!=""){
+		
+		$('form[name=add_purchase_order_item] #purchase_order_id').val(po_id);
+		$('#dlg_add_item').dialog('open');
+	}
+	else{
+		
+	  $('#po_request_message').html('<div class="response-msg error ui-corner-all"> Please save the purchase order before Adding an Item </div>');
+
+	}
+	
+	
+}//addNewItemDialog
+
+
+//Add item dialog open ends
+
+
 
 //edit po request start
 
 
 $().ready(function() {
-    //form name and id
-	//alert('lcs');
+
 	$("#purchase_order_request_edit").validate
 	({
 	 	 
@@ -511,7 +527,7 @@ $().ready(function() {
 					$('form[name=purchase_order_request] #po_request_id').val(purchaseOrderID);
 					//setting up the valus changed as false... because the insert or update is already done
 					//$('#po_details_change').val('false');
-					$('#dlg_add_item').dialog('open');
+					//$('#dlg_add_item').dialog('open');
 				});
 								
 				}//if expectedDateValidity

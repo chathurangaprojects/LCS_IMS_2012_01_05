@@ -117,6 +117,17 @@ Logout
 <a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/displayApprovedPO" class="sf-with-ul">View Approved PO</a>
 </li>
 
+<?php
+//this link is visible only for the Head of Departments. level code of the HOD is 4
+if($this->session->userdata('level')==4){
+?>
+<li>
+<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewDepartmentPOrequests" class="sf-with-ul">Approve PO Requests</a>
+</li>
+
+<?php
+}
+?>
 
 </ul>
 </li>

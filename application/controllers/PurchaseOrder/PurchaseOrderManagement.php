@@ -841,7 +841,7 @@ echo $message.'#######----#######'.$poItemTableView;
 			  //end
 			  
 			
-						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidary of Singapore Telecom', 'Edit Purchase Order', 'Edit Your Purchase Order...');
+						$this->template->setTitles('', '', 'Edit Purchase Order', '');
 			
 			//user can edit only the purchase order requests that are in new state (save state)
 		    if($poModelRetrieved->getStatus_Code()=='1'){
@@ -1031,6 +1031,43 @@ echo $message.'#######----#######'.$poItemTableView;
 	 
 	 
 	 
+	 
+	 
+	 function viewDepartmentPOrequests(){
+		 
+		  if($this->session->userdata('logged_in'))
+			{
+		     //the user is logged and priviledges should be checked
+			$userPriviledgeModel=new UserPriviledge();
+			
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(7);//priviledge 6 is for removing po items from the po request
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 			
+			 echo "user has the priviledges";
+				  
+		     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+						
+			}
+			
+			}//if logged
+			else{
+							
+			redirect(base_url().'index.php');
+
+			}
+			 
+	 }//viewDepartmentPOrequests
 	 
 	 
 	 
