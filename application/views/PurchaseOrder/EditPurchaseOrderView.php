@@ -52,19 +52,36 @@
         <td colspan="1" style="padding: 5px 5px 5px 0;"><b>Department *</b></td>
         <td colspan="3" style="padding: 5px 5px 5px 0;"><div>
             <select id="Department_Code" class="field select full" name="Department_Code" >
-              <option value="">Please select</option>
-              <?php
-								 
-				$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','UserService','UserModel'));
+             <option value="">Please select</option>
+              <?php		
+			  $this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','UserService','UserModel'));
 			  
-			    $departmentService=new DepartmentService();
+			   $userService = new UserService();
+			   $departmentService=new DepartmentService();
+			   
+			   $deptModel = new DepartmentModel();
+					
+				if(!$userService->isAdministrativeUser($this->session->userdata('emp_id'))) { 
 				
+				//getting the department name and the id of the employee 
+				$departmentCode = $this->session->userdata('department');
+				
+				$deptModel->setDepartmentCode($departmentCode);
+				 
+				$depatModelRetrieved = $departmentService->retriveGivenDepartmentDetails($deptModel);
+			?>
+             <option value="<?php echo $depatModelRetrieved->getDepartmentCode(); ?>"><?php echo $depatModelRetrieved->getDepartmentName(); ?></option>
+            <?php
+				}
+				else{
+					
 				$departmentData=$departmentService->retriveAllDepartmentDetails();
 					for($index=0;$index<sizeof($departmentData);$index++){
 					?>
               <option value="<?php echo $departmentData[$index]->getDepartmentCode(); ?>" <?php if($departmentData[$index]->getDepartmentCode()==$PurchaseOrderRequestObject->getRequested_Dept()){ ?> selected="selected" <?php } ?> ><?php echo $departmentData[$index]->getDepartmentName(); ?></option>
               <?php
-					}
+					}//for
+				}//else -- administrative user
 				?>
             </select>
           </div></td>
@@ -75,9 +92,8 @@
 										
 						if(!$userService->isAdministrativeUser($this->session->userdata('emp_id'))) { 
 						//retrieve only the logged employee data
-						
-						//$userService =  new UserService();
-						$userMod = new UserModel();
+
+                        $userMod = new UserModel();
 						
 						$userMod->setEmployeeCode($PurchaseOrderRequestObject->getRequested_By());
 						$userModelRetrieved = $userService->retrieveGivenEmployeeDetails($userMod);

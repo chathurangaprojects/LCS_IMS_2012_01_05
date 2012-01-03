@@ -59,6 +59,27 @@ class DepartmentService extends CI_Model {
  
  
  
+ 
+  function retriveGivenDepartmentDetails($deptModel){
+	 
+	 
+	$query = $this->db->get_where('ta_ims_department',array('Department_Code'=>$deptModel->getDepartmentCode()));
+		
+
+		foreach ($query->result() as $row)
+		{
+			$departmentModel=new DepartmentModel();
+			
+			$departmentModel->setDepartmentCode($row->Department_Code);
+			$departmentModel->setDepartmentName($row->Department_Name);
+			$departmentModel->setDepartmentID($row->Department_ID);
+		}
+		
+		
+		return $departmentModel;
+	 
+ }//retriveGivenDepartmentDetails
+ 
 
 }
 
