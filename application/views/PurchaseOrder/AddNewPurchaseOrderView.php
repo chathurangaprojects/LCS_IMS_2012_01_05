@@ -82,8 +82,12 @@
 					
 				$departmentData=$departmentService->retriveAllDepartmentDetails();
 					for($index=0;$index<sizeof($departmentData);$index++){
+						
+						
 					?>
-              <option value="<?php echo $departmentData[$index]->getDepartmentCode(); ?>" <?php if($departmentData[$index]->getDepartmentCode()==$PurchaseOrderRequestObject->getRequested_Dept()){ ?> selected="selected" <?php } ?> ><?php echo $departmentData[$index]->getDepartmentName(); ?></option>
+                   
+              <option value="<?php echo $departmentData[$index]->getDepartmentCode(); ?>" ><?php echo $departmentData[$index]->getDepartmentName(); ?></option>
+              
               <?php
 					}//for
 				}//else -- administrative user
@@ -188,10 +192,10 @@
 
 
           <div id="add_new_po_msg">
-           <input type="hidden" id="required_fields" name="required_fields" value="false">
-           <input type="hidden" id="po_request_id" name="po_request_id" value=""  />
-           <input type="hidden" id="expected_date_validity" name="expexted_date_validity" value="true"  />
-           <input type="hidden" id="supplier_id" name="supplier_id" value="" />
+           <input type="text" id="required_fields" name="required_fields" value="false">
+           <input type="text" id="po_request_id" name="po_request_id" value=""  />
+           <input type="text" id="expected_date_validity" name="expexted_date_validity" value="true"  />
+           <input type="text" id="supplier_id" name="supplier_id" value="" />
            
 
           </div>

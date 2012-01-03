@@ -519,7 +519,7 @@ $().ready(function() {
 				//set this id using ajax			
 			$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/createNewPurchaseOrderRequest', $("#purchase_order_request_edit").serialize(), function(msg) {
 					//$('form[name=purchase_order_request] #po_request_id').val(msg);
-					$('#po_request_message').html('<font color="#009900">'+msg.split('#')[0]+'</font>'); 
+					$('#po_request_message').html('<div class="response-msg success ui-corner-all">'+msg.split('#')[0]+'</div>'); 
 
 					var purchaseOrderID=msg.split('#')[1];
 					//set up the purchase order id for adding items for the purchase order 
