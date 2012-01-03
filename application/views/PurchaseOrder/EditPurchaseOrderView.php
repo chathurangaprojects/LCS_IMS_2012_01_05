@@ -352,25 +352,25 @@
                                 
             </select></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Unit Price *</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_po_item_unit_price" class="field text full" name="edit_po_item_unit_price" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_po_item_unit_price" class="field text full" name="edit_po_item_unit_price" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value_for_edit();" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Quantity *</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 18%"><input type="text" id="edit_po_item_qty" class="field text full" name="edit_po_item_qty" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value();" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%"><input type="text" id="edit_po_item_qty" class="field text full" name="edit_po_item_qty" style="font-weight: bold;text-align: right;" onkeyup="calculate_item_value_for_edit();" /></td>
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Discount %</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_discount_percentage" class="field text full" name="edit_discount_percentage" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateDiscount()" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_discount_percentage" class="field text full" name="edit_discount_percentage" style="text-align: right;" onkeyup="calculate_item_value_for_edit();" onchange="validateEditDiscount()" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Discount Amount</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_discount_amount" class="field text full" name="edit_discount_amount" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateDiscount()" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_discount_amount" class="field text full" name="edit_discount_amount" style="text-align: right;" onkeyup="calculate_item_value_for_edit();" onchange="validateEditDiscount()" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"></td>
           <td style="padding: 5px 5px 5px 0;width: 18%"></td>
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Individual Tax %</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_tax_percentage" class="field text full" name="edit_tax_percentage" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateTax()"/></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_tax_percentage" class="field text full" name="edit_tax_percentage" style="text-align: right;" onkeyup="calculate_item_value_for_edit();" onchange="validateEditTax()"/></td>
           <td style="padding: 5px 5px 5px 0;width: 16%"><b>Tax Value</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_tax_value" class="field text full" name="edit_tax_value" style="text-align: right;" onkeyup="calculate_item_value();" onchange="validateTax()" /></td>
+          <td style="padding: 5px 5px 5px 0;width: 17%"><input type="text" id="edit_tax_value" class="field text full" name="edit_tax_value" style="text-align: right;" onkeyup="calculate_item_value_for_edit();" onchange="validateEditTax()" /></td>
           <td style="padding: 5px 5px 5px 0;width: 16%;text-align: right;font-size: 15px;"><b>Item Value</b></td>
-          <td style="padding: 5px 5px 5px 0;width: 18%;"><!--<input type="text" readonly="readonly" id="edit_po_item_val" class="field text full" name="edit_txt_po_item_val" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" />--></td>
+          <td style="padding: 5px 5px 5px 0;width: 18%;"><input type="text" readonly="readonly" id="edit_po_item_val" class="field text full" name="edit_po_item_val" style="text-align: right;background-color: #99f099;font-size: 15px;font-weight: bold;" /></td>
         </tr>
         <tr>
           <td style="padding: 5px 5px 5px 0;width: 16%;"><b>Description</b></td>
@@ -378,9 +378,8 @@
         </tr>
       </table>
      
-<!--      Previous item<input type="text" name="previous_item_id" id="previous_item_id"/>
--->      updating item <input type="text" name="updating_item_id" id="updating_item_id" />
-     purchase order <input type="text" name="updating_po_id" id="updating_po_id" />
+     <?php /*?> updating item<?php */?> <input type="hidden" name="updating_item_id" id="updating_item_id" />
+<?php /*?>     purchase order<?php */?> <input type="hidden" name="updating_po_id" id="updating_po_id" />
       
 <!--      <button class="ui-state-default ui-corner-all float-left ui-button" type="button" onclick="add_items_to_po();">Add</button>-->
 <div id="editItemMessage" >

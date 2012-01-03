@@ -883,7 +883,7 @@ function validateDiscount(){
 
 
 
-// validate discount
+// validate taxt
 
 function validateTax(){
 	
@@ -916,20 +916,94 @@ function validateTax(){
 
 
 
+//validate taxt and discount in edit form
+
+//validate discount percentage and  discount amount
+
+
+function validateEditDiscount(){
+	
+	
+	var discount_percentage = $('form[name=update_purchase_order_item] #edit_discount_percentage').val();
+	var discount_amount = $('form[name=update_purchase_order_item] #edit_discount_amount').val();
+	
+	if(jQuery.trim(discount_percentage)!=""){
+		
+		$('form[name=update_purchase_order_item] #edit_discount_amount').attr("disabled", "disabled");
+	}
+	else{
+		
+	    $("form[name=update_purchase_order_item] #edit_discount_amount").removeAttr("disabled"); 
+	}
+	
+	
+	
+	
+	if(jQuery.trim(discount_amount)!=""){
+		
+		$('form[name=update_purchase_order_item] #edit_discount_percentage').attr("disabled", "disabled");
+	}
+	else{
+		
+	//$('form[name=add_purchase_order_item] #discount_percentage').attr("enabled", "enabled");
+	$("form[name=update_purchase_order_item] #edit_discount_percentage").removeAttr("disabled"); 
+	}
+	
+}//validateEditDiscount
+
+
+
+
+
+
+// validate taxt
+
+function validateEditTax(){
+	
+	
+	var tax_percentage = $('form[name=update_purchase_order_item] #edit_tax_percentage').val();
+	var tax_value = $('form[name=update_purchase_order_item] #edit_tax_value').val();
+	
+	if(jQuery.trim(tax_percentage)!=""){
+		
+		$('form[name=update_purchase_order_item] #edit_tax_value').attr("disabled", "disabled");
+	}
+	else{
+		
+	    $("form[name=update_purchase_order_item] #edit_tax_value").removeAttr("disabled"); 
+	}
+	
+	
+	
+	
+	if(jQuery.trim(tax_value)!=""){
+		
+		$('form[name=update_purchase_order_item] #edit_tax_percentage').attr("disabled", "disabled");
+	}
+	else{
+		
+	$("form[name=update_purchase_order_item] #edit_tax_percentage").removeAttr("disabled"); 
+	}
+	
+}//validateEditTax
+
+
+
+
+
 
 
 
 //calculate po item value
 function calculate_item_value()
 {
-    //alert($('#po_item_unit_price').val());
     
-    var up = jQuery.jQuery.trim($('#po_item_unit_price').val());
-    var qty = jQuery.jQuery.trim($('#po_item_qty').val());
-    var dp = jQuery.jQuery.trim($('#discount_percentage').val());
-    var d = jQuery.jQuery.trim($('#po_disc').val());
-    var it = jQuery.jQuery.trim($('#tax_percentage').val());
-    var tv = jQuery.jQuery.trim($('#tax_value').val());
+    var up = jQuery.trim($('#po_item_unit_price').val());
+    var qty = jQuery.trim($('#po_item_qty').val());
+    var dp = jQuery.trim($('#discount_percentage').val());
+    var d = jQuery.trim($('#discount_amount').val());
+    var it = jQuery.trim($('#tax_percentage').val());
+    var tv = jQuery.trim($('#tax_value').val());
     
     if(up == '')
     {
@@ -1065,30 +1139,6 @@ $.ajax({
 
 
 
-/*
-function load_added_items(){
-	
-	//alert('hello1');
-	
-
-$.ajax({
-        type: "POST",
-        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/loadItemTable',
-        //data: "pono="+pono,
-        success: function(msg)
-        {
-			alert('hello2');
-           $('#addNewItemMessage2').html('chathuranga');
-
-        }
-    });
-
-}//load_added_items
-*/
-
-
-
-
 
 
 function load_item_details_for_edit(itemID,poID){
@@ -1109,7 +1159,7 @@ function load_item_details_for_edit(itemID,poID){
         // $('#editItemMessage').html(msg);
 
          var dataArray = msg.split('####');
-
+        /*
          $('#edit_po_item_name').val(jQuery.trim(dataArray[0]));
 		 $('#edit_po_description').val(jQuery.trim(dataArray[8]));
 		 $('#edit_po_item_unit_price').val(jQuery.trim(dataArray[2]));
@@ -1119,7 +1169,51 @@ function load_item_details_for_edit(itemID,poID){
 		 $('#edit_discount_amount').val(jQuery.trim(dataArray[5]));
 		 $('#edit_tax_percentage').val(jQuery.trim(dataArray[6]));
 		 $('#edit_tax_value').val(jQuery.trim(dataArray[7]));
-
+         */
+		  
+		 $('#edit_po_item_name').val(jQuery.trim(dataArray[0]));
+		 $('#edit_po_description').val(jQuery.trim(dataArray[8]));
+		 $('#edit_po_item_unit_price').val(jQuery.trim(dataArray[2]));
+		 $('#edit_po_item_unit').val(jQuery.trim(dataArray[1]));
+		 $('#edit_po_item_qty').val(jQuery.trim(dataArray[3]));
+		 
+		 if(jQuery.trim(dataArray[4])!=0){
+		 $('#edit_discount_percentage').val(jQuery.trim(dataArray[4]));
+		 }
+		 else{
+			 $('#edit_discount_percentage').val(''); 
+		 }
+		 
+		 //if discount amount is not equalt to zero
+		 if(jQuery.trim(dataArray[5])!=0.00){
+		 $('#edit_discount_amount').val(jQuery.trim(dataArray[5]));
+		 }
+		 else{
+			 $('#edit_discount_amount').val(''); 
+		 }
+		 
+		 
+		 if(jQuery.trim(dataArray[6])!=0){
+		 $('#edit_tax_percentage').val(jQuery.trim(dataArray[6]));
+		 }
+		 else{
+			 $('#edit_tax_percentage').val(''); 
+		 }
+		 
+		 
+		 //if tax amount is not equalt to zero
+		 if(jQuery.trim(dataArray[7])!=0.00){
+		  $('#edit_tax_value').val(jQuery.trim(dataArray[7]));
+		 } 
+		 else{
+			 $('#edit_tax_value').val(''); 
+		 }
+		 
+		 
+     		 //validate tax and discount	 
+		 		validateEditTax();
+                validateEditDiscount();
+				
 		 
         }
     });
@@ -1208,6 +1302,54 @@ $.ajax({
 
 
 
+function calculate_item_value_for_edit(){
+	
+	
+	 var up = jQuery.trim($('#edit_po_item_unit_price').val());
+    var qty = jQuery.trim($('#edit_po_item_qty').val());
+    var dp = jQuery.trim($('#edit_discount_percentage').val());
+    var d = jQuery.trim($('#edit_discount_amount').val());
+    var it = jQuery.trim($('#edit_tax_percentage').val());
+    var tv = jQuery.trim($('#edit_tax_value').val());
+	
+    
+    if(up == '')
+    {
+        up = 0;
+    }
+    
+    if(qty == '')
+    {
+        qty = 0;
+    }
+    
+    if(dp == '')
+    {
+        dp = 0;
+    }
+    
+    if(d == '')
+    {
+        d = 0;
+    }
+    
+    if(it == '')
+    {
+        it = 0;
+    }
+    
+    if(tv == '')
+    {
+        tv = 0;
+    }
+    
+
+    
+    var iv = ((parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100) + (parseFloat(parseFloat(up) - (parseFloat(up) * parseFloat(dp) / 100)) * parseFloat(it) / 100)) * parseFloat(qty)) - parseFloat(d) + parseFloat(tv);
+    
+	 $('#edit_po_item_val').val(iv);
+	
+}//function
 
 
 
