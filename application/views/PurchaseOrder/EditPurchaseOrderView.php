@@ -192,7 +192,7 @@
                                 </a>
                             </span>-->
           <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
-          <input type="button" value="Add Item"  id="lnk_add_item_edit" name="lnk_add_item_edit" class="btn ui-state-default ui-corner-all" onclick="addNewItemDialog()" />
+          <input type="button" value="Add Item"  id="lnk_add_item" name="lnk_add_item" class="btn ui-state-default ui-corner-all" onclick="addNewItemDialog()" />
           
           </span>
           
@@ -202,11 +202,62 @@
         <input type="submit" value="Save"  id="po_save" name="po_save" class="btn ui-state-default ui-corner-all" />
           </span>
           
+          <?php
+    //check whther the logged user is  HOD(Head of Departments) or Administrative Director
+   $userService = new UserService();
+   $isHODorACDuser = $userService->isHeadOfDepartmentOrAdministrativeDirector($this->session->userdata('emp_id'));
+   
+   
+   $isHODuser = $userService->isHeadOfDepartment($this->session->userdata('emp_id'));
+   
+   $isAdminDirector = $userService->isAdministrativeDirector($this->session->userdata('emp_id'));
+  
+  //send for Approval button is only dedicated for the Employee who place the PO request
+   if(!$isHODorACDuser){
+	  ?>
+      
           <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
           <input type="button" value="Send For Approval"  id="item_for_approval" name="item_for_approval" class="btn ui-state-default ui-corner-all" onclick="sendForApprvalByEmployee()" />
           </span>
           
+<?php
+  }//if send for Approval
+  
+  //the below three buttons will be displyed only for the HOD(Head of Departments)
+  if($isHODuser){
+	 
+	 //check whether PO request is relevant to the logged in HOD user
+	 
+	 $po_requested_dept=$PurchaseOrderRequestObject->getRequested_Dept();
+	 
+	 $logged_hod_user_dept=$this->session->userdata('department');
 
+    if($po_requested_dept==$logged_hod_user_dept){
+?>
+        <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+  <input type="button" value="Approve PO"  id="Approve" name="Approve" class="btn ui-state-default ui-corner-all" onclick="approvePOrequestByHOD()" />
+       </span>
+          
+          <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+          <input type="button" value="Reject PO"  id="Reject" name="Reject" class="btn ui-state-default ui-corner-all"  onclick="rejectPOrequestByHOD()" />
+          </span>
+          
+         <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+     <input type="button" value="Return PO"  id="Return" name="Return" class="btn ui-state-default ui-corner-all" onclick="returnPOrequestByHOD()"/>
+          </span>
+   <?php
+   
+	}//HOD user has the PO request moderation ownership
+  }//if HOD user
+  
+  if($isAdminDirector){
+  ?>
+     Buttons set for ACD user
+     
+ <?php
+  }
+  ?>
+  
           
           
             <br/><br/>

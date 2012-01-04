@@ -7,13 +7,15 @@
 		{
 			parent::__construct();
 		
-			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService','PurchaseOrder/UnitModelService','PurchaseOrder/PurchaseOrderItemModel','PurchaseOrder/PurchaseOrderItemService','ItemMaster/ItemMasterModel','ItemMaster/ItemMasterService','Supplier/SupplierModel','Supplier/SupplierService'));
+			$this->load->model(array('PurchaseOrder/DepartmentModel','PurchaseOrder/DepartmentService','PurchaseOrder/CurrencyModel','PurchaseOrder/CurrencyService','PurchaseOrder/PaymentTypeModel','PurchaseOrder/PaymentTypeService','PurchaseOrder/PurchaseOrderRequestModel','PurchaseOrder/PurchaseOrderRequestService','PurchaseOrder/UnitModelService','PurchaseOrder/PurchaseOrderItemModel','PurchaseOrder/PurchaseOrderItemService','ItemMaster/ItemMasterModel','ItemMaster/ItemMasterService','Supplier/SupplierModel','Supplier/SupplierService','UserModel','UserService'));
 		   
 			if(!$this->session->userdata('logged_in'))
 			{
 				redirect(base_url() . 'index.php/login');
 			}
-		}
+		}//construct
+		
+		
 		
 		function createNewPurchaseOrder()
 		{
@@ -181,7 +183,6 @@
 				 $poRequest->setAttn($this->input->post('attention',TRUE)); 
 				 $poRequest->setRequested_Dept($this->input->post('Department_Code',TRUE));
 				 $poRequest->setRequested_By($this->input->post('requested_by',TRUE));
-				 $poRequest->setCreated_By($user_id);
 				 $poRequest->setCurrency_Code($this->input->post('currrency_selector',TRUE));
 				 $poRequest->setCurrency_Rate($this->input->post('conversion_rate',TRUE));
 				 $poRequest->setPayment_Type_Code($this->input->post('payment_type',TRUE));
@@ -189,14 +190,27 @@
 				 $poRequest->setPO_Remarks($this->input->post('po_remarks',TRUE));
 				 $poRequest->setPO_Payment_Remarks($this->input->post('pay_remark',TRUE)); 
 			     $poRequest->setPrint_Original(0);
-				 $poRequest->setStatus_Code(1); //change the status based on status table
-			   
+		   
 			   
 			   //setting the values end
 			   
 			   
             if($purchase_order_id==""){
-		  
+				 
+				 $userService = new UserService();
+				 
+				 //these fields should be updated when creating new PO request
+				 if($userService->isHeadOfDepartment($user_id)){				 
+				  //if the creating user is Head of Depoartment, it will be updated to status 2
+				   $poRequest->setStatus_Code(2);
+				 }
+				 else{
+				     $poRequest->setStatus_Code(1);
+				 }
+				 
+				 $poRequest->setStatus_Code(2);
+				 $poRequest->setCreated_By($user_id);
+				 
 		     //purchase order is not in dabase and it should be inserted
 			  $purchaseOrderID = $poService->createNewPurchaseOrder($poRequest);
 				  
@@ -207,10 +221,19 @@
 			
 			$poRequest->setOrder_Code($purchase_order_id);
 			
+			//retrieving the previous data
+			$poReqModel = $poService->getPurchaseOrderDetailsForGivenOrderCode($poRequest);
+			     //saving the same status code
+				 $poRequest->setStatus_Code($poReqModel->getStatus_Code());
+				 //saving the same created by user
+				 $poRequest->setCreated_By($poReqModel->getCreated_By());	
+			
+					
 			//purchase order already exists and it should be updated
 		      $poService->updatePurchaseOrder($poRequest);	
-	    	  echo "Purchase Order was succesfully Updated..#".$purchase_order_id;
-				
+	    	  echo "Purchase Order was succesfully Saved..#".$purchase_order_id;
+			
+			
 			}
 				  
 		     }//hasPriviledges
@@ -476,7 +499,7 @@ echo $message.'#######----#######'.$poItemTableView;
                 {
                    // $iv = ((floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100) + (floatval(floatval($row['Unit_Price']) - (floatval($row['Unit_Price']) * floatval($row['Discount']) / 100)) * floatval($row['Ind_Tax']) / 100)) * floatval($row['Quantity'])) - floatval($row['Discount_Value']) + floatval($row['Tax_Value']);
 				   
-				   //retirve Item name
+				   //retrieve Item name
 				   $itemMasterModel =  new ItemMasterModel();
 				   $itemMasterModel->setMaster_Item_Code($poItemModelArray[$index]->getMaster_Item_Code());
 				   
@@ -839,15 +862,22 @@ echo $message.'#######----#######'.$poItemTableView;
 			$data=array('departmentName'=>$departmentName,'currencyObjectArray'=>$currencyObjectArray,'paymentTypeObjectArray'=>$paymentTypeObjectArray,'UnitArray'=>$unitModelObjArr,'PurchaseOrderID'=>$purchaseOrderCode,'PurchaseOrderRequestObject'=>$poModelRetrieved,'SupplierType'=>$supModRetrieved->getSupplier_Type());
 			  		  
 			  //end
-			  
-			
+			            $userService = new UserService();
+			            $user_id = $this->session->userdata('emp_id');
+						
 						$this->template->setTitles('', '', 'Edit Purchase Order', '');
 			
-			//user can edit only the purchase order requests that are in new state (save state)
+			//employee can edit only the purchase order requests that are in new state (save state)
 		    if($poModelRetrieved->getStatus_Code()=='1'){
 			   
 			$this->template->load('template', 'PurchaseOrder/EditPurchaseOrderView',$data);	
 			
+			}
+			//Department Head Can Edit the PO request (status 2 requets) that are sent for his Approval
+			else if($userService->isHeadOfDepartment($user_id) && $poModelRetrieved->getStatus_Code()=='2'){
+				
+			$this->template->load('template', 'PurchaseOrder/EditPurchaseOrderView',$data);	
+	
 			}
 			else{
 				
@@ -892,7 +922,10 @@ echo $message.'#######----#######'.$poItemTableView;
 		 
 	 }//editPurchaseOrderView
 	 
-	 
+	
+	
+	
+	
 	 
 	 
 	 
@@ -920,7 +953,7 @@ echo $message.'#######----#######'.$poItemTableView;
 		 
 		 $poRequestModel->setOrder_Code($poRequestID);
 		 $poRequestModel->setStatus_Code(2);
-		 
+		// $poRequestModel->setRequested_Dept($this->session->userdata('department'));
 		 
 		 
 		 $num_of_po_items = $poRequestService->getNumberOfItemsInPurchaseOrderRequest($poRequestModel);
@@ -1048,7 +1081,32 @@ echo $message.'#######----#######'.$poItemTableView;
 						
 			if($hasPriviledges){			
 			 			
-			 echo "user has the priviledges";
+			 //echo "user has the priviledges to check PO requests";
+			 
+			 			 
+			 $deparmentID = $this->session->userdata('department');
+			 
+			  // echo "user has the priviledges";
+			  
+			  $poReqModel = new PurchaseOrderRequestModel();
+			  
+			  
+			  $poReqModel->setRequested_Dept($deparmentID);
+              $poReqModel->setStatus_Code(2); // retrieve the PO requests sent by the employees
+			  $poReqService = new PurchaseOrderRequestService();
+			  
+			  $purchaseOrders = $poReqService->getPurchaseOrderRequestDetailsForGivenDepartment($poReqModel);
+			  
+			  			//setting up the data array
+			       $data = array('PurchaseOrders'=>$purchaseOrders);
+			
+						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidiry of Singapoor Telecom', 'Purchase Order requests', 'List of Purchase Order Request for giving approval...');
+		
+			$this->template->load('template', 'PurchaseOrder/viewDepartmentPurchaseOrdersList',$data);
+			 			//$this->template->load('template', 'PurchaseOrder/viewPurchaseOrdersList');
+			 
+			 
+			 
 				  
 		     }//hasPriviledges
 			else{
@@ -1068,6 +1126,357 @@ echo $message.'#######----#######'.$poItemTableView;
 			}
 			 
 	 }//viewDepartmentPOrequests
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 function approvePurchaseOrderbyHOD($po_request_id){
+		
+		
+		 if($this->session->userdata('logged_in'))
+			{
+		     
+			$userPriviledgeModel=new UserPriviledge();
+			 //check whether the user has the HOD priviledges
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode($this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(7);//priviledge 7 is to approve the PO request by the HOD
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 			
+			//HOD has the priviledges to approve the PO request
+			 //echo "approve PO ".$;
+			 	 
+		 $poRequestModel = new PurchaseOrderRequestModel();
+		 
+		 $poRequestService = new PurchaseOrderRequestService();
+		 
+		 $poRequestModel->setOrder_Code($po_request_id);
+		 $poRequestModel->setStatus_Code(4);//status 4 - PO approved by HOD
+		 $poRequestModel->setRequested_Dept($this->session->userdata('department')); 
+		 
+		 $isUpdated = $poRequestService->updatePurchaseOrderRequestByHOD($poRequestModel);	 
+ 	 
+	        if($isUpdated){
+				
+          echo '<div class="response-msg success ui-corner-all">Purchase Order Request was successfully approved and forwarded to the Administrative director</div>#######success';
+		  
+			}
+			else{
+				
+				          echo '<div class="response-msg error ui-corner-all">You are not Authorized to Approve this Purchase Order request</div>#######error';
+						  
+			}
+			
+	  
+	     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+			
+			
+												
+			}
+			
+			}//if logged
+			else{
+							
+			redirect(base_url().'index.php');
+
+			}
+				 
+		 
+	 }//approvePurchaseOrderbyHOD
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 function rejectPurchaseOrderbyHOD($po_request_id){
+		
+		
+		 if($this->session->userdata('logged_in'))
+			{
+		     
+			$userPriviledgeModel=new UserPriviledge();
+			 //check whether the user has the HOD priviledges
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode($this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(10);//priviledge 10 is to reject the PO request by the HOD
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 			
+			//HOD has the priviledges to approve the PO request
+			 //echo "approve PO ".$;
+			 	 
+		 $poRequestModel = new PurchaseOrderRequestModel();
+		 
+		 $poRequestService = new PurchaseOrderRequestService();
+		 
+		 $poRequestModel->setOrder_Code($po_request_id);
+		 $poRequestModel->setStatus_Code(3);//status 3 - PO Canceled by HOD
+		 $poRequestModel->setRequested_Dept($this->session->userdata('department')); 
+		 
+		 $isUpdated = $poRequestService->updatePurchaseOrderRequestByHOD($poRequestModel);	 
+ 	 
+	        if($isUpdated){
+				
+          echo '<div class="response-msg success ui-corner-all">Purchase Order Request was successfully Rejected</div>#######success';
+		  
+			}
+			else{
+				
+				 echo '<div class="response-msg error ui-corner-all">You are not Authorized to reject this Purchase Order request</div>#######error';
+						  
+			}
+			
+	  
+	     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+			
+			
+												
+			}
+			
+			}//if logged
+			else{
+							
+			redirect(base_url().'index.php');
+
+			}
+				 
+		 
+	 }//rejectPurchaseOrderbyHOD
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	  function returnPurchaseOrderbyHOD($po_request_id){
+		
+		
+		 if($this->session->userdata('logged_in'))
+			{
+		     
+			$userPriviledgeModel=new UserPriviledge();
+			 //check whether the user has the HOD priviledges
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode($this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(10);//priviledge 10 is to reject the PO request by the HOD
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 			
+			//HOD has the priviledges to approve the PO request
+			 //echo "approve PO ".$;
+			 	 
+		 $poRequestModel = new PurchaseOrderRequestModel();
+		 
+		 $poRequestService = new PurchaseOrderRequestService();
+		 
+		 $poRequestModel->setOrder_Code($po_request_id);
+		 $poRequestModel->setStatus_Code(5);//status 5 - PO Returned by HOD
+		 $poRequestModel->setRequested_Dept($this->session->userdata('department')); 
+		 
+		 $isUpdated = $poRequestService->updatePurchaseOrderRequestByHOD($poRequestModel);	 
+ 	 
+	        if($isUpdated){
+				
+          echo '<div class="response-msg success ui-corner-all">Purchase Order Request was successfully Returned</div>#######success';
+		  
+			}
+			else{
+				
+				 echo '<div class="response-msg error ui-corner-all">You are not Authorized to return this Purchase Order request</div>#######error';
+						  
+			}
+			
+	  
+	     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+			
+			
+												
+			}
+			
+			}//if logged
+			else{
+							
+			redirect(base_url().'index.php');
+
+			}
+				 
+		 
+	 }//returnPurchaseOrderbyHOD
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 function viewPurchaseOrder($purchaseOrderCode){
+		 
+		 
+		if($this->session->userdata('logged_in'))
+			{
+		     //the user is logged and priviledges should be checked
+			$userPriviledgeModel=new UserPriviledge();
+			
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(5);//priviledge 5 is for creating purchase order request
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 
+			 $deptID = $this->session->userdata('department');
+			 
+			  // echo "user has the priviledges";
+			  
+			  //start
+			  
+			  //retrieveing department details
+			$departmentModel = new DepartmentModel();
+			$departmentService = new DepartmentService();
+			
+			$departmentModel->setDepartmentCode($this->session->userdata('department'));
+			$departmentName=$departmentService->retrieveDepartmentName($departmentModel);
+			
+			
+			//retrieving currency details
+			$currencyService = new CurrencyService();
+			$currencyObjectArray = $currencyService->retriveAllCurrencyDetails();
+			
+			
+			//retrieving payment type details
+			$paymentTypeService = new PaymentTypeService();
+			$paymentTypeObjectArray = $paymentTypeService->retriveAllPaymentTypes();
+			
+			
+			$unitService = new UnitModelService();
+			
+			$unitModelObjArr = $unitService->retrieveAllUnitDetails();
+			//retrieving all details related to the purchase order request
+			
+			$poReqService = new PurchaseOrderRequestService();
+			
+			$poModel = new PurchaseOrderRequestModel();
+			
+			$poModel->setOrder_Code($purchaseOrderCode);
+			$poModel->setRequested_Dept($deptID);
+			
+			//retrieve the given purchase order if it is placed by this particular user
+			$poModelRetrieved = $poReqService->getPurchaseOrderDetailsForGivenOrderIDWithDepartment($poModel);
+			
+			if($poModelRetrieved!=NULL){
+			
+			//Purchase Order Request found with the given ID and it is placed by the currently logged user
+			
+			//supplier type retrieving
+			$supplierModelObject = new SupplierModel();
+			
+			$supplierModelObject->setSupplier_Code($poModelRetrieved->getSupplier_Code());
+			$supService = new SupplierService();
+			$supModRetrieved = $supService->getGivenSupplierDetails($supplierModelObject);
+			
+			//setting up the data array
+			$data=array('departmentName'=>$departmentName,'currencyObjectArray'=>$currencyObjectArray,'paymentTypeObjectArray'=>$paymentTypeObjectArray,'UnitArray'=>$unitModelObjArr,'PurchaseOrderID'=>$purchaseOrderCode,'PurchaseOrderRequestObject'=>$poModelRetrieved,'SupplierType'=>$supModRetrieved->getSupplier_Type());
+			  		  
+			  //end
+			  
+			
+						$this->template->setTitles('', '', 'Purchase Order Request', '');
+			
+			//user can edit only the purchase order requests that are in new state (save state)
+		    if($poModelRetrieved->getStatus_Code()=='2'){
+			   
+			$this->template->load('template', 'PurchaseOrder/EditPurchaseOrderView',$data);	
+			
+			}
+			else{
+				
+				
+				redirect(base_url()."index.php/PurchaseOrder/PurchaseOrderManagement/viewDepartmentPOrequests");
+				
+			}//else
+				  
+			
+			}//purchase order request was found for given id
+			else{
+				
+			//purchase order requst is not relevant for the HOD requested. therefore the error mesaage is displayed
+			
+					  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+			 	
+			
+			}
+			
+		     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";
+			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+						
+			}
+			
+			}//if
+			else{
+				
+				
+			redirect(base_url().'index.php');
+	
+			
+			}
+			
+		 
+	 }//editPurchaseOrderView
+	 
+	
+	
+	
 	 
 	 
 	 

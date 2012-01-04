@@ -184,8 +184,18 @@
                                 </a>
                             </span>-->
           <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
-          <input type="submit" value="Add Item"  id="lnk_add_item" name="lnk_add_item" class="btn ui-state-default ui-corner-all" />
+          <input type="button" value="Add Item"  id="lnk_add_item" name="lnk_add_item" class="btn ui-state-default ui-corner-all"  onclick="addNewItemDialog()"  />
           </span>
+          
+          <br/><br/>
+                   <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+        <input type="submit" value="Save"  id="po_save" name="po_save" class="btn ui-state-default ui-corner-all" />
+          </span>
+          
+          <span class="cont tooltip ui-corner-all" title="Click here to add an Item">
+          <input type="button" value="Send For Approval"  id="Approve" name="Approve" class="btn ui-state-default ui-corner-all" onclick="sendForApprvalByEmployee()" />
+          </span>
+          
           <!-- <button class="ui-state-default ui-corner-all float-left ui-button" type="submit" disabled="disabled">Save</button> -->
 <!--          <span class="cont tooltip ui-corner-all" title="Click here to update an Item"> <a id="lnk_update_item" class="btn ui-state-default ui-corner-all" href="#"> <span class="ui-icon ui-icon-newwin"></span> Update Item </a> 
 </span>-->

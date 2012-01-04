@@ -122,7 +122,7 @@ Logout
 if($this->session->userdata('level')==4){
 ?>
 <li>
-<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewDepartmentPOrequests" class="sf-with-ul">Approve PO Requests</a>
+<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewDepartmentPOrequests" class="sf-with-ul">Department PO Requests</a>
 </li>
 
 <?php

@@ -362,7 +362,8 @@ $().ready(function() {
 			Department_Code:"required",
 			currrency_selector:"required",
 			conversion_rate : "required",
-			payment_type:"required"
+			payment_type:"required",
+			requested_by:"required"
 		},
 			messages:
 			{
@@ -373,13 +374,14 @@ $().ready(function() {
 				Department_Code:"Department is required",
 				currrency_selector: "Please select the currency",
 				conversion_rate : "Conversion rate is required",
-				payment_type:"Please select the payment type"
+				payment_type:"Please select the payment type",
+				requested_by:"Requested user is required"
 				
 				
 			},
 			
 			submitHandler: function(form) {
-							
+				
 				//var isAllFiedsValidated=$('#required_fields').val();
 			  var expectedDateValidity =  $("#expected_date_validity").val();
 
@@ -390,14 +392,14 @@ $().ready(function() {
 				//set this id using ajax			
 			$.post(base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/createNewPurchaseOrderRequest', $("#purchase_order_request").serialize(), function(msg) {
 					//$('form[name=purchase_order_request] #po_request_id').val(msg);
-					$('#po_request_message').html('<font color="#009900">'+msg.split('#')[0]+'</font>'); 
+					$('#po_request_message').html('<div class="response-msg success ui-corner-all">'+msg.split('#')[0]+'</div>'); 
 
 					var purchaseOrderID=msg.split('#')[1];
 					//set up the purchase order id for adding items for the purchase order 
 					$('form[name=add_purchase_order_item] #purchase_order_id').val(purchaseOrderID);
 					$('form[name=purchase_order_request] #po_request_id').val(purchaseOrderID);
 					//setting up the valus changed as false... because the insert or update is already done
-					$('#dlg_add_item').dialog('open');
+					//$('#dlg_add_item').dialog('open');
 				});
 								
 				}//if expectedDateValidity
@@ -408,7 +410,7 @@ $().ready(function() {
 	});
 	
 	
-		openDialog();
+		//openDialog();
 	
 });
 
@@ -447,12 +449,13 @@ function openDialog(){
 function addNewItemDialog(){
 	
 	
-	var po_id=$('form[name=purchase_order_request_edit] #po_request_id').val();
-	
+//	var po_id=$('form[name=purchase_order_request_edit] #po_request_id').val();
+	var po_id=$('#po_request_id').val();
 	
 	if(po_id!=""){
 		
-		$('form[name=add_purchase_order_item] #purchase_order_id').val(po_id);
+		//$('form[name=add_purchase_order_item] #purchase_order_id').val(po_id);
+		$('#purchase_order_id').val(po_id);
 		$('#dlg_add_item').dialog('open');
 	}
 	else{
@@ -491,7 +494,10 @@ $().ready(function() {
 			Department_Code:"required",
 			currrency_selector:"required",
 			conversion_rate : "required",
-			payment_type:"required"
+			payment_type:"required",
+			requested_by:"required"
+
+
 		},
 			messages:
 			{
@@ -502,8 +508,9 @@ $().ready(function() {
 				Department_Code:"Department is required",
 				currrency_selector: "Please select the currency",
 				conversion_rate : "Conversion rate is required",
-				payment_type:"Please select the payment type"
-				
+				payment_type:"Please select the payment type",
+				requested_by:"Requested user is required"
+			
 				
 			},
 			
@@ -557,8 +564,11 @@ $().ready(function() {
 
 function sendForApprvalByEmployee(){
  
-   var PoRequestID = $('#po_request_id').val();
+ 	var confirmation = confirm('Are you sure tosend this PO request for the Approval ?');
 
+  if(confirmation){
+	  
+   var PoRequestID = $('#po_request_id').val();
    
    $('#addnewempmsg').html('<font color="#CC0000"> Please wait............ </font>'); 
 	  
@@ -575,10 +585,12 @@ function sendForApprvalByEmployee(){
 	  
 	   $('#po_request_message').html(message); 
 	   
+	  	   
 	  if(messageType=="success"){
 		  
-     document.getElementById("lnk_add_item_edit").disabled = true;
+     document.getElementById("lnk_add_item").disabled = true;
 	 document.getElementById("item_for_approval").disabled = true;
+	 document.getElementById("po_save").disabled = true;
 	  
 	  }
 	  
@@ -586,6 +598,10 @@ function sendForApprvalByEmployee(){
   
  });   
    
+   
+  }//if confirmed
+  
+  
   
 }//sendForApprvalByEmployee
 
@@ -1411,4 +1427,146 @@ function delete_po_items(po_item_id,po_request_id){
 
 
 
+function approvePOrequestByHOD(){
+	
+	
+   var confirmation = confirm('Are you sure to approve this PO request ?');
+	
+	if(confirmation){
+		
+	
+	var po_request_id = jQuery.trim($('#po_request_id').val());	
 
+if(po_request_id!=""){
+	
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/approvePurchaseOrderbyHOD/'+po_request_id,
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+        // $('#po_request_message').html(msg);
+		
+		var message=msg.split("#######")[0];
+		var messageType = msg.split("#######")[1];
+	  
+	   $('#po_request_message').html(message); 
+	   
+	  	   
+	  if(messageType=="success"){
+		  
+	 document.getElementById("lnk_add_item").disabled = true;
+	 document.getElementById("Approve").disabled = true;
+	 document.getElementById("po_save").disabled = true;
+	 document.getElementById("Reject").disabled = true;
+	 document.getElementById("Return").disabled = true;
+	  }
+		
+      }
+    });
+}
+	
+	}//confirmed
+	
+	
+}//approvePOrequests
+
+
+
+
+
+
+
+
+
+function rejectPOrequestByHOD(){
+	
+	
+   var confirmation = confirm('Are you sure to reject this PO request ?');
+	
+	if(confirmation){
+		
+	
+	var po_request_id = jQuery.trim($('#po_request_id').val());	
+
+if(po_request_id!=""){
+	
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/rejectPurchaseOrderbyHOD/'+po_request_id,
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+        // $('#po_request_message').html(msg);
+		
+		var message=msg.split("#######")[0];
+		var messageType = msg.split("#######")[1];
+	  
+	   $('#po_request_message').html(message); 
+	   
+	  	   
+	  if(messageType=="success"){
+		  
+	 document.getElementById("lnk_add_item").disabled = true;
+	 document.getElementById("Approve").disabled = true;
+	 document.getElementById("po_save").disabled = true;
+	 document.getElementById("Reject").disabled = true;
+	 document.getElementById("Return").disabled = true;
+	  }
+		
+      }
+    });
+  }
+	
+	}//confirmed
+	
+	
+}//rejectPOrequestByHOD
+
+
+
+
+
+
+function returnPOrequestByHOD(){
+	
+   var confirmation = confirm('Are you sure to return this PO request ?');
+	
+	if(confirmation){
+		
+	
+	var po_request_id = jQuery.trim($('#po_request_id').val());	
+
+if(po_request_id!=""){
+	
+$.ajax({
+        type: "POST",
+        url: base_url+'index.php/PurchaseOrder/PurchaseOrderManagement/returnPurchaseOrderbyHOD/'+po_request_id,
+        //data: "pono="+pono,
+        success: function(msg)
+        {
+        // $('#po_request_message').html(msg);
+		
+		var message=msg.split("#######")[0];
+		var messageType = msg.split("#######")[1];
+	  
+	   $('#po_request_message').html(message); 
+	   
+	  	   
+	  if(messageType=="success"){
+		  
+	 document.getElementById("lnk_add_item").disabled = true;
+	 document.getElementById("Approve").disabled = true;
+	 document.getElementById("po_save").disabled = true;
+	 document.getElementById("Reject").disabled = true;
+	 document.getElementById("Return").disabled = true;
+	  }
+		
+      }
+    });
+  }
+	
+	}//confirmed
+	
+	
+}//returnPOrequestByHOD

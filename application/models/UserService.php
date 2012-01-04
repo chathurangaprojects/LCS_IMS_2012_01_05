@@ -349,7 +349,6 @@ class UserService extends CI_Model {
   
   function isAdministrativeUser($empID){
 	  
-	  //implemetation here
 	 	  
 	  $query = $this->db->get_where('ta_ims_employee', array('Department_Code' =>'1','Employee_Code'=>$empID));
 
@@ -365,6 +364,78 @@ class UserService extends CI_Model {
 	  }
 	  
   }//function
+  
+  
+  
+  
+  
+  
+  
+    function isHeadOfDepartmentOrAdministrativeDirector($empID){
+	  
+	
+	$sql = "select * from ta_ims_employee where Employee_Code=".$empID." and (Level_Code=3 OR Level_Code=4)";
+    $query = $this->db->query($sql);
+	
+      if($query->num_rows()>0){
+		
+		return TRUE;
+		  
+	  }
+	  else{
+		  
+		 return FALSE;
+	  
+	  }
+	  
+  }//function
+  
+  
+  
+  
+    function isHeadOfDepartment($empID){
+	  
+	 	  
+	  $query = $this->db->get_where('ta_ims_employee', array('Level_Code' =>'4','Employee_Code'=>$empID));
+
+      if($query->num_rows()>0){
+		
+		return TRUE;
+		  
+	  }
+	  else{
+		  
+		 return FALSE;
+	  
+	  }
+	  
+  }//function
+  
+  
+  
+  
+  
+   function isAdministrativeDirector($empID){
+	  
+	 	  
+	  $query = $this->db->get_where('ta_ims_employee', array('Level_Code' =>'3','Employee_Code'=>$empID));
+
+      if($query->num_rows()>0){
+		
+		return TRUE;
+		  
+	  }
+	  else{
+		  
+		 return FALSE;
+	  
+	  }
+	  
+  }//function
+  
+  
+  
+  
   
   
    
