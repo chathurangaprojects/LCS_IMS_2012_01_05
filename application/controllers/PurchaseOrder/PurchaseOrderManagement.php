@@ -1075,7 +1075,8 @@ echo $message.'#######----#######'.$poItemTableView;
 			
 		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
 			$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
-			$userPriviledgeModel->setPriviledgeCode(7);//priviledge 6 is for removing po items from the po request
+			$userPriviledgeModel->setPriviledgeCode(11);/* priviledge 11 is for viewing a list of PO requests placed by the department users */
+			
 			
 			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
 						
@@ -1477,6 +1478,73 @@ echo $message.'#######----#######'.$poItemTableView;
 	
 	
 	
+	
+	/*
+	the below method is used to diaply all the pending po requests of all departments for the ACD user (Administrative Director)
+	*/
+	
+	 function viewAllDepartmentPendingPOrequests(){
+		 
+		  if($this->session->userdata('logged_in'))
+			{
+		     //the user is logged and priviledges should be checked
+			$userPriviledgeModel=new UserPriviledge();
+			
+		    $userPriviledgeModel->setLevelCode($this->session->userdata('level'));
+			$userPriviledgeModel->setDepartmentCode( $this->session->userdata('department'));
+			$userPriviledgeModel->setPriviledgeCode(12);/* priviledge 12 is for viewing a list of PO requests placed by the all department users */
+			
+			
+			$hasPriviledges=$userPriviledgeModel->checkUserPriviledge($userPriviledgeModel);
+						
+			if($hasPriviledges){			
+			 			
+			 //echo "user has the priviledges to check PO requests";
+			 
+			 			 
+			 $deparmentID = $this->session->userdata('department');
+			 
+			  // echo "user has the priviledges";
+			  
+			  $poReqModel = new PurchaseOrderRequestModel();
+			  
+			  
+			  //$poReqModel->setRequested_Dept($deparmentID);
+              $poReqModel->setStatus_Code(2); // retrieve all the PO requests approved by the HOD
+			  $poReqService = new PurchaseOrderRequestService();
+			  
+			  $purchaseOrders = $poReqService->getPurchaseOrderDetailsForGivenStatus($poReqModel);
+			  
+			  echo sizeof($purchaseOrders);
+			  			//setting up the data array
+			       $data = array('PurchaseOrders'=>$purchaseOrders);
+			
+						$this->template->setTitles('LankaCom Inventory Management System', 'Subsidiry of Singapoor Telecom', 'Purchase Order requests', 'List of Purchase Order Request for giving approval...');
+		
+			$this->template->load('template', 'PurchaseOrder/viewAllDepartmentsPurchaseOrdersList',$data);
+			 
+			 
+		     }//hasPriviledges
+			else{
+				
+			  // "user doesnt have the priviledges";			  
+			  $this->template->setTitles('Access Denied', 'You are not allowed to access this page.', 'You are not allowed to access this page.', 'Please Contact Administrator...');
+			
+			$this->template->load('template', 'errorPage');
+						
+			}
+			
+			}//if logged
+			else{
+							
+			redirect(base_url().'index.php');
+
+			}
+			 
+	 }//viewDepartmentPOrequests
+	 
+	 
+	 
 	 
 	 
 	 

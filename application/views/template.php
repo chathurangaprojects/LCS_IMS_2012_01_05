@@ -109,7 +109,7 @@ Logout
 </li>
 
 <li>
-<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewListOfPurchaseOrders" class="sf-with-ul">View Pending PO Requests</a>
+<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewListOfPurchaseOrders" class="sf-with-ul">My PO Requests</a>
 </li>
 
 
@@ -118,11 +118,28 @@ Logout
 </li>
 
 <?php
+
+$this->load->model(array('UserModel','UserService'));
+
+
+$userService = new UserService();
+
+$isAdminDirector = $userService->isAdministrativeDirector($this->session->userdata('emp_id'));
+
 //this link is visible only for the Head of Departments. level code of the HOD is 4
 if($this->session->userdata('level')==4){
 ?>
 <li>
 <a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewDepartmentPOrequests" class="sf-with-ul">Department PO Requests</a>
+</li>
+
+<?php
+}
+else if($isAdminDirector){
+?>
+
+<li>
+<a href="<?php echo base_url(); ?>index.php/PurchaseOrder/PurchaseOrderManagement/viewAllDepartmentPendingPOrequests" class="sf-with-ul">Approve PO Requests</a>
 </li>
 
 <?php
